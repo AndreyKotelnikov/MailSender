@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using CodeFirstDbContext.Abstract;
 using CodeFirstDbContext.Migrations;
 using Entities;
+using Entities.Abstract;
 
 namespace CodeFirstDbContext
 {
@@ -18,6 +19,7 @@ namespace CodeFirstDbContext
         public MailSenderDbContext() : base("Name=MailSenderDbContext")
         {
             this.Configuration.LazyLoadingEnabled = false;
+            this.Database.Log = (s => Console.WriteLine(s));
         }
 
         public MailSenderDbContext(string connectionString) : base(connectionString) { }
@@ -38,6 +40,26 @@ namespace CodeFirstDbContext
         IQueryable<TEntity> IDbContext.Set<TEntity>() 
         {
             return this.Set<TEntity>();
+        }
+
+        public void Attach<TEntity>(TEntity entity) where TEntity : class
+        {
+            this.Set<TEntity>().Attach(entity);
+        }
+
+        public void Add<TEntity>(TEntity entity) where TEntity : class
+        {
+            this.Set<TEntity>().Add(entity);
+        }
+
+        public void Update<TEntity>(TEntity entity) where TEntity : class
+        {
+            this.Entry(entity).State = EntityState.Modified;
+        }
+
+        public void Remove<TEntity>(TEntity entity) where TEntity : class
+        {
+            this.Set<TEntity>().Remove(entity);
         }
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)

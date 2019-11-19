@@ -7,12 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CodeFirstDbContext.Abstract;
+using Entities.Abstract;
 using Repository;
 using Repository.Abstract;
 
 namespace ConsoleTest
 {
-    class Program
+    static class Program
     {
         private static async Task Main(string[] args)
         {
@@ -36,14 +37,42 @@ namespace ConsoleTest
 
             IUnitOfWork<Recipient> unitOfWork = unitOfWorkFactory.GetUnitOfWork<Recipient>();
 
-            var result = await unitOfWork.FindByAsync(r => r.Id >= 5 && r.Id <= 8);
+            unitOfWork.Print();
 
-            foreach (var recipient in result)
-            {
-                Console.WriteLine($"{recipient.Id} => {recipient.Name}");
-            }
+            int result1 = await unitOfWork.AddAsync(new Recipient { Id = 0, Name = "id 17" });
+            Console.WriteLine();
+            Console.WriteLine($" AddAsync {result1}");
+            Console.WriteLine();
+
+            unitOfWork.Print();
+
+            bool result11 = await unitOfWork.UpdateAsync(new Recipient { Id = 15, Name = "Update" });
+            Console.WriteLine();
+            Console.WriteLine($" UpdateAsync {result11}");
+            Console.WriteLine();
+
+            unitOfWork.Print();
+
+            bool result2 = await unitOfWork.DeleteAsync(new Recipient { Id = 16 });
+            Console.WriteLine();
+            Console.WriteLine($" DeleteAsync {result2}");
+            Console.WriteLine();
+
+            unitOfWork.Print();
 
             Console.ReadLine();
+        }
+
+        private static void Print<T>(this IUnitOfWork<T> unit) where T: NamedEntity
+        {
+            {
+                var result = unit.GetAllAsync().Result;
+
+                foreach (var recipient in result)
+                {
+                    Console.WriteLine($"{recipient.Id} => {recipient.Name}");
+                }
+            }
         }
     }
 }

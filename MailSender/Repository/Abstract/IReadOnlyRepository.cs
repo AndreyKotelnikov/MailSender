@@ -5,9 +5,14 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Entities.Abstract;
 
 namespace Repository.Abstract
 {
+    /// <summary>
+    /// Для формирования запросов только на чтение для указанного типа сущности
+    /// </summary>
+    /// <typeparam name="TEntity">Тип сущности</typeparam>
     public interface IReadOnlyRepository<TEntity> where TEntity : class
     {
         Task<IEnumerable<TEntity>> GetAsync(

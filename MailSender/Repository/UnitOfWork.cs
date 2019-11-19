@@ -1,47 +1,105 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using CodeFirstDbContext;
 using CodeFirstDbContext.Abstract;
+using Entities.Abstract;
 using Repository.Abstract;
 
 namespace Repository
 {
-    public class UnitOfWork<TEntity> : IUnitOfWork<TEntity> where TEntity : class
+    public sealed class UnitOfWork<TEntity> : IUnitOfWork<TEntity> where TEntity : class, IBaseEntity
     {
-        private Type _typeDbContext;
+        private readonly Type _typeDbContext;
+
+        private readonly ConcurrentDictionary<int, int> _keysList = new ConcurrentDictionary<int, int>();
+
+        private Task<bool> _isKeysLoaded;
+
+        
 
         internal UnitOfWork(Type typeDbContext)
         {
             _typeDbContext = typeDbContext;
+            _isKeysLoaded = Task.Run(LoadKeysFromDbSetAsync);
         }
 
-        public Task<int> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
+        public async Task<int> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+            if (entity.Id != 0) throw new ArgumentOutOfRangeException(nameof(entity.Id), "Id должен быть равен 0");
+
+            if (await CheckExistByIdAsync(entity.Id))
+            {
+                return 0;
+            }
+
+            using (IDbContext context = (IDbContext)Activator.CreateInstance(_typeDbContext))
+            {
+                entity.CreatedDate = DateTime.Now;
+                context.Attach(entity);
+                context.Add(entity);
+                if (await context.SaveChangesAsync(cancellationToken) > 0)
+                {
+                    _keysList.TryAdd(entity.Id, entity.Id);
+                }
+                
+                return entity.Id;
+            }
         }
 
-        public Task<bool> Delete(TEntity entity, CancellationToken cancellationToken = default)
+        public async Task<bool> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
+
+
+            if (!await CheckExistByIdAsync(entity.Id))
+            {
+                return false;
+            }
+
+            using (IDbContext context = (IDbContext)Activator.CreateInstance(_typeDbContext))
+            {
+                entity.CreatedDate = DateTime.Now;
+                context.Attach(entity);
+                context.Update(entity);
+                return await context.SaveChangesAsync(cancellationToken) > 0;
+            }
         }
 
-        public Task<bool> Update(TEntity entity, CancellationToken cancellationToken = default)
+        public async Task<bool> DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
-        }
+            if (entity == null) throw new ArgumentNullException(nameof(entity));
 
-        public Task<bool> DiscardChanges()
-        {
-            throw new System.NotImplementedException();
+
+            if (!await CheckExistByIdAsync(entity.Id))
+            {
+                return false;
+            }
+
+            using (IDbContext context = (IDbContext)Activator.CreateInstance(_typeDbContext))
+            {
+                context.Attach(entity);
+                context.Remove(entity);
+                if (await context.SaveChangesAsync(cancellationToken) > 0)
+                {
+                    _keysList.TryRemove(entity.Id, out int i);
+                    return true;
+                }
+                
+                return false;
+            }
+
         }
 
         public async Task<IEnumerable<TEntity>> GetAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>> queryShaper, CancellationToken cancellationToken)
         {
-            using (IDbContext context = new MailSenderDbContext())
+            using (IDbContext context = (IDbContext)Activator.CreateInstance(_typeDbContext))
             {
                 var query = queryShaper(context.Set<TEntity>());
                 return await query.ToArrayAsync(cancellationToken);
@@ -51,13 +109,34 @@ namespace Repository
         public async Task<TResult> GetAsync<TResult>(Func<IQueryable<TEntity>, TResult> queryShaper,
             CancellationToken cancellationToken)
         {
-            using (IDbContext context = new MailSenderDbContext())
+            using (IDbContext context = (IDbContext)Activator.CreateInstance(_typeDbContext))
             {
                 var set = context.Set<TEntity>();
                 var query = queryShaper;
                 var factory = Task<TResult>.Factory;
                 return await factory.StartNew(() => query(set), cancellationToken);
             }
+        }
+
+        private async Task<bool> LoadKeysFromDbSetAsync()
+        {
+            using (IDbContext context = (IDbContext)Activator.CreateInstance(_typeDbContext))
+            {
+                var keysFromDb = await context.Set<TEntity>().Select(e => e.Id).ToListAsync().ConfigureAwait(false);
+                foreach (var id in keysFromDb)
+                {
+                    _keysList.TryAdd(id, id);
+                }
+            }
+
+            return _keysList.Count > 0;
+        }
+
+        private async Task<bool> CheckExistByIdAsync(int id)
+        {
+            await Task.WhenAll(_isKeysLoaded);
+            
+            return _keysList.TryGetValue(id, out int i);
         }
     }
 }

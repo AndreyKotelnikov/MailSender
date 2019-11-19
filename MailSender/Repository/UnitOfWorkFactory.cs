@@ -5,21 +5,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CodeFirstDbContext.Abstract;
+using Entities.Abstract;
 using Repository.Abstract;
 
 namespace Repository
 {
-    public class UnitOfWorkFactory : IUnitOfWorkFactory
+    public sealed class UnitOfWorkFactory : IUnitOfWorkFactory
     {
         private readonly Type _typeDbContext;
 
         private readonly ConcurrentDictionary<Type, object> _unitsOfWork = new ConcurrentDictionary<Type, object>();
+
+        /// <summary>
+        /// Конструктор для создания фабрики UnitOfWork
+        /// </summary>
+        /// <param name="typeDbContext">Тип класса для подключения к базе данных</param>
         public UnitOfWorkFactory(Type typeDbContext)
         {
             _typeDbContext = typeDbContext;
         }
 
-        public IUnitOfWork<TEntity> GetUnitOfWork<TEntity>() where TEntity : class
+        public IUnitOfWork<TEntity> GetUnitOfWork<TEntity>() where TEntity : class, IBaseEntity
         {
             var type = typeof(TEntity);
             object current;
