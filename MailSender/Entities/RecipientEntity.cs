@@ -3,7 +3,7 @@ using Entities.Abstract;
 
 namespace Entities
 {
-    public class Recipient : ConnectionEntity
+    public class RecipientEntity : ConnectionEntity
     {
         public ICollection<int> ListsId { get; set; }
     }

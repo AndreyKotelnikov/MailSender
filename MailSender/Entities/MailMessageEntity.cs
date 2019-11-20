@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Entities
 {
-    public class MailMessage : BaseEntity
+    public class MailMessageEntity : BaseEntity
     {
         public string Subject { get; set; }
 

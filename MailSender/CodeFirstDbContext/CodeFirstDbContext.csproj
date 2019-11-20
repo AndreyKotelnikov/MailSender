@@ -57,6 +57,10 @@
     <Compile Include="Migrations\201911151129089_Initial.designer.cs">
       <DependentUpon>201911151129089_Initial.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\201911201312376_DeleteNavigetionProperties.cs" />
+    <Compile Include="Migrations\201911201312376_DeleteNavigetionProperties.designer.cs">
+      <DependentUpon>201911201312376_DeleteNavigetionProperties.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -76,6 +80,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201911151129089_Initial.resx">
       <DependentUpon>201911151129089_Initial.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911201312376_DeleteNavigetionProperties.resx">
+      <DependentUpon>201911201312376_DeleteNavigetionProperties.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

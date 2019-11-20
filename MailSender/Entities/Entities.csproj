@@ -45,13 +45,13 @@
     <Compile Include="Abstract\ConnectionEntity.cs" />
     <Compile Include="Abstract\IBaseEntity.cs" />
     <Compile Include="Abstract\NamedEntity.cs" />
-    <Compile Include="MailMessage.cs" />
-    <Compile Include="Recipient.cs" />
+    <Compile Include="MailMessageEntity.cs" />
+    <Compile Include="RecipientEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RecipientsList.cs" />
-    <Compile Include="SchedulerTask.cs" />
-    <Compile Include="Sender.cs" />
-    <Compile Include="Server.cs" />
+    <Compile Include="RecipientsListEntity.cs" />
+    <Compile Include="SchedulerTaskEntity.cs" />
+    <Compile Include="SenderEntity.cs" />
+    <Compile Include="ServerEntity.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -19,9 +19,9 @@ namespace MapperLib
         /// </summary>
         private static readonly  Dictionary<Type, Type> _mappingTypes = new Dictionary<Type, Type>
         {
-            { typeof(RecipientDomain), typeof(Recipient)},
-            { typeof(RecipientsListDomain), typeof(RecipientsList)},
-            { typeof(SenderDomain), typeof(Sender)}
+            { typeof(RecipientDomain), typeof(RecipientEntity)},
+            { typeof(RecipientsListDomain), typeof(RecipientsListEntity)},
+            { typeof(SenderDomain), typeof(SenderEntity)}
         };
 
 
@@ -33,12 +33,12 @@ namespace MapperLib
         /// </summary>
         private static readonly Dictionary<Type, Action<IMapperConfigurationExpression>> _configExpressions = new Dictionary<Type, Action<IMapperConfigurationExpression>>
         {
-            { typeof(RecipientDomain), cfg => cfg.CreateMap<RecipientDomain, Recipient>()
-                .ForMember(dist => dist.Name, act => act.MapFrom(source => source.NameFull))
+            { typeof(RecipientDomain), cfg => cfg.CreateMap<RecipientDomain, RecipientEntity>()
+                .ForMember(dist => dist.Name, act => act.MapFrom(source => source.Name))
                 .ForMember(dist => dist.Description, act => act.Ignore())
                 .ReverseMap()
                 .ForMember(dist => dist.Description, act => act.Ignore())},
-            { typeof(RecipientsListDomain), cfg => cfg.CreateMap<RecipientDomain, Recipient>().ReverseMap()}
+            { typeof(RecipientsListDomain), cfg => cfg.CreateMap<RecipientsListDomain, RecipientsListEntity>().ReverseMap()}
         };
         
         /// <summary>

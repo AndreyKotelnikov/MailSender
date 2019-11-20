@@ -24,17 +24,17 @@ namespace CodeFirstDbContext
 
         public MailSenderDbContext(string connectionString) : base(connectionString) { }
 
-        public DbSet<Recipient> Recipients { get; set; }
+        public DbSet<RecipientEntity> Recipients { get; set; }
 
-        public DbSet<Sender> Senders { get; set; }
+        public DbSet<SenderEntity> Senders { get; set; }
 
-        public DbSet<Server> Servers { get; set; }
+        public DbSet<ServerEntity> Servers { get; set; }
 
-        public DbSet<MailMessage> MailMessages { get; set; }
+        public DbSet<MailMessageEntity> MailMessages { get; set; }
 
-        public DbSet<RecipientsList> Lists { get; set; }
+        public DbSet<RecipientsListEntity> Lists { get; set; }
 
-        public DbSet<SchedulerTask> SchedulerTasks { get; set; }
+        public DbSet<SchedulerTaskEntity> SchedulerTasks { get; set; }
 
 
         IQueryable<TEntity> IDbContext.Set<TEntity>() 

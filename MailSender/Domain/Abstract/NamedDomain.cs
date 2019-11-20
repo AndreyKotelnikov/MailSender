@@ -14,6 +14,6 @@ namespace Domain.Abstract
         /// <summary>
         /// Наименование
         /// </summary>
-        public string NameFull { get; set; }
+        public string Name { get; set; }
     }
 }

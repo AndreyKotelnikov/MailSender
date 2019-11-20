@@ -2,7 +2,7 @@
 
 namespace Entities
 {
-    public class Server : ConnectionEntity
+    public class ServerEntity : ConnectionEntity
     {
         public int Port { get; set; }
 
