@@ -5,6 +5,6 @@ namespace Entities
 {
     public class RecipientsList : NamedEntity
     {
-        public virtual ICollection<Recipient> Recipients { get; set; }
+        public ICollection<int> RecipientsId { get; set; }
     }
 }

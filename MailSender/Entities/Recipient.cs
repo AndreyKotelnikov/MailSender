@@ -5,6 +5,6 @@ namespace Entities
 {
     public class Recipient : ConnectionEntity
     {
-        public virtual ICollection<RecipientsList> Lists { get; set; }
+        public ICollection<int> ListsId { get; set; }
     }
 }

@@ -36,6 +36,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=9.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.9.0.0\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.3.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -65,9 +68,17 @@
       <Project>{F4639D87-6E2C-4A77-98CB-B4AE538387F4}</Project>
       <Name>CodeFirstDbContext</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Domain\Domain.csproj">
+      <Project>{C8267BD6-E2CF-4150-9833-16B393EA60EC}</Project>
+      <Name>Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Entities\Entities.csproj">
       <Project>{57D3C079-FB6B-4EA6-9FC9-47B123EC728D}</Project>
       <Name>Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MapperLib\MapperLib.csproj">
+      <Project>{0C887787-E26E-45A4-8032-7EE740B41D78}</Project>
+      <Name>MapperLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\Repository\Repository.csproj">
       <Project>{F8CFFD8D-46B8-4F19-8369-8F2ECBB9DAE3}</Project>
