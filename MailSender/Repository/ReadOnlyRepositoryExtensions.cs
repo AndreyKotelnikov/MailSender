@@ -14,14 +14,14 @@ namespace Repository
     public static class ReadOnlyRepositoryExtensions
     {
         public static Task<IEnumerable<T>> GetAsync<T>(
-            this IReadOnlyRepository<T> repository, Func<IQueryable<T>, 
-                IQueryable<T>> queryShaper
+            this IReadOnlyRepository<T> repository, 
+            Func<IQueryable<T>, IQueryable<T>> queryShaper
             ) 
             where T : class 
             => repository.GetAsync(queryShaper, CancellationToken.None);
 
         public static Task<TResult> GetAsync<T, TResult>(
-            this IReadOnlyRepository<T> repository, 
+            this IReadOnlyRepository<T> repository,
             Func<IQueryable<T>, TResult> queryShaper
             ) 
             where T : class 

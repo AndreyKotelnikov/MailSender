@@ -51,6 +51,13 @@ namespace MapperLib
             _configExpressions = configExpressions;
         }
 
+        public Type GetDestinationType<TSource>() where TSource : class
+        {
+            return _mappingTypes.ContainsKey(typeof(TSource))
+                ? _mappingTypes[typeof(TSource)]
+                : null;
+        }
+
         public IMapper GetMapper<TSource>() where TSource : class
         {
             var config = CreateConfiguration(typeof(TSource), _mappingTypes[typeof(TSource)], _configExpressions?[typeof(TSource)]);
@@ -62,7 +69,7 @@ namespace MapperLib
         {
             MapperConfiguration config = new MapperConfiguration(configure
                 ?? (cfg => cfg.CreateMap(sourceType, destinationType)
-                .ReverseMap())
+                    .ReverseMap())
             );
             return config;
         }

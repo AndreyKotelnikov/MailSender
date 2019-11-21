@@ -17,6 +17,6 @@ namespace Repository.Abstract
         /// </summary>
         /// <typeparam name="TEntity">Тип сущности</typeparam>
         /// <returns>Возвращает UnitOfWork указанного типа сущности</returns>
-        IUnitOfWork<TEntity> GetUnitOfWork<TEntity>() where TEntity : class, IBaseEntity;
+        IUnitOfWork<TEntity> GetCurrentUnitOfWork<TEntity>() where TEntity : class;
     }
 }

@@ -9,6 +9,6 @@ namespace Domain
 {
     public class RecipientDomain : ConnectionDomain
     {
-        public ICollection<int> ListsId { get; set; }
+        //public ICollection<int> ListsId { get; set; }
     }
 }

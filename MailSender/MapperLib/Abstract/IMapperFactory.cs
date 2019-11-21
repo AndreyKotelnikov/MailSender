@@ -20,5 +20,12 @@ namespace MapperLib.Abstract
         /// <typeparam name="TSource">Тип объекта более высокого слоя.</typeparam>
         /// <returns>Возвращает Mapper для указанного типа</returns>
         IMapper GetMapper<TSource>() where TSource : class;
+
+        /// <summary>
+        /// Возвращает связанный тип более низкого слоя для указанного типа. Или null, если для указанного типа нет связанного типа.
+        /// </summary>
+        /// <typeparam name="TSource">Тип объекта более высокого слоя.</typeparam>
+        /// <returns>Возвращает связанный тип более низкого слоя для указанного типа. Или null, если для указанного типа нет связанного типа.</returns>
+        Type GetDestinationType<TSource>() where TSource : class;
     }
 }

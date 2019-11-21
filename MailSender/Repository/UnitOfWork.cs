@@ -10,6 +10,7 @@ using CodeFirstDbContext;
 using CodeFirstDbContext.Abstract;
 using Entities.Abstract;
 using Repository.Abstract;
+using AutoMapper;
 
 namespace Repository
 {

@@ -5,6 +5,6 @@ namespace Entities
 {
     public class RecipientEntity : ConnectionEntity
     {
-        public ICollection<int> ListsId { get; set; }
+        //public ICollection<int> ListsId { get; set; }
     }
 }
