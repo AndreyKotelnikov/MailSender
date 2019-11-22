@@ -7,5 +7,7 @@ namespace Entities.Abstract
         int Id { get; set; }
 
         DateTime CreatedDate { get; set; }
+
+        byte[] RowVersion { get; set; }
     }
 }

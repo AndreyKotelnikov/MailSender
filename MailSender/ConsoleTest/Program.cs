@@ -26,10 +26,7 @@ namespace ConsoleTest
 
             #region Тестирование UnitOfWorkEntity
 
-            IUnitOfWorkFactory unitOfWorkFactory = new UnitOfWorkFactory(
-                typeof(MailSenderDbContext),
-                new MapperFactory(MappingConfig.GetMappingTypes(), MappingConfig.GetConfigExpressions())
-            );
+            IUnitOfWorkFactory unitOfWorkFactory = new UnitOfWorkFactory(typeof(MailSenderDbContext));
 
             IUnitOfWork<RecipientEntity> unitOfWork = unitOfWorkFactory.GetCurrentUnitOfWork<RecipientEntity>();
 
@@ -41,7 +38,18 @@ namespace ConsoleTest
 
             unitOfWork.Print();
 
-            int result1 = await unitOfWork.AddAsync(new RecipientEntity { Id = 0, Name = "id 17 Entity" });
+            var rec = new RecipientEntity
+            {
+                Id = 0,
+                Name = "id 17 Entity",
+                RecipientsListEntities = new List<RecipientsListEntity>()
+                {
+                    new RecipientsListEntity{Id = 1, Name = "List 1"},
+                    new RecipientsListEntity{Id = 2, Name = "List 2"}
+                }
+            };
+
+            int result1 = await unitOfWork.AddAsync(rec);
             Console.WriteLine();
             Console.WriteLine($" AddAsync {result1}");
             Console.WriteLine();
@@ -66,14 +74,14 @@ namespace ConsoleTest
 
             #region Тестирование UnitOfWorkDomain
 
-            //IUnitOfWorkFactory unitOfWorkFactoryD = new UnitOfWorkFactory(
-            //    typeof(MailSenderDbContext),
-            //    new MapperFactory(MappingConfig.GetMappingTypes(), MappingConfig.GetConfigExpressions())
-            //);
+            IUnitOfWorkFactory unitOfWorkFactoryD = new UnitOfWorkFactory(
+                typeof(MailSenderDbContext),
+                new MapperFactory(MappingConfig.GetMappingTypes(), MappingConfig.GetConfigExpressions())
+            );
 
-            IUnitOfWork<RecipientDomain> unitOfWorkD = unitOfWorkFactory.GetCurrentUnitOfWork<RecipientDomain>();
+            IUnitOfWork<RecipientDomain> unitOfWorkD = unitOfWorkFactoryD.GetCurrentUnitOfWork<RecipientDomain>();
 
-            int resultD = await unitOfWork.GetAsync(p => p.Count());
+            int resultD = await unitOfWorkD.GetAsync(p => p.Count());
             Console.WriteLine();
             Console.WriteLine($" Count {resultD}");
             Console.WriteLine();
@@ -150,14 +158,26 @@ namespace ConsoleTest
             Console.ReadLine();
         }
 
-        private static void Print<T>(this IUnitOfWork<T> unit) where T: NamedEntity
+        private static void Print<T>(this IUnitOfWork<T> unit) where T: RecipientEntity
         {
             {
                 var result = unit.GetAllAsync().Result;
 
                 foreach (var recipient in result)
                 {
-                    Console.WriteLine($"{recipient.Id} => {recipient.Name}");
+                    if (recipient.Id >= 40)
+                    {
+                        ;
+                    }
+                    Console.WriteLine($"RecipientEntity {recipient.Id} => {recipient.Name}");
+
+                    if (recipient.RecipientsListEntities != null)
+                    {
+                        foreach (var list in recipient.RecipientsListEntities)
+                        {
+                            Console.WriteLine($"ListEntity {list.Id} => {list.Name}");
+                        }
+                    }
                 }
             }
         }
@@ -169,7 +189,7 @@ namespace ConsoleTest
 
                 foreach (var recipient in result)
                 {
-                    Console.WriteLine($"{recipient.Id} => {recipient.Name}");
+                    Console.WriteLine($"RecipientDomain {recipient.Id} => {recipient.Name}");
                 }
             }
         }

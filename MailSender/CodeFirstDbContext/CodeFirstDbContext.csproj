@@ -52,6 +52,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\IDbContext.cs" />
+    <Compile Include="EntityConfigurations\MailMessageEntityConfiguration.cs" />
+    <Compile Include="EntityConfigurations\RecipientEntityConfiguration.cs" />
+    <Compile Include="EntityConfigurations\RecipientsListEntityConfiguration.cs" />
+    <Compile Include="EntityConfigurations\SchedulerTaskEntityConfiguration.cs" />
+    <Compile Include="EntityConfigurations\SenderEntityConfiguration.cs" />
+    <Compile Include="EntityConfigurations\ServerEntityConfiguration.cs" />
     <Compile Include="MailSenderDbContext.cs" />
     <Compile Include="Migrations\201911151129089_Initial.cs" />
     <Compile Include="Migrations\201911151129089_Initial.designer.cs">
@@ -60,6 +66,14 @@
     <Compile Include="Migrations\201911201312376_DeleteNavigetionProperties.cs" />
     <Compile Include="Migrations\201911201312376_DeleteNavigetionProperties.designer.cs">
       <DependentUpon>201911201312376_DeleteNavigetionProperties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911211641000_AddRelationships.cs" />
+    <Compile Include="Migrations\201911211641000_AddRelationships.designer.cs">
+      <DependentUpon>201911211641000_AddRelationships.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201911211655028_CanceledCascadeOnDelete.cs" />
+    <Compile Include="Migrations\201911211655028_CanceledCascadeOnDelete.designer.cs">
+      <DependentUpon>201911211655028_CanceledCascadeOnDelete.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -74,15 +88,19 @@
       <Name>Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="EntityConfigurations\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201911151129089_Initial.resx">
       <DependentUpon>201911151129089_Initial.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\201911201312376_DeleteNavigetionProperties.resx">
       <DependentUpon>201911201312376_DeleteNavigetionProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911211641000_AddRelationships.resx">
+      <DependentUpon>201911211641000_AddRelationships.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201911211655028_CanceledCascadeOnDelete.resx">
+      <DependentUpon>201911211655028_CanceledCascadeOnDelete.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

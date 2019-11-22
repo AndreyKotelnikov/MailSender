@@ -5,6 +5,8 @@ namespace Entities
 {
     public class RecipientsListEntity : NamedEntity
     {
-        public ICollection<int> RecipientsId { get; set; }
+        public virtual ICollection<RecipientEntity> RecipientEntities { get; set; }
+
+        public virtual ICollection<SchedulerTaskEntity> SchedulerTaskEntity { get; set; }
     }
 }

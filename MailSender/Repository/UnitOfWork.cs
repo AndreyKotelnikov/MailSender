@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Threading;
@@ -45,13 +46,36 @@ namespace Repository
                 entity.CreatedDate = DateTime.Now;
                 context.Attach(entity);
                 context.Add(entity);
-                if (await context.SaveChangesAsync(cancellationToken) > 0)
+                if (await SaveChangesWithResolvesOptimisticConcurrencyExceptionsAsClientPriorityAsync(context, cancellationToken) > 0)
                 {
                     _keysList.TryAdd(entity.Id, entity.Id);
                 }
                 
                 return entity.Id;
             }
+        }
+
+        private async Task<int> SaveChangesWithResolvesOptimisticConcurrencyExceptionsAsClientPriorityAsync(IDbContext context, CancellationToken cancellationToken)
+        {
+            int numberOfSavedChanges = 0;
+            bool isSaveFailed;
+            do
+            {
+                isSaveFailed = false;
+                try
+                {
+                   numberOfSavedChanges = await context.SaveChangesAsync(cancellationToken);
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    isSaveFailed = true;
+                    var entry = ex.Entries.Single();
+                    entry.OriginalValues.SetValues(entry.GetDatabaseValues());
+                }
+
+            } while (isSaveFailed);
+
+            return numberOfSavedChanges;
         }
 
         public async Task<bool> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
@@ -69,7 +93,7 @@ namespace Repository
                 entity.CreatedDate = DateTime.Now;
                 context.Attach(entity);
                 context.Update(entity);
-                return await context.SaveChangesAsync(cancellationToken) > 0;
+                return await SaveChangesWithResolvesOptimisticConcurrencyExceptionsAsClientPriorityAsync(context, cancellationToken) > 0;
             }
         }
 
@@ -87,7 +111,7 @@ namespace Repository
             {
                 context.Attach(entity);
                 context.Remove(entity);
-                if (await context.SaveChangesAsync(cancellationToken) > 0)
+                if (await SaveChangesWithResolvesOptimisticConcurrencyExceptionsAsClientPriorityAsync(context, cancellationToken) > 0)
                 {
                     _keysList.TryRemove(entity.Id, out int i);
                     return true;

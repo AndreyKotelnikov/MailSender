@@ -12,5 +12,7 @@ namespace Entities
         public string Subject { get; set; }
 
         public string Body { get; set; }
+
+        public virtual ICollection<SchedulerTaskEntity> SchedulerTaskEntity { get; set; }
     }
 }

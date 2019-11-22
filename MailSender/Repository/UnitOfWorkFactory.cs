@@ -26,8 +26,9 @@ namespace Repository
         /// Конструктор для создания фабрики UnitOfWork
         /// </summary>
         /// <param name="typeDbContext">Тип класса для подключения к базе данных</param>
-        /// <param name="mapperFactory">Класс для создания объектов меппинга между слоями архитектуры</param>
-        public UnitOfWorkFactory(Type typeDbContext, IMapperFactory mapperFactory)
+        /// <param name="mapperFactory">Класс для создания объектов меппинга между слоями архитектуры.
+        /// Если mapping не требуется, то параметр можно не указывать</param>
+        public UnitOfWorkFactory(Type typeDbContext, IMapperFactory mapperFactory = null)
         {
             _typeDbContext = typeDbContext;
             _mapperFactory = mapperFactory;
@@ -57,16 +58,15 @@ namespace Repository
                 
                 return (IUnitOfWork<T>)methodCreateUnitOfWorkEntity?.MakeGenericMethod(sourceType)
                     .Invoke(this, null);
-                
             }
-            var distType = _mapperFactory.GetDestinationType<T> ();
-            if (distType == null) throw new ArgumentNullException(nameof(distType), $"Для {sourceType.Name} не указан связанный тип Entity");
+
+            var distType = _mapperFactory?.GetDestinationType<T> ();
+            if (distType == null) 
+                throw new ArgumentNullException(nameof(distType), $"Для {sourceType.Name} в объекте {typeof(IMapperFactory).Name} не указан связанный тип Entity");
+
             var methodCreateUnitOfWorkMapper = GetType().GetMethod("CreateUnitOfWorkMapper", BindingFlags.Instance | BindingFlags.NonPublic);
-            
             return (IUnitOfWork<T>)methodCreateUnitOfWorkMapper?.MakeGenericMethod(sourceType, distType)
                 .Invoke(this, null);
-            
-                
         }
 
         private IUnitOfWork<TEntity> CreateUnitOfWorkEntity<TEntity>() where TEntity : class, IBaseEntity => 

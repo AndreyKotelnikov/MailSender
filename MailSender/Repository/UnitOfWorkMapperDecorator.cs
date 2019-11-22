@@ -42,33 +42,7 @@ namespace Repository
             _mapper.Map<IEnumerable<TDomain>>( 
                 await _unitOfWork.GetAsync(
                     e => queryShaper(_mapper.ProjectTo<TDomain>(e)).AsEnumerable().Select(d => _mapper.Map<TEntity>(d)).AsAsyncQueryable()
-                    //e => queryShaper(_mapper.ProjectTo<TDomain>(e)).AsAsyncEnumerableQuery().ProjectTo<TEntity>(_mapper.ConfigurationProvider)
-                    //e => _mapper.Map<IEnumerable<TEntity>>(queryShaper(_mapper.ProjectTo<TDomain>(e)).AsEnumerable()).AsQueryable()
-                    //MappingQueryShaper(queryShaper)
                     , cancellationToken));
-
-        //private Func<IQueryable<TEntity>, IQueryable<TEntity>> MappingQueryShaper(
-        //    Func<IQueryable<TDomain>, IQueryable<TDomain>> queryShaperDomain)
-        //{
-        //    Expression expr;
-        //    IQueryProvider provider;
-
-        //    Func<IQueryable<TEntity>, IQueryable<TDomain>> v1 = e =>
-        //    {
-        //        var method = queryShaperDomain(_mapper.ProjectTo<TDomain>(e));
-        //        expr = method.Expression;
-        //        provider = method.Provider;
-        //        return method;
-        //    };
-
-        //    v1.BeginInvoke()
-
-        //    var query = provider.CreateQuery<TEntity>(expr);
-
-        //    Func<IQueryable<TEntity>, IQueryable<TEntity>> v2 = e => v1(e).AsEnumerable().AsQueryable().ProjectTo<TEntity>(_mapper.ConfigurationProvider);
-        //    return v2;
-        //}
-
 
         public async Task<TResult> GetAsync<TResult>(Func<IQueryable<TDomain>, TResult> queryShaper,
             CancellationToken cancellationToken) =>

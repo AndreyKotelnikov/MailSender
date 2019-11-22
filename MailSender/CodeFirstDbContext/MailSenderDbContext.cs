@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using CodeFirstDbContext.Abstract;
+using CodeFirstDbContext.EntityConfigurations;
 using CodeFirstDbContext.Migrations;
 using Entities;
 using Entities.Abstract;
@@ -64,7 +65,12 @@ namespace CodeFirstDbContext
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-
+            modelBuilder.Configurations.Add(new RecipientEntityConfiguration());
+            modelBuilder.Configurations.Add(new RecipientsListEntityConfiguration());
+            modelBuilder.Configurations.Add(new MailMessageEntityConfiguration());
+            modelBuilder.Configurations.Add(new SchedulerTaskEntityConfiguration());
+            modelBuilder.Configurations.Add(new SenderEntityConfiguration());
+            modelBuilder.Configurations.Add(new ServerEntityConfiguration());
         }
     }
 }

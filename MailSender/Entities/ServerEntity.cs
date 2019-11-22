@@ -1,4 +1,5 @@
-﻿using Entities.Abstract;
+﻿using System.Collections.Generic;
+using Entities.Abstract;
 
 namespace Entities
 {
@@ -9,5 +10,7 @@ namespace Entities
         public bool UseSSL { get; set; } = true;
 
         public string UserName { get; set; }
+
+        public virtual ICollection<SchedulerTaskEntity> SchedulerTaskEntity { get; set; }
     }
 }
