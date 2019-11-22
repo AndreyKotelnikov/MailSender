@@ -60,7 +60,7 @@ namespace Repository
                     .Invoke(this, null);
             }
 
-            var distType = _mapperFactory?.GetDestinationType<T> ();
+            var distType = _mapperFactory?.GetDestinationTypeForDataLayer<T> ();
             if (distType == null) 
                 throw new ArgumentNullException(nameof(distType), $"Для {sourceType.Name} в объекте {typeof(IMapperFactory).Name} не указан связанный тип Entity");
 

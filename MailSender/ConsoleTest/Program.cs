@@ -38,37 +38,37 @@ namespace ConsoleTest
 
             unitOfWork.Print();
 
-            var rec = new RecipientEntity
-            {
-                Id = 0,
-                Name = "id 17 Entity",
-                RecipientsListEntities = new List<RecipientsListEntity>()
-                {
-                    new RecipientsListEntity{Id = 1, Name = "List 1"},
-                    new RecipientsListEntity{Id = 2, Name = "List 2"}
-                }
-            };
+            //var rec = new RecipientEntity
+            //{
+            //    Id = 0,
+            //    Name = "id 17 Entity",
+            //    RecipientsListEntities = new List<RecipientsListEntity>()
+            //    {
+            //        new RecipientsListEntity{Id = 1, Name = "List 1"},
+            //        new RecipientsListEntity{Id = 2, Name = "List 2"}
+            //    }
+            //};
 
-            int result1 = await unitOfWork.AddAsync(rec);
-            Console.WriteLine();
-            Console.WriteLine($" AddAsync {result1}");
-            Console.WriteLine();
+            //int result1 = await unitOfWork.AddAsync(rec);
+            //Console.WriteLine();
+            //Console.WriteLine($" AddAsync {result1}");
+            //Console.WriteLine();
 
-            unitOfWork.Print();
+            //unitOfWork.Print();
 
-            bool result11 = await unitOfWork.UpdateAsync(new RecipientEntity { Id = 20, Name = "UpdateEntity" });
-            Console.WriteLine();
-            Console.WriteLine($" UpdateAsync {result11}");
-            Console.WriteLine();
+            //bool result11 = await unitOfWork.UpdateAsync(new RecipientEntity { Id = 20, Name = "UpdateEntity" });
+            //Console.WriteLine();
+            //Console.WriteLine($" UpdateAsync {result11}");
+            //Console.WriteLine();
 
-            unitOfWork.Print();
+            //unitOfWork.Print();
 
-            bool result2 = await unitOfWork.DeleteAsync(new RecipientEntity { Id = 31 });
-            Console.WriteLine();
-            Console.WriteLine($" DeleteAsync {result2}");
-            Console.WriteLine();
+            //bool result2 = await unitOfWork.DeleteAsync(new RecipientEntity { Id = 31 });
+            //Console.WriteLine();
+            //Console.WriteLine($" DeleteAsync {result2}");
+            //Console.WriteLine();
 
-            unitOfWork.Print();
+            //unitOfWork.Print();
 
             #endregion
 
@@ -76,7 +76,7 @@ namespace ConsoleTest
 
             IUnitOfWorkFactory unitOfWorkFactoryD = new UnitOfWorkFactory(
                 typeof(MailSenderDbContext),
-                new MapperFactory(MappingConfig.GetMappingTypes(), MappingConfig.GetConfigExpressions())
+                new MapperFactory()
             );
 
             IUnitOfWork<RecipientDomain> unitOfWorkD = unitOfWorkFactoryD.GetCurrentUnitOfWork<RecipientDomain>();
@@ -88,26 +88,26 @@ namespace ConsoleTest
 
             unitOfWorkD.PrintD();
 
-            int resultD1 = await unitOfWorkD.AddAsync(new RecipientDomain { Id = 0, Name = "id 20 Domain" });
-            Console.WriteLine();
-            Console.WriteLine($" AddAsync {resultD1}");
-            Console.WriteLine();
+            //int resultD1 = await unitOfWorkD.AddAsync(new RecipientDomain { Id = 0, Name = "id 20 Domain" });
+            //Console.WriteLine();
+            //Console.WriteLine($" AddAsync {resultD1}");
+            //Console.WriteLine();
 
-            unitOfWorkD.PrintD();
+            //unitOfWorkD.PrintD();
 
-            bool result1D1 = await unitOfWorkD.UpdateAsync(new RecipientDomain { Id = 22, Name = "UpdateDomain" });
-            Console.WriteLine();
-            Console.WriteLine($" UpdateAsync {result1D1}");
-            Console.WriteLine();
+            //bool result1D1 = await unitOfWorkD.UpdateAsync(new RecipientDomain { Id = 22, Name = "UpdateDomain" });
+            //Console.WriteLine();
+            //Console.WriteLine($" UpdateAsync {result1D1}");
+            //Console.WriteLine();
 
-            unitOfWorkD.PrintD();
+            //unitOfWorkD.PrintD();
 
-            bool resultD2 = await unitOfWorkD.DeleteAsync(new RecipientDomain { Id = 32 });
-            Console.WriteLine();
-            Console.WriteLine($" DeleteAsync {resultD2}");
-            Console.WriteLine();
+            //bool resultD2 = await unitOfWorkD.DeleteAsync(new RecipientDomain { Id = 32 });
+            //Console.WriteLine();
+            //Console.WriteLine($" DeleteAsync {resultD2}");
+            //Console.WriteLine();
 
-            unitOfWorkD.PrintD();
+            //unitOfWorkD.PrintD();
 
             #endregion
 
@@ -161,11 +161,11 @@ namespace ConsoleTest
         private static void Print<T>(this IUnitOfWork<T> unit) where T: RecipientEntity
         {
             {
-                var result = unit.GetAllAsync().Result;
+                var result = unit.GetAsync(p => p.Include(l => l.RecipientsListEntities).Where(w => w.Id > 40)).Result;
 
                 foreach (var recipient in result)
                 {
-                    if (recipient.Id >= 40)
+                    if (recipient.Id >= 41)
                     {
                         ;
                     }
@@ -182,7 +182,7 @@ namespace ConsoleTest
             }
         }
 
-        private static void PrintD<T>(this IUnitOfWork<T> unit) where T : NamedDomain
+        private static void PrintD<T>(this IUnitOfWork<T> unit) where T : RecipientDomain
         {
             {
                 var result = unit.GetAllAsync().Result;
@@ -190,6 +190,14 @@ namespace ConsoleTest
                 foreach (var recipient in result)
                 {
                     Console.WriteLine($"RecipientDomain {recipient.Id} => {recipient.Name}");
+
+                    if (recipient.RecipientsListDomain != null)
+                    {
+                        foreach (var list in recipient.RecipientsListDomain)
+                        {
+                            Console.WriteLine($"ListDomain {list.Id} => {list.Name}");
+                        }
+                    }
                 }
             }
         }

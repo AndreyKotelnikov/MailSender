@@ -82,7 +82,6 @@ namespace Repository
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
-
             if (!await CheckExistByIdAsync(entity.Id))
             {
                 return false;
@@ -100,7 +99,6 @@ namespace Repository
         public async Task<bool> DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
-
 
             if (!await CheckExistByIdAsync(entity.Id))
             {
