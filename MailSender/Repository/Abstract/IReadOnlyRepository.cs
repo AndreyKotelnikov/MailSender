@@ -16,14 +16,14 @@ namespace Repository.Abstract
     public interface IReadOnlyRepository<TEntity> where TEntity : class
     {
         Task<IEnumerable<TEntity>> GetAsync(
-            Func<IQueryable<TEntity>, IQueryable<TEntity>> queryShaper,
+            Expression<Func<IQueryable<TEntity>, IQueryable<TEntity>>> queryExpression,
             CancellationToken cancellationToken );
 
         /// <summary>
         /// Используется для возврата скалярных результатов запроса
         /// </summary>
         Task<TResult> GetAsync<TResult>(
-            Func<IQueryable<TEntity>, TResult> queryShaper,
+            Expression<Func<IQueryable<TEntity>, TResult>> queryExpression,
             CancellationToken cancellationToken);
     }
 }

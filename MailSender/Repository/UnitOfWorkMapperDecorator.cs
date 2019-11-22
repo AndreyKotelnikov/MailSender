@@ -13,7 +13,10 @@ using AutoMapper.QueryableExtensions;
 using DelegateDecompiler.EntityFramework;
 using Repository.Abstract;
 using System.Data.Entity.Infrastructure;
+using AutoMapper.Extensions.ExpressionMapping;
+using Entities;
 using Repository.AsyncQueryProvider;
+using Domain;
 
 namespace Repository
 {
@@ -38,18 +41,23 @@ namespace Repository
         public async Task<bool> DeleteAsync(TDomain entity, CancellationToken cancellationToken = default) =>
             await _unitOfWork.DeleteAsync(_mapper.Map<TEntity>(entity), cancellationToken);
 
-        public async Task<IEnumerable<TDomain>> GetAsync(Func<IQueryable<TDomain>, IQueryable<TDomain>> queryShaper, CancellationToken cancellationToken) =>
-            _mapper.Map<IEnumerable<TDomain>>( 
-                await _unitOfWork.GetAsync(
-                    e => queryShaper(_mapper.ProjectTo<TDomain>(e)).AsEnumerable().Select(d => _mapper.Map<TEntity>(d)).AsAsyncQueryable()
-                    , cancellationToken));
-
-        public async Task<TResult> GetAsync<TResult>(Func<IQueryable<TDomain>, TResult> queryShaper,
-            CancellationToken cancellationToken) =>
-            await _unitOfWork.GetAsync(
-                e => queryShaper(_mapper.ProjectTo<TDomain>(e)),
-                cancellationToken);
-
+        public async Task<IEnumerable<TDomain>> GetAsync(
+            Expression<Func<IQueryable<TDomain>, IQueryable<TDomain>>> queryExpression,
+            CancellationToken cancellationToken)
+        {
+            var expressionToEntity = _mapper.MapExpression<Expression<Func<IQueryable<TEntity>, IQueryable<TEntity>>>>(queryExpression);
+            var entityList = await _unitOfWork.GetAsync(expressionToEntity, cancellationToken);
+            return _mapper.Map<IEnumerable<TDomain>>(entityList);
+        }
+            
+        public async Task<TResult> GetAsync<TResult>(
+            Expression<Func<IQueryable<TDomain>, TResult>> queryExpression,
+            CancellationToken cancellationToken)
+        {
+            var expressionToEntity = _mapper.MapExpression<Expression<Func<IQueryable<TEntity>, TResult>>>(queryExpression);
+            var result = await _unitOfWork.GetAsync(expressionToEntity, cancellationToken);
+            return result;
+        }
 
         public async Task<bool> UpdateAsync(TDomain entity, CancellationToken cancellationToken = default) =>
             await _unitOfWork.UpdateAsync(_mapper.Map<TEntity>(entity), cancellationToken);

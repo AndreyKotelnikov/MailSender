@@ -5,6 +5,7 @@ using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using CodeFirstDbContext;
@@ -12,6 +13,7 @@ using CodeFirstDbContext.Abstract;
 using Entities.Abstract;
 using Repository.Abstract;
 using AutoMapper;
+using Repository.AsyncQueryProvider;
 
 namespace Repository
 {
@@ -120,22 +122,27 @@ namespace Repository
 
         }
 
-        public async Task<IEnumerable<TEntity>> GetAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>> queryShaper, CancellationToken cancellationToken)
+        public async Task<IEnumerable<TEntity>> GetAsync(
+            Expression<Func<IQueryable<TEntity>, IQueryable<TEntity>>> queryExpression, CancellationToken cancellationToken)
         {
             using (IDbContext context = (IDbContext)Activator.CreateInstance(_typeDbContext))
             {
-                var query = queryShaper(context.Set<TEntity>());
-                return await query.ToArrayAsync(cancellationToken);
+                var query = queryExpression.Compile();
+
+                var v = await query(context.Set<TEntity>())
+                    .ToArrayAsync(cancellationToken);
+                return v;
             }
         }
 
-        public async Task<TResult> GetAsync<TResult>(Func<IQueryable<TEntity>, TResult> queryShaper,
+        public async Task<TResult> GetAsync<TResult>(
+            Expression<Func<IQueryable<TEntity>, TResult>> queryExpression,
             CancellationToken cancellationToken)
         {
             using (IDbContext context = (IDbContext)Activator.CreateInstance(_typeDbContext))
             {
                 var set = context.Set<TEntity>();
-                var query = queryShaper;
+                var query = queryExpression.Compile();
                 var factory = Task<TResult>.Factory;
                 return await factory.StartNew(() => query(set), cancellationToken);
             }
