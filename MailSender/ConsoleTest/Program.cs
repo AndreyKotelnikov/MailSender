@@ -16,7 +16,7 @@ using AutoMapper.QueryableExtensions;
 using Domain.Abstract;
 using MapperLib;
 using MapperLib.Abstract;
-using Repository.AsyncQueryProvider;
+
 
 namespace ConsoleTest
 {
