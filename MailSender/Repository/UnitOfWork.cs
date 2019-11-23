@@ -13,6 +13,7 @@ using CodeFirstDbContext.Abstract;
 using Entities.Abstract;
 using Repository.Abstract;
 using AutoMapper;
+using Repository.AsyncQueryProvider;
 
 namespace Repository
 {
