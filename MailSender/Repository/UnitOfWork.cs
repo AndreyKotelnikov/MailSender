@@ -19,7 +19,7 @@ namespace Repository
 {
     public sealed class UnitOfWork<TEntity> : IUnitOfWork<TEntity> where TEntity : class, IBaseEntity
     {
-        private readonly Type _typeDbContext;
+        private readonly IDbContextProvider _dbContextProvider;
 
         private readonly ConcurrentDictionary<int, int> _keysList = new ConcurrentDictionary<int, int>();
 
@@ -27,9 +27,9 @@ namespace Repository
 
         
 
-        internal UnitOfWork(Type typeDbContext)
+        internal UnitOfWork(IDbContextProvider dbContextProvider)
         {
-            _typeDbContext = typeDbContext;
+            _dbContextProvider = dbContextProvider;
             _isKeysLoaded = Task.Run(LoadKeysFromDbSetAsync);
         }
 
@@ -43,16 +43,14 @@ namespace Repository
                 return 0;
             }
 
-            using (IDbContext context = (IDbContext)Activator.CreateInstance(_typeDbContext))
+            using (IDbContext context = _dbContextProvider.GetDbContext())
             {
                 entity.CreatedDate = DateTime.Now;
-                context.Attach(entity);
                 context.Add(entity);
                 if (await SaveChangesWithResolvesOptimisticConcurrencyExceptionsAsClientPriorityAsync(context, cancellationToken) > 0)
                 {
                     _keysList.TryAdd(entity.Id, entity.Id);
                 }
-                
                 return entity.Id;
             }
         }
@@ -74,9 +72,7 @@ namespace Repository
                     var entry = ex.Entries.Single();
                     entry.OriginalValues.SetValues(entry.GetDatabaseValues());
                 }
-
             } while (isSaveFailed);
-
             return numberOfSavedChanges;
         }
 
@@ -89,10 +85,9 @@ namespace Repository
                 return false;
             }
 
-            using (IDbContext context = (IDbContext)Activator.CreateInstance(_typeDbContext))
+            using (IDbContext context = _dbContextProvider.GetDbContext())
             {
                 entity.CreatedDate = DateTime.Now;
-                context.Attach(entity);
                 context.Update(entity);
                 return await SaveChangesWithResolvesOptimisticConcurrencyExceptionsAsClientPriorityAsync(context, cancellationToken) > 0;
             }
@@ -107,16 +102,14 @@ namespace Repository
                 return false;
             }
 
-            using (IDbContext context = (IDbContext)Activator.CreateInstance(_typeDbContext))
+            using (IDbContext context = _dbContextProvider.GetDbContext())
             {
-                context.Attach(entity);
                 context.Remove(entity);
                 if (await SaveChangesWithResolvesOptimisticConcurrencyExceptionsAsClientPriorityAsync(context, cancellationToken) > 0)
                 {
                     _keysList.TryRemove(entity.Id, out int i);
                     return true;
                 }
-                
                 return false;
             }
 
@@ -125,7 +118,7 @@ namespace Repository
         public async Task<IEnumerable<TEntity>> GetAsync(
             Expression<Func<IQueryable<TEntity>, IQueryable<TEntity>>> queryExpression, CancellationToken cancellationToken)
         {
-            using (IDbContext context = (IDbContext)Activator.CreateInstance(_typeDbContext))
+            using (IDbContext context = _dbContextProvider.GetDbContext())
             {
                 var query = queryExpression.Compile();
 
@@ -139,7 +132,7 @@ namespace Repository
             Expression<Func<IQueryable<TEntity>, TResult>> queryExpression,
             CancellationToken cancellationToken)
         {
-            using (IDbContext context = (IDbContext)Activator.CreateInstance(_typeDbContext))
+            using (IDbContext context = _dbContextProvider.GetDbContext())
             {
                 var set = context.Set<TEntity>();
                 var query = queryExpression.Compile();
@@ -150,7 +143,7 @@ namespace Repository
 
         private async Task<bool> LoadKeysFromDbSetAsync()
         {
-            using (IDbContext context = (IDbContext)Activator.CreateInstance(_typeDbContext))
+            using (IDbContext context = _dbContextProvider.GetDbContext())
             {
                 var keysFromDb = await context.Set<TEntity>().Select(e => e.Id).ToListAsync().ConfigureAwait(false);
                 foreach (var id in keysFromDb)

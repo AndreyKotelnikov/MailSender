@@ -43,23 +43,22 @@ namespace CodeFirstDbContext
             return this.Set<TEntity>();
         }
 
-        public void Attach<TEntity>(TEntity entity) where TEntity : class
-        {
-            this.Set<TEntity>().Attach(entity);
-        }
 
         public void Add<TEntity>(TEntity entity) where TEntity : class
         {
+            this.Set<TEntity>().Attach(entity);
             this.Set<TEntity>().Add(entity);
         }
 
         public void Update<TEntity>(TEntity entity) where TEntity : class
         {
+            this.Set<TEntity>().Attach(entity);
             this.Entry(entity).State = EntityState.Modified;
         }
 
         public void Remove<TEntity>(TEntity entity) where TEntity : class
         {
+            this.Set<TEntity>().Attach(entity);
             this.Set<TEntity>().Remove(entity);
         }
 

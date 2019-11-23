@@ -15,7 +15,6 @@ using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain.Abstract;
 using MapperLib;
-using MapperLib.Abstract;
 using Repository.AsyncQueryProvider;
 
 namespace ConsoleTest
@@ -27,7 +26,8 @@ namespace ConsoleTest
 
             #region Тестирование UnitOfWorkEntity
 
-            IUnitOfWorkFactory unitOfWorkFactory = new UnitOfWorkFactory(typeof(MailSenderDbContext));
+            IDbContextProvider dbContextProvider = new CodeFirstDbContextProvider(typeof(MailSenderDbContext));
+            IUnitOfWorkFactory unitOfWorkFactory = new UnitOfWorkFactory(dbContextProvider);
 
             IUnitOfWork<RecipientEntity> unitOfWork = unitOfWorkFactory.GetCurrentUnitOfWork<RecipientEntity>();
 
@@ -75,10 +75,11 @@ namespace ConsoleTest
 
             #region Тестирование UnitOfWorkDomain
 
-            IUnitOfWorkFactory unitOfWorkFactoryD = new UnitOfWorkFactory(
-                typeof(MailSenderDbContext),
-                new MapperFactory()
-            );
+
+            IDbContextProvider dbContextProviderD = new CodeFirstDbContextProvider(typeof(MailSenderDbContext));
+            IMapper mapper = MappingProfile.InitializeAutoMapper().CreateMapper();
+            
+            IUnitOfWorkFactory unitOfWorkFactoryD = new UnitOfWorkFactory(dbContextProviderD, mapper);
 
             IUnitOfWork<RecipientDomain> unitOfWorkD = unitOfWorkFactoryD.GetCurrentUnitOfWork<RecipientDomain>();
 

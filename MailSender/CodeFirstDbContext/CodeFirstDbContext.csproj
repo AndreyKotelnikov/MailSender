@@ -52,6 +52,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Abstract\IDbContext.cs" />
+    <Compile Include="Abstract\IDbContextProvider.cs" />
+    <Compile Include="CodeFirstDbContextProvider.cs" />
     <Compile Include="EntityConfigurations\MailMessageEntityConfiguration.cs" />
     <Compile Include="EntityConfigurations\RecipientEntityConfiguration.cs" />
     <Compile Include="EntityConfigurations\RecipientsListEntityConfiguration.cs" />

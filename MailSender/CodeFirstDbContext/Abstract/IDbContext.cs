@@ -28,13 +28,6 @@ namespace CodeFirstDbContext.Abstract
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Прикрепить сущность к сущностной модели данных
-        /// </summary>
-        /// <typeparam name="TEntity">Тип сущности</typeparam>
-        /// <param name="entity">Сущность, которую нужно прикрепить к сущностной модели данных</param>
-        void Attach<TEntity>(TEntity entity) where TEntity : class;
-
-        /// <summary>
         /// Помечает сущность как новую в сущностной моделе данных
         /// </summary>
         /// <typeparam name="TEntity">Тип сущности</typeparam>
