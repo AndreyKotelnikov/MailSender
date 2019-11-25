@@ -25,5 +25,7 @@ namespace Repository.Abstract
         Task<TResult> GetAsync<TResult>(
             Expression<Func<IQueryable<TEntity>, TResult>> queryExpression,
             CancellationToken cancellationToken);
+
+        Task<int> GetMaxIdAsync(CancellationToken cancellationToken);
     }
 }

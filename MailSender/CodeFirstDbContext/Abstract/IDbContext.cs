@@ -47,5 +47,26 @@ namespace CodeFirstDbContext.Abstract
         /// <typeparam name="TEntity">Тип сущности</typeparam>
         /// <param name="entity">Сущность, которую нужно пометить как удалённую в сущностной моделе данных</param>
         void Remove<TEntity>(TEntity entity) where TEntity : class;
+
+        /// <summary>
+        /// Помечает последовательность сущностей как новые в сущностной моделе данных
+        /// </summary>
+        /// <typeparam name="TEntity">Тип сущности</typeparam>
+        /// <param name="entities">Сущности, которые нужно пометить как новые в сущностной моделе данных</param>
+        void AddRange<TEntity>(IEnumerable<TEntity> entities) where TEntity : class;
+
+        /// <summary>
+        /// Помечает последовательность сущностей как изменённые в сущностной моделе данных
+        /// </summary>
+        /// <typeparam name="TEntity">Тип сущности</typeparam>
+        /// <param name="entities">Сущности, которые нужно пометить как изменённые в сущностной моделе данных</param>
+        void UpdateRange<TEntity>(IEnumerable<TEntity> entities) where TEntity : class;
+
+        /// <summary>
+        /// Помечает последовательность сущностей как удалённые в сущностной моделе данных
+        /// </summary>
+        /// <typeparam name="TEntity">Тип сущности</typeparam>
+        /// <param name="entities">Сущности, которые нужно пометить как удалённые в сущностной моделе данных</param>
+        void RemoveRange<TEntity>(IEnumerable<TEntity> entities) where TEntity : class;
     }
 }

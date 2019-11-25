@@ -35,11 +35,17 @@ namespace Repository
         }
 
         public async Task<int> AddAsync(TDomain entity, CancellationToken cancellationToken = default) =>
-            await _unitOfWork.AddAsync(_mapper.Map<TEntity>(entity), cancellationToken); 
-        
+            await _unitOfWork.AddAsync(_mapper.Map<TEntity>(entity), cancellationToken);
+
+        public async Task<List<int>> AddRangeAsync(IEnumerable<TDomain> entities,
+            CancellationToken cancellationToken = default) =>
+            await _unitOfWork.AddRangeAsync(_mapper.Map<IEnumerable<TEntity>>(entities), cancellationToken);
 
         public async Task<bool> DeleteAsync(TDomain entity, CancellationToken cancellationToken = default) =>
             await _unitOfWork.DeleteAsync(_mapper.Map<TEntity>(entity), cancellationToken);
+
+        public async Task<bool> DeleteRangeAsync(IEnumerable<TDomain> entities, CancellationToken cancellationToken = default) => 
+            await _unitOfWork.DeleteRangeAsync(_mapper.Map<IEnumerable<TEntity>>(entities), cancellationToken);
 
         public async Task<IEnumerable<TDomain>> GetAsync(
             Expression<Func<IQueryable<TDomain>, IQueryable<TDomain>>> queryExpression,
@@ -59,8 +65,13 @@ namespace Repository
             return result;
         }
 
+        public async Task<int> GetMaxIdAsync(CancellationToken cancellationToken) =>
+            await _unitOfWork.GetMaxIdAsync(cancellationToken);
+
         public async Task<bool> UpdateAsync(TDomain entity, CancellationToken cancellationToken = default) =>
             await _unitOfWork.UpdateAsync(_mapper.Map<TEntity>(entity), cancellationToken);
 
+        public async Task<bool> UpdateRangeAsync(IEnumerable<TDomain> entities, CancellationToken cancellationToken = default) =>
+        await _unitOfWork.UpdateRangeAsync(_mapper.Map<IEnumerable<TEntity>>(entities), cancellationToken);
     }
 }

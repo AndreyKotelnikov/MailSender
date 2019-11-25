@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Entities.Abstract;
 
@@ -33,6 +34,34 @@ namespace Repository.Abstract
         /// <param name="cancellationToken">Токен отмены</param>
         /// <returns>true, если удаление прошло успешно. Или false, если не получилось удалить элемент.</returns>
         Task<bool> DeleteAsync(TEntity entity, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Добавляет новые элементы в базу данных и возвращает новые Id элементов. Или возвращает 0, если не получилось добавить элементы.
+        /// </summary>
+        /// <param name="entities">Новые элементы, где Id = 0</param>
+        /// <param name="cancellationToken">Токен отмены</param>
+        /// <returns>Новые значения Id. Или 0, если не получилось добавить элементы.</returns>
+        Task<List<int>> AddRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Изменяет текущие элементы в базе данных и возвращает true, если изменение прошло успешно. Или возвращает false, если не получилось изменить элементы.
+        /// </summary>
+        /// <param name="entities">Элементы, где Id > 0</param>
+        /// <param name="cancellationToken">Токен отмены</param>
+        /// <returns>true, если изменение прошло успешно. Или false, если не получилось изменить элементы.</returns>
+        Task<bool> UpdateRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Удаляет текущие элементы из базы данных и возвращает true, если удаление прошло успешно. Или возвращает false, если не получилось удалить элементы.
+        /// </summary>
+        /// <param name="entities">Элементы, где Id > 0</param>
+        /// <param name="cancellationToken">Токен отмены</param>
+        /// <returns>true, если удаление прошло успешно. Или false, если не получилось удалить элементы.</returns>
+        Task<bool> DeleteRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default);
+
+
+        
+
 
     }
 }

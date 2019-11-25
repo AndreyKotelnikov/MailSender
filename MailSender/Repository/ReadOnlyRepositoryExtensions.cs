@@ -46,5 +46,13 @@ namespace Repository
             ) 
             where T : class 
             => repository.GetAsync(q => q.Where(predicate), CancellationToken.None);
+
+        public static Task<int> GetMaxIdAsync<T>(this IReadOnlyRepository<T> repository, CancellationToken cancellationToken)
+            where T : class
+            => repository.GetMaxIdAsync(cancellationToken);
+
+        public static Task<int> GetMaxIdAsync<T>(this IReadOnlyRepository<T> repository)
+            where T : class
+            => repository.GetMaxIdAsync(CancellationToken.None);
     }
 }

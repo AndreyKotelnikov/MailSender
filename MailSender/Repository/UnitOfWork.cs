@@ -36,11 +36,11 @@ namespace Repository
         public async Task<int> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
-            if (entity.Id != 0) throw new ArgumentOutOfRangeException(nameof(entity.Id), "Id должен быть равен 0");
 
             if (await CheckExistByIdAsync(entity.Id))
             {
-                return 0;
+                throw new ArgumentOutOfRangeException(nameof(entity),
+                    $"Id со значением {entity.Id} уже содержится в базе данных");
             }
 
             using (IDbContext context = _dbContextProvider.GetDbContext())
@@ -55,34 +55,13 @@ namespace Repository
             }
         }
 
-        private async Task<int> SaveChangesWithResolvesOptimisticConcurrencyExceptionsAsClientPriorityAsync(IDbContext context, CancellationToken cancellationToken)
-        {
-            int numberOfSavedChanges = 0;
-            bool isSaveFailed;
-            do
-            {
-                isSaveFailed = false;
-                try
-                {
-                   numberOfSavedChanges = await context.SaveChangesAsync(cancellationToken);
-                }
-                catch (DbUpdateConcurrencyException ex)
-                {
-                    isSaveFailed = true;
-                    var entry = ex.Entries.Single();
-                    entry.OriginalValues.SetValues(entry.GetDatabaseValues());
-                }
-            } while (isSaveFailed);
-            return numberOfSavedChanges;
-        }
-
         public async Task<bool> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             if (entity == null) throw new ArgumentNullException(nameof(entity));
 
             if (!await CheckExistByIdAsync(entity.Id))
             {
-                return false;
+                throw new ArgumentOutOfRangeException(nameof(entity), $"Id со значением {entity.Id} в базе данных не найден");
             }
 
             using (IDbContext context = _dbContextProvider.GetDbContext())
@@ -99,7 +78,7 @@ namespace Repository
 
             if (!await CheckExistByIdAsync(entity.Id))
             {
-                return false;
+                throw new ArgumentOutOfRangeException(nameof(entity), $"Id со значением {entity.Id} в базе данных не найден");
             }
 
             using (IDbContext context = _dbContextProvider.GetDbContext())
@@ -113,6 +92,110 @@ namespace Repository
                 return false;
             }
 
+        }
+
+        public async Task<List<int>> AddRangeAsync(IEnumerable<TEntity> entities,
+            CancellationToken cancellationToken = default)
+        {
+            if (entities.Any(e => e == null)) throw new ArgumentNullException(nameof(entities));
+
+            if (entities.Any(e => CheckExistByIdAsync(e.Id).Result))
+            {
+                throw new ArgumentOutOfRangeException(nameof(entities), 
+                    $"Id со значением {entities.First(e => CheckExistByIdAsync(e.Id).Result)} уже содержится в базе данных");
+            }
+
+            using (IDbContext context = _dbContextProvider.GetDbContext())
+            {
+                foreach (var entity in entities)
+                {
+                    entity.CreatedDate = DateTime.Now;
+                }
+                context.AddRange(entities);
+                if (await SaveChangesWithResolvesOptimisticConcurrencyExceptionsAsClientPriorityAsync(context, cancellationToken) > 0)
+                {
+                    foreach (var entity in entities)
+                    {
+                        _keysList.TryAdd(entity.Id, entity.Id);
+                    }
+                    
+                }
+                return entities.Select(e => e.Id).ToList();
+            }
+        }
+
+        public async Task<bool> UpdateRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+        {
+            if (entities.Any(e => e == null)) throw new ArgumentNullException(nameof(entities));
+            
+
+            if (entities.Any(e => !CheckExistByIdAsync(e.Id).Result))
+            {
+                throw new ArgumentOutOfRangeException(nameof(entities), 
+                    $"Id со значением {entities.First(e => !CheckExistByIdAsync(e.Id).Result)} в базе данных не найден");
+            }
+
+            using (IDbContext context = _dbContextProvider.GetDbContext())
+            {
+                //TODO убрать цикл foreach ниже после реализации тестов
+                foreach (var entity in entities)
+                {
+                    entity.CreatedDate = DateTime.Now;
+                }
+                context.UpdateRange(entities);
+                if (await SaveChangesWithResolvesOptimisticConcurrencyExceptionsAsClientPriorityAsync(context, cancellationToken) > 0)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        public async Task<bool> DeleteRangeAsync(IEnumerable<TEntity> entities, CancellationToken cancellationToken = default)
+        {
+            if (entities.Any(e => e == null)) throw new ArgumentNullException(nameof(entities));
+
+            if (entities.Any(e => !CheckExistByIdAsync(e.Id).Result))
+            {
+                throw new ArgumentOutOfRangeException(nameof(entities), 
+                    $"Id со значением {entities.First(e => !CheckExistByIdAsync(e.Id).Result)} в базе данных не найден");
+            }
+
+            using (IDbContext context = _dbContextProvider.GetDbContext())
+            {
+                context.RemoveRange(entities);
+                if (await SaveChangesWithResolvesOptimisticConcurrencyExceptionsAsClientPriorityAsync(context, cancellationToken) > 0)
+                {
+                    foreach (var entity in entities)
+                    {
+                        _keysList.TryRemove(entity.Id, out int i);
+                    }
+
+                    return true;
+                }
+                return false;
+            }
+        }
+
+        private async Task<int> SaveChangesWithResolvesOptimisticConcurrencyExceptionsAsClientPriorityAsync(IDbContext context, CancellationToken cancellationToken)
+        {
+            int numberOfSavedChanges = 0;
+            bool isSaveFailed;
+            do
+            {
+                isSaveFailed = false;
+                try
+                {
+                    numberOfSavedChanges = await context.SaveChangesAsync(cancellationToken);
+                }
+                catch (DbUpdateConcurrencyException ex)
+                {
+                    isSaveFailed = true;
+                    var entry = ex.Entries.Single();
+                    entry.OriginalValues.SetValues(entry.GetDatabaseValues());
+                }
+            } while (isSaveFailed);
+            return numberOfSavedChanges;
         }
 
         public async Task<IEnumerable<TEntity>> GetAsync(
@@ -160,6 +243,13 @@ namespace Repository
             await Task.WhenAll(_isKeysLoaded);
             
             return _keysList.TryGetValue(id, out int i);
+        }
+
+        public async Task<int> GetMaxIdAsync(CancellationToken cancellationToken)
+        {
+            await Task.WhenAll(_isKeysLoaded);
+
+            return _keysList.Max(k => k.Key);
         }
     }
 }
