@@ -36,8 +36,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=9.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.9.0.0\lib\net461\AutoMapper.dll</HintPath>
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.4.9.4\lib\net45\Autofac.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.3.0\lib\net45\EntityFramework.dll</HintPath>
@@ -70,6 +70,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Autofac.Lib\Autofac.Lib.csproj">
+      <Project>{1542F997-B693-448B-B5B2-08A3E994ACF1}</Project>
+      <Name>Autofac.Lib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CodeFirstDbContext\CodeFirstDbContext.csproj">
       <Project>{F4639D87-6E2C-4A77-98CB-B4AE538387F4}</Project>
       <Name>CodeFirstDbContext</Name>
