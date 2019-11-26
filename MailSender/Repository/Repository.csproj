@@ -77,6 +77,7 @@
     <Compile Include="Abstract\IReadOnlyRepository.cs" />
     <Compile Include="Abstract\IUnitOfWork.cs" />
     <Compile Include="Abstract\IUnitOfWorkFactory.cs" />
+    <Compile Include="Abstract\IWriteOnlyRepositoty.cs" />
     <Compile Include="AsyncQueryProvider\AsyncQueryableExtensions.cs" />
     <Compile Include="AsyncQueryProvider\DbAsyncEnumerable.cs" />
     <Compile Include="AsyncQueryProvider\DbAsyncEnumerator.cs" />

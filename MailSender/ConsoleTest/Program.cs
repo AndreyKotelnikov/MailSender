@@ -118,10 +118,7 @@ namespace ConsoleTest
                 #endregion
 
 
-                Task.WaitAll(TestUnitOfWorkDomain(scope));
-
-
-
+                Task.WhenAll(TestUnitOfWorkDomain(scope));
 
 
                 #region Тестирование Mapper
