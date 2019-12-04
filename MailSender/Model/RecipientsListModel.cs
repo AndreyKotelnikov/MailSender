@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Domains.Abstract;
+using Models.Abstract;
 
-namespace Domains
+namespace Models
 {
-    public class RecipientsListDomain : NamedDomain
+    public class RecipientsListModel : NamedModel
     {
         public ICollection<int> RecipientsId { get; set; }
     }

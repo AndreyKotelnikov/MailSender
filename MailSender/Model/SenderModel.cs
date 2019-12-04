@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Models.Abstract;
 
-namespace Domains.Abstract
+namespace Models
 {
-    public abstract class BaseDomain : IBaseDomain
+    public class SenderModel : ConnectionModel
     {
-        public int Id { get; set; }
     }
 }

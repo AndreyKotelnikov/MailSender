@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domains.Abstract
+namespace Models.Abstract
 {
-    public abstract class ConnectionDomain : NamedDomain
+    public abstract class ConnectionModel : NamedModel
     {
         /// <summary>
         /// Адрес для связи

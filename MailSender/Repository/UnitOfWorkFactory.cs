@@ -62,11 +62,13 @@ namespace Repository
             {
                 baseUnitOfWork = GetNewInstanceOfUnitOfWorkBase<TUpLayer>();
             }
+            else
+            {
+                var distType = GetDestinationTypeForDownLayer<TUpLayer>();
 
-            var distType = GetDestinationTypeForDownLayer<TUpLayer>();
-
-            baseUnitOfWork = CreateUnitOfWorkWithMapper<TUpLayer>(distType);
-
+                baseUnitOfWork = CreateUnitOfWorkWithMapper<TUpLayer>(distType);
+            }
+            
             return CreateUnitOfWorkWithDecorators(baseUnitOfWork);
         }
 
@@ -74,7 +76,6 @@ namespace Repository
         {
             var unitOfWork = new UnitOfWorkContractDecorator<T>(baseUnitOfWork);
             return unitOfWork;
-            //return baseUnitOfWork;
         }
 
 

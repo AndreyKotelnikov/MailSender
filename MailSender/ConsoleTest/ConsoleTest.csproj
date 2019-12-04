@@ -78,9 +78,9 @@
       <Project>{F4639D87-6E2C-4A77-98CB-B4AE538387F4}</Project>
       <Name>EFCodeFirstDb</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Domain\Domain.csproj">
+    <ProjectReference Include="..\Domain\Domains.csproj">
       <Project>{C8267BD6-E2CF-4150-9833-16B393EA60EC}</Project>
-      <Name>Domain</Name>
+      <Name>Domains</Name>
     </ProjectReference>
     <ProjectReference Include="..\Entities\Entities.csproj">
       <Project>{57D3C079-FB6B-4EA6-9FC9-47B123EC728D}</Project>

@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domains.Abstract
+namespace Models.Abstract
 {
     /// <summary>
-    /// Именованный домен
+    /// Именованная модель
     /// </summary>
-    public abstract class NamedDomain : BaseDomain
+    public abstract class NamedModel : BaseModel
     {
         /// <summary>
         /// Наименование

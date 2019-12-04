@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0C887787-E26E-45A4-8032-7EE740B41D78}</ProjectGuid>
+    <ProjectGuid>{43D73C57-FDCC-4298-8A89-F35673DCF4F8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MapperLib</RootNamespace>
-    <AssemblyName>MapperLib</AssemblyName>
+    <RootNamespace>Models</RootNamespace>
+    <AssemblyName>Models</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -31,9 +31,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=9.0.0.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.9.0.0\lib\net461\AutoMapper.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,24 +41,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BusinessLogicMappingProfile.cs" />
-    <Compile Include="MappingProfile.cs" />
+    <Compile Include="Abstract\BaseModel.cs" />
+    <Compile Include="Abstract\ConnectionModel.cs" />
+    <Compile Include="Abstract\IBaseModel.cs" />
+    <Compile Include="Abstract\NamedModel.cs" />
+    <Compile Include="MailMessageModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ClientMappingProfile.cs" />
+    <Compile Include="RecipientModel.cs" />
+    <Compile Include="RecipientsListModel.cs" />
+    <Compile Include="SchedulerTaskModel.cs" />
+    <Compile Include="SenderModel.cs" />
+    <Compile Include="ServerModel.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Domain\Domains.csproj">
-      <Project>{C8267BD6-E2CF-4150-9833-16B393EA60EC}</Project>
-      <Name>Domains</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Entities\Entities.csproj">
-      <Project>{57d3c079-fb6b-4ea6-9fc9-47b123ec728d}</Project>
-      <Name>Entities</Name>
+    <ProjectReference Include="..\RepositoryAbstract\RepositoryAbstract.csproj">
+      <Project>{8B5F42BE-0B56-4145-A806-519CD798863D}</Project>
+      <Name>RepositoryAbstract</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

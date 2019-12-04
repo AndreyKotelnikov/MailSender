@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domains.Abstract
+namespace Models.Abstract
 {
-    public abstract class BaseDomain : IBaseDomain
+    public abstract class BaseModel : IBaseModel
     {
         public int Id { get; set; }
     }

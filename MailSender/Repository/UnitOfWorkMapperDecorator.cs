@@ -15,7 +15,7 @@ using System.Data.Entity.Infrastructure;
 using AutoMapper.Extensions.ExpressionMapping;
 using Entities;
 using Repository.AsyncQueryProvider;
-using Domain;
+using Domains;
 using RepositoryAbstract;
 
 namespace Repository

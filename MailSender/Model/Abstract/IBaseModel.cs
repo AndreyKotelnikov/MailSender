@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domains.Abstract
+namespace Models.Abstract
 {
 
-    public interface IBaseDomain : IUniqueEntity
+    public interface IBaseModel : IUniqueEntity
     {
 
     }
