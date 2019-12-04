@@ -1,13 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Threading;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
-using Entities.Abstract;
 
-namespace Repository.Abstract
+namespace RepositoryAbstract
 {
-    
     public interface IUnitOfWork<TEntity> : IReadOnlyRepository<TEntity>, IWriteOnlyRepositoty<TEntity> where TEntity : class
     {
-     
+
     }
 }

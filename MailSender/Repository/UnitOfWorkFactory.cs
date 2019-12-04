@@ -6,14 +6,15 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using CodeFirstDbContext;
 using CodeFirstDbContext.Abstract;
 using Entities;
 using Entities.Abstract;
-using Repository.Abstract;
+using RepositoryAbstract;
 
 namespace Repository
 {
-    public sealed class UnitOfWorkFactory : IUnitOfWorkFactory
+    public sealed class UnitOfWorkFactory: IUnitOfWorkFactory
     {
         private readonly IDbContextProvider _dbContextProvider;
 
@@ -24,86 +25,91 @@ namespace Repository
         /// <summary>
         /// Конструктор для создания фабрики UnitOfWork
         /// </summary>
+        /// <param name="mapper">Класс для меппинга между слоями архитектуры</param>
         /// <param name="typeDbContext">Тип класса для подключения к базе данных</param>
-        /// <param name="mapper">Класс для меппинга между слоями архитектуры.
-        /// Если mapping не требуется, то параметр можно не указывать</param>
-        public UnitOfWorkFactory(IDbContextProvider dbContextProvider, IMapper mapper = null)
+        public UnitOfWorkFactory(IMapper mapper, IDbContextProvider dbContextProvider)
         {
             _dbContextProvider = dbContextProvider;
             _mapper = mapper;
         }
 
-        public IUnitOfWork<T> GetCurrentUnitOfWork<T>() where T : class
+        /// <summary>
+        /// Конструктор для создания фабрики UnitOfWork
+        /// </summary>
+        /// <param name="mapper">Класс для меппинга между слоями архитектуры</param>
+        public UnitOfWorkFactory(IMapper mapper):this(mapper, null)
         {
-            var type = typeof(T);
+        }
+
+        public IUnitOfWork<TUpLayer> GetCurrentUnitOfWork<TUpLayer>() where TUpLayer : class, IUniqueEntity
+        {
+            var type = typeof(TUpLayer);
             object current;
 
             if (!_unitsOfWorks.TryGetValue(type, out current))
             {
-                current = CreateUnitOfWork<T>();
+                current = CreateUnitOfWork<TUpLayer>();
                 _unitsOfWorks[type] = current;
             }
 
-            return (IUnitOfWork<T>)current;
+            return (IUnitOfWork<TUpLayer>)current;
         }
 
-        private IUnitOfWork<T> CreateUnitOfWork<T>() where T : class
+        private IUnitOfWork<TUpLayer> CreateUnitOfWork<TUpLayer>() where TUpLayer : class, IUniqueEntity
         {
-            if (CheckImplementationOfIBaseEntity(typeof(T)))
-            {
-                return CreateUnitOfWorkEntity<T>();
-            }
+            IUnitOfWork<TUpLayer> baseUnitOfWork;
             if (_mapper == null)
-                throw new ArgumentNullException(typeof(T).Name,
-                    $"Тип {nameof(T)} не реализует базовый интерфейс сущностей DataLayer {nameof(IBaseEntity)} - требуется указать объект {nameof(IMapper)}");
+            {
+                baseUnitOfWork = GetNewInstanceOfUnitOfWorkBase<TUpLayer>();
+            }
 
-            var distType = GetDestinationTypeForDataLayer<T>();
-            if (distType == null)
-                throw new ArgumentNullException(nameof(distType), $"Для {nameof(T)} в объекте {nameof(IMapper)} не указан связанный тип для DataLayer");
+            var distType = GetDestinationTypeForDownLayer<TUpLayer>();
 
-            return CreateUnitOfWorkWithMapper<T>(distType);
+            baseUnitOfWork = CreateUnitOfWorkWithMapper<TUpLayer>(distType);
+
+            return CreateUnitOfWorkWithDecorators(baseUnitOfWork);
         }
 
-        private IUnitOfWork<T> CreateUnitOfWorkEntity<T>() where T : class
+        private IUnitOfWork<T> CreateUnitOfWorkWithDecorators<T>(IUnitOfWork<T> baseUnitOfWork) where T : class, IUniqueEntity
         {
-            var methodGetNewInstanceOfUnitOfWorkEntity = GetType()
-                .GetMethod(nameof(GetNewInstanceOfUnitOfWorkEntity), BindingFlags.Instance | BindingFlags.NonPublic);
-
-            return (IUnitOfWork<T>)methodGetNewInstanceOfUnitOfWorkEntity?.MakeGenericMethod(typeof(T))
-                .Invoke(this, null);
+            var unitOfWork = new UnitOfWorkContractDecorator<T>(baseUnitOfWork);
+            return unitOfWork;
+            //return baseUnitOfWork;
         }
 
-        private IUnitOfWork<T> CreateUnitOfWorkWithMapper<T>(Type distType) where T : class
+
+        private IUnitOfWork<TUpLayer> CreateUnitOfWorkWithMapper<TUpLayer>(Type downLayerType) where TUpLayer : class
         {
             var methodCreateUnitOfWorkMapper = GetType()
-                .GetMethod(nameof(GetNewInctanceOfUnitOfWorkWithMapper), BindingFlags.Instance | BindingFlags.NonPublic);
-            return (IUnitOfWork<T>)methodCreateUnitOfWorkMapper?.MakeGenericMethod(typeof(T), distType)
+                .GetMethod(nameof(GetNewInstanceOfUnitOfWorkWithMapper), BindingFlags.Instance | BindingFlags.NonPublic);
+            return (IUnitOfWork<TUpLayer>)methodCreateUnitOfWorkMapper?.MakeGenericMethod(typeof(TUpLayer), downLayerType)
                 .Invoke(this, null);
         }
 
-        private IUnitOfWork<TEntity> GetNewInstanceOfUnitOfWorkEntity<TEntity>() where TEntity : class, IBaseEntity => 
-            new UnitOfWork<TEntity>(_dbContextProvider);
-            
-
-        private IUnitOfWork<TDomain> GetNewInctanceOfUnitOfWorkWithMapper<TDomain, TEntity>() 
-            where TDomain : class
-            where TEntity : class, IBaseEntity
+        private IUnitOfWork<T> GetNewInstanceOfUnitOfWorkBase<T>() where T : class, IUniqueEntity
         {
-            IUnitOfWork<TEntity> unitOfWorkEntity = GetNewInstanceOfUnitOfWorkEntity<TEntity>();
-            IUnitOfWork<TDomain> unitOfWorkWithMapper = new UnitOfWorkMapperDecorator<TDomain,TEntity>(unitOfWorkEntity, _mapper);
+            if (_dbContextProvider == null)
+            {
+                return null;
+            }
+            return new UnitOfWorkEF<T>(_dbContextProvider, new ResolveOptimisticConcurrencyExceptionsAsClientPriority());
+        }  
+            
+        private IUnitOfWork<TUpLayer> GetNewInstanceOfUnitOfWorkWithMapper<TUpLayer, TDownLayer>() 
+            where TUpLayer : class
+            where TDownLayer : class, IUniqueEntity
+        {
+            IUnitOfWork<TDownLayer> unitOfWorkBase = GetNewInstanceOfUnitOfWorkBase<TDownLayer>();
+            IUnitOfWork<TUpLayer> unitOfWorkWithMapper = new UnitOfWorkMapperDecorator<TUpLayer,TDownLayer>(unitOfWorkBase, _mapper);
             return unitOfWorkWithMapper;
         }
 
-        private Type GetDestinationTypeForDataLayer<T>() where T : class
+        private Type GetDestinationTypeForDownLayer<TUpLayer>() where TUpLayer : class
         {
             TypeMap[] typeMaps = _mapper.ConfigurationProvider.GetAllTypeMaps();
-             var distType = typeMaps.FirstOrDefault(t =>
-                    t.SourceType == typeof(T)
-                    && CheckImplementationOfIBaseEntity(t.DestinationType))
-                ?.DestinationType;
+             var distType = typeMaps.Single(t => t.SourceType == typeof(TUpLayer))
+                .DestinationType;
             return distType;
         }
-
-        private bool CheckImplementationOfIBaseEntity(Type type) => type.GetInterfaces().Any(t => t == typeof(IBaseEntity));
     }
 }

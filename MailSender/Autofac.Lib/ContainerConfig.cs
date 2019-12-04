@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Repository.Abstract;
 using MapperLib;
 using AutoMapper;
+using RepositoryAbstract;
 
 namespace Autofac.Lib
 {

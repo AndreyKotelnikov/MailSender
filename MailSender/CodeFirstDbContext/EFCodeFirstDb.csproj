@@ -51,7 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Abstract\IDbContext.cs" />
+    <Compile Include="Abstract\IConcurrencyExceptionsResolver.cs" />
     <Compile Include="Abstract\IDbContextProvider.cs" />
     <Compile Include="CodeFirstDbContextProvider.cs" />
     <Compile Include="EntityConfigurations\MailMessageEntityConfiguration.cs" />
@@ -79,6 +79,8 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ResolveOptimisticConcurrencyExceptionsAsClientPriority.cs" />
+    <Compile Include="UnitOfWorkEF.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -88,6 +90,10 @@
     <ProjectReference Include="..\Entities\Entities.csproj">
       <Project>{57D3C079-FB6B-4EA6-9FC9-47B123EC728D}</Project>
       <Name>Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RepositoryAbstract\RepositoryAbstract.csproj">
+      <Project>{8B5F42BE-0B56-4145-A806-519CD798863D}</Project>
+      <Name>RepositoryAbstract</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

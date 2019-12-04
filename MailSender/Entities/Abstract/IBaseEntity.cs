@@ -1,11 +1,10 @@
-﻿using System;
+﻿using RepositoryAbstract;
+using System;
 
 namespace Entities.Abstract
 {
-    public interface IBaseEntity
+    public interface IBaseEntity : IUniqueEntity
     {
-        int Id { get; set; }
-
         DateTime CreatedDate { get; set; }
 
         byte[] RowVersion { get; set; }

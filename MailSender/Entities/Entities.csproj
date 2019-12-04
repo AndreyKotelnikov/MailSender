@@ -53,6 +53,11 @@
     <Compile Include="SenderEntity.cs" />
     <Compile Include="ServerEntity.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\RepositoryAbstract\RepositoryAbstract.csproj">
+      <Project>{8B5F42BE-0B56-4145-A806-519CD798863D}</Project>
+      <Name>RepositoryAbstract</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

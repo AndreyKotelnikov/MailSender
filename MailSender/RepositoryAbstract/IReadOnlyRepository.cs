@@ -5,9 +5,8 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Entities.Abstract;
 
-namespace Repository.Abstract
+namespace RepositoryAbstract
 {
     /// <summary>
     /// Для формирования запросов только на чтение для указанного типа сущности
@@ -17,7 +16,7 @@ namespace Repository.Abstract
     {
         Task<IEnumerable<TEntity>> GetAsync(
             Expression<Func<IQueryable<TEntity>, IQueryable<TEntity>>> queryExpression,
-            CancellationToken cancellationToken );
+            CancellationToken cancellationToken);
 
         /// <summary>
         /// Используется для возврата скалярных результатов запроса

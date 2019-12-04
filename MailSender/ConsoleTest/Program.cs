@@ -1,6 +1,7 @@
 ﻿using CodeFirstDbContext;
 using Entities;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
@@ -10,13 +11,13 @@ using System.Threading.Tasks;
 using CodeFirstDbContext.Abstract;
 using Entities.Abstract;
 using Repository;
-using Repository.Abstract;
 using Domain;
 using Domain.Abstract;
 using MapperLib;
 using Repository.AsyncQueryProvider;
 using Autofac.Lib;
 using Autofac;
+using RepositoryAbstract;
 
 namespace ConsoleTest
 {
@@ -116,7 +117,6 @@ namespace ConsoleTest
 
 
                 #endregion
-
 
                 Task.WhenAll(TestUnitOfWorkDomain(scope));
 
@@ -221,17 +221,17 @@ namespace ConsoleTest
 
             unitOfWorkD.PrintD();
 
-            var domainList = Enumerable.Range(await unitOfWorkD.GetMaxIdAsync() + 11, 10)
+            var domainList = Enumerable.Range(await unitOfWorkD.GetMaxIdAsync() + 1001, 10)
                 .Select(d => new RecipientDomain()
                 {
                     Id = d,
                     Name = $"DomainList {d}",
-                        //RecipientsListDomain = new List<RecipientsListDomain>()
-                        //{
-                        //    new RecipientsListDomain(){Id = 66, Name = "List 1 777"},
-                        //    new RecipientsListDomain(){Id = 77, Name = "List 2 777"}
-                        //}
-                    }).ToList();
+                    //RecipientsListDomain = new List<RecipientsListDomain>()
+                    //{
+                    //    new RecipientsListDomain(){Id = 66, Name = "List 1 777"},
+                    //    new RecipientsListDomain(){Id = 77, Name = "List 2 777"}
+                    //}
+                }).ToList();
 
             var domainIdList = await unitOfWorkD.AddRangeAsync(domainList);
             Console.WriteLine();
@@ -240,9 +240,10 @@ namespace ConsoleTest
 
             unitOfWorkD.PrintD();
 
-            //domainList.Zip(domainIdList, (f, s) => f.Id == s);
-
-            for (var i = 0; i < domainList.Count; i++) domainList[i].Id = domainIdList[i];
+            for (var i = 0; i < domainList.Count; i++)
+            {
+                domainList[i].Id = domainIdList[i];
+            }
 
             var resultD11 = await unitOfWorkD.UpdateRangeAsync(domainList);
             Console.WriteLine();
@@ -262,7 +263,7 @@ namespace ConsoleTest
         }
 
 
-        private static void Print<T>(this IUnitOfWork<T> unit) where T: RecipientEntity
+        private static void Print<T>(this IUnitOfWork<T> unit) where T : RecipientEntity
         {
             {
                 var result = unit.GetAsync(p => p.Include(l => l.RecipientsListEntities).Where(w => w.Id > 40)).Result;
@@ -289,7 +290,7 @@ namespace ConsoleTest
         private static void PrintD<T>(this IUnitOfWork<T> unit) where T : RecipientDomain
         {
             {
-                
+
                 var result = unit.GetAsync(p => p.Include(l => l.RecipientsListDomain).Where(w => w.Id > 40)).Result;
 
                 foreach (var recipient in result)

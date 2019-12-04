@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Repository.Abstract
+namespace RepositoryAbstract
 {
     /// <summary>
     /// Интерфейс для изменения сущностей в базе данных

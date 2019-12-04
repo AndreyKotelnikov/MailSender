@@ -55,13 +55,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CodeFirstDbContext\CodeFirstDbContext.csproj">
+    <ProjectReference Include="..\CodeFirstDbContext\EFCodeFirstDb.csproj">
       <Project>{F4639D87-6E2C-4A77-98CB-B4AE538387F4}</Project>
-      <Name>CodeFirstDbContext</Name>
+      <Name>EFCodeFirstDb</Name>
     </ProjectReference>
     <ProjectReference Include="..\MapperLib\MapperLib.csproj">
       <Project>{0C887787-E26E-45A4-8032-7EE740B41D78}</Project>
       <Name>MapperLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RepositoryAbstract\RepositoryAbstract.csproj">
+      <Project>{8B5F42BE-0B56-4145-A806-519CD798863D}</Project>
+      <Name>RepositoryAbstract</Name>
     </ProjectReference>
     <ProjectReference Include="..\Repository\Repository.csproj">
       <Project>{F8CFFD8D-46B8-4F19-8369-8F2ECBB9DAE3}</Project>

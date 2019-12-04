@@ -13,7 +13,7 @@ using Entities.Abstract;
 
 namespace CodeFirstDbContext
 {
-    public class MailSenderDbContext : DbContext, IDbContext
+    public class MailSenderDbContext : DbContext
     {
         public DbSet<RecipientEntity> Recipients { get; set; }
 
@@ -46,70 +46,6 @@ namespace CodeFirstDbContext
             modelBuilder.Configurations.Add(new SenderEntityConfiguration());
             modelBuilder.Configurations.Add(new ServerEntityConfiguration());
             modelBuilder.Properties<DateTime>().Configure(c => c.HasColumnType("datetime2"));
-        }
-
-
-        IQueryable<TEntity> IDbContext.Set<TEntity>() => Set<TEntity>();
-
-
-        public void Add<TEntity>(TEntity entity) where TEntity : class
-        {
-            Set<TEntity>().Attach(entity);
-            Set<TEntity>().Add(entity);
-        }
-
-        public void Update<TEntity>(TEntity entity) where TEntity : class
-        {
-            Set<TEntity>().Attach(entity);
-            Entry(entity).State = EntityState.Modified;
-        }
-
-        public void Remove<TEntity>(TEntity entity) where TEntity : class
-        {
-            Set<TEntity>().Attach(entity);
-            Set<TEntity>().Remove(entity);
-        }
-
-        public void AddRange<TEntity>(IEnumerable<TEntity> entities) where TEntity : class
-        {
-            Set<TEntity>().AddRange(entities);
-        }
-
-        public void UpdateRange<TEntity>(IEnumerable<TEntity> entities) where TEntity : class
-        {
-            Configuration.AutoDetectChangesEnabled = false;
-            Configuration.ValidateOnSaveEnabled = false;
-
-            foreach (TEntity entity in entities)
-            {
-                Entry(entity).State = EntityState.Modified;
-                Set<TEntity>().Attach(entity);
-            }
-
-            Configuration.AutoDetectChangesEnabled = true;
-            Configuration.ValidateOnSaveEnabled = true;
-        }
-
-        public void RemoveRange<TEntity>(IEnumerable<TEntity> entities) where TEntity : class
-        {
-            Configuration.AutoDetectChangesEnabled = false;
-            Configuration.ValidateOnSaveEnabled = false;
-
-            foreach (TEntity entity in entities)
-            {
-                Entry(entity).State = EntityState.Deleted;
-                Set<TEntity>().Attach(entity);
-            }
-
-            Configuration.AutoDetectChangesEnabled = true;
-            Configuration.ValidateOnSaveEnabled = true;
-        }
-
-        async Task<int> IDbContext.SaveChangesAsync(CancellationToken cancellationToken)
-        {
-            int numberOfSavedChanges = await SaveChangesAsync(cancellationToken);
-
-            return numberOfSavedChanges;
         }
     }
 }

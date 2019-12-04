@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Text;
@@ -17,9 +18,9 @@ namespace CodeFirstDbContext
             _typeDbContext = typeDbContext;
         }
 
-        public IDbContext GetDbContext()
+        public DbContext GetDbContext()
         {
-            return (IDbContext) Activator.CreateInstance(_typeDbContext);
+            return (DbContext) Activator.CreateInstance(_typeDbContext);
         }
     }
 }
