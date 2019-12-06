@@ -1,0 +1,148 @@
+﻿<Window x:Class="WpfMailSender.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WpfMailSender"
+        xmlns:components="clr-namespace:WpfMailSender.Components"
+        xmlns:data="clr-namespace:Models;assembly=Models"
+        xmlns:dataAbstract="clr-namespace:Models.Abstract;assembly=Models"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:utils="clr-namespace:WpfMailSender.Utils"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="{Binding Title}"  
+        Height="450" Width="800"
+        DataContext="{Binding  MainWindowViewModel, Source={StaticResource Locator}}"
+        >
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Файл">
+                <MenuItem Header="Создать"/>
+                <MenuItem Header="Открыть"/>
+                <MenuItem Header="Сохранить"/>
+                <Separator/>
+                <MenuItem Header="Выход"/>
+            </MenuItem>
+            <MenuItem Header="Сервис" IsEnabled="False"/>
+            <MenuItem Header="Помощь" IsEnabled="False"/>
+        </Menu>
+        <StatusBar DockPanel.Dock="Bottom">
+            <TextBlock Text="{Binding Status}"/>
+        </StatusBar>
+        <TabControl x:Name="MainTabControl">
+            <TabItem Header="Списки">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <ToolBarTray Grid.Row="0">
+                        <ToolBar Band="0">
+                            <components:ListController LabelName="Отправители"
+                                                       ItemsSource="{utils:ParameterBinding {Binding Models[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:SenderModel}}"
+                                                       SelectedIndex="{utils:ParameterBinding {Binding SelectedIndex[(0)]},{x:Type data:SenderModel}}"
+                                                       SelectedItem="{utils:ParameterBinding {Binding SelectedItem[(0)]},{x:Type data:SenderModel}}"> 
+                            </components:ListController>
+                        </ToolBar>
+                        <ToolBar Band="1">
+                            <components:ListController LabelName="Получатели"
+                                                       ItemsSource="{utils:ParameterBinding {Binding Models[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:RecipientModel}}"
+                                                       SelectedIndex="{utils:ParameterBinding {Binding SelectedIndex[(0)]},{x:Type data:RecipientModel}}"
+                                                       SelectedItem="{utils:ParameterBinding {Binding SelectedItem[(0)]},{x:Type data:RecipientModel}}">
+                            </components:ListController>
+                        </ToolBar>
+                    </ToolBarTray>
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="5*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Width="3" Background="Transparent"/>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Планировщик">
+                <DockPanel>
+                    <StackPanel>
+                        <StackPanel.Resources>
+                            <Style x:Key="ControlStyle" TargetType="Control" >
+                                <Setter Property="Margin" Value="3"/>
+                                <Setter Property="Padding" Value="2"/>
+                            </Style>
+                            <Style x:Key="ButtonStyle" TargetType="Button" BasedOn="{StaticResource ControlStyle}">
+                                <Setter Property="Background" Value="#FFA8FF00"/>
+                            </Style>
+                        </StackPanel.Resources>
+                        <TextBlock>Дата:</TextBlock>
+                        <Calendar Style="{StaticResource ControlStyle}"/>
+                        <DockPanel>
+                            <TextBlock VerticalAlignment="Center">Время:</TextBlock>
+                            <materialDesign:TimePicker Style="{StaticResource ControlStyle}"/>
+                        </DockPanel>
+                        <Button Style="{StaticResource ButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:ImageAwesome Icon="ClockOutline" Foreground="DarkBlue" Effect="{x:Null}"/>
+                                <TextBlock>Запланировать</TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button Style="{StaticResource ButtonStyle}">
+                            <StackPanel Orientation="Horizontal">
+                                <fa:ImageAwesome Icon="Send" Foreground="DarkBlue"/>
+                                <TextBlock>Отправить</TextBlock>
+                            </StackPanel>
+                        </Button>
+                        <Button Content="Button"/>
+                    </StackPanel>
+
+                    <GroupBox Header="Запланированные задания">
+                        <ListBox>
+                            <ListBoxItem>Задание 1</ListBoxItem>
+                            <ListBoxItem>Задание 2</ListBoxItem>
+                            <ListBoxItem>Задание 3</ListBoxItem>
+                            <ListBoxItem>Задание 4</ListBoxItem>
+                        </ListBox>
+                    </GroupBox>
+                </DockPanel>
+            </TabItem>
+            <TabItem Header="Почта">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="30*"/>
+                        <ColumnDefinition Width="115*"/>
+                        <ColumnDefinition Width="21*"/>
+                        <ColumnDefinition Width="43*"/>
+                        <ColumnDefinition Width="132*"/>
+                        <ColumnDefinition Width="845*"/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Grid.Column="0" Header="Письма" Grid.ColumnSpan="5">
+                        <DockPanel>
+                            <UniformGrid DockPanel.Dock="Bottom" Rows="1">
+                                <Button>New</Button>
+                                <Button>Delete</Button>
+                            </UniformGrid>
+                            <ListBox x:Name="MessagesList" ItemsSource="{Binding MailMessages}" SelectedIndex="0">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Subject}" ToolTip="{Binding Body}"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </DockPanel>
+                    </GroupBox>
+                    <DockPanel Grid.Column="5">
+                        <GroupBox DockPanel.Dock="Top" Header="Тема">
+                            <TextBox Text="{Binding  SelectedItem.Subject,  ElementName=MessagesList}"></TextBox>
+                        </GroupBox>
+                        <GroupBox DockPanel.Dock="Top" Header="Тело">
+                            <TextBox Text="{Binding  SelectedItem.Body,  ElementName=MessagesList}" AcceptsReturn="True" VerticalContentAlignment="Top"></TextBox>
+                        </GroupBox>
+                    </DockPanel>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="Статистика" IsEnabled="False"/>
+        </TabControl>
+    </DockPanel>
+</Window>

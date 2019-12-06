@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RepositoryAbstract", "Repos
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Models", "Model\Models.csproj", "{43D73C57-FDCC-4298-8A89-F35673DCF4F8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfMailSender", "WpfMailSender\WpfMailSender.csproj", "{71B941CB-98FA-489D-A7CB-875DC926D2DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{43D73C57-FDCC-4298-8A89-F35673DCF4F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43D73C57-FDCC-4298-8A89-F35673DCF4F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43D73C57-FDCC-4298-8A89-F35673DCF4F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{71B941CB-98FA-489D-A7CB-875DC926D2DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{71B941CB-98FA-489D-A7CB-875DC926D2DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{71B941CB-98FA-489D-A7CB-875DC926D2DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{71B941CB-98FA-489D-A7CB-875DC926D2DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -87,6 +93,7 @@ Global
 		{1542F997-B693-448B-B5B2-08A3E994ACF1} = {87E782BE-15D5-4A45-A4F1-75EA9AAE1E44}
 		{8B5F42BE-0B56-4145-A806-519CD798863D} = {87E782BE-15D5-4A45-A4F1-75EA9AAE1E44}
 		{43D73C57-FDCC-4298-8A89-F35673DCF4F8} = {0D0F106D-F1E8-4655-A232-A0DB0485D152}
+		{71B941CB-98FA-489D-A7CB-875DC926D2DD} = {0D0F106D-F1E8-4655-A232-A0DB0485D152}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F5756D3D-C1F1-44AC-81A3-DDB66668791C}
