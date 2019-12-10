@@ -11,6 +11,8 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:utils="clr-namespace:WpfMailSender.Utils"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:behaviours="clr-namespace:WpfMailSender.Behaviours"
         mc:Ignorable="d"
         Title="{Binding Title}"  
         Height="450" Width="800"
@@ -59,6 +61,13 @@
                             <ColumnDefinition Width="5*"/>
                             <ColumnDefinition Width="3*"/>
                         </Grid.ColumnDefinitions>
+                        <DataGrid utils:CollectionElementTypeConvertor.SetItemsSourceInOriginType=
+                                  "{utils:ParameterBinding {Binding Models[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:RecipientModel}}">
+                            <i:Interaction.Behaviors>
+                                <behaviours:AutoGenerateColumnsBehaviour/>
+                                <behaviours:BindingStyleForAutoGenerateColumnsBehaviour/>
+                            </i:Interaction.Behaviors>
+                        </DataGrid>
                         <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Width="3" Background="Transparent"/>
                     </Grid>
                 </Grid>
@@ -116,7 +125,7 @@
                         <ColumnDefinition Width="132*"/>
                         <ColumnDefinition Width="845*"/>
                     </Grid.ColumnDefinitions>
-                    <GroupBox Grid.Column="0" Header="Письма" Grid.ColumnSpan="5">
+                    <!--<GroupBox Grid.Column="0" Header="Письма" Grid.ColumnSpan="5">
                         <DockPanel>
                             <UniformGrid DockPanel.Dock="Bottom" Rows="1">
                                 <Button>New</Button>
@@ -138,7 +147,7 @@
                         <GroupBox DockPanel.Dock="Top" Header="Тело">
                             <TextBox Text="{Binding  SelectedItem.Body,  ElementName=MessagesList}" AcceptsReturn="True" VerticalContentAlignment="Top"></TextBox>
                         </GroupBox>
-                    </DockPanel>
+                    </DockPanel>-->
 
                 </Grid>
             </TabItem>

@@ -13,14 +13,32 @@ using Models;
 using Models.Abstract;
 using RepositoryAbstract;
 using WpfMailSender.Utils;
+using Type = System.Type;
 
 namespace WpfMailSender.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        #region private
+
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
         private string _title = "Рассыльщик почты";
+
+        private string _status = "Готов к работе";
+
+        private ObservableDictionary<Type, ObservableCollection<IBaseModel>> _models = 
+            new ObservableDictionary<Type, ObservableCollection<IBaseModel>>();
+
+        private ObservableDictionary<Type, object> _selectedItem = 
+            new ObservableDictionary<Type, object>();
+
+        private ObservableDictionary<Type, int> _selectedIndex = 
+            new ObservableDictionary<Type, int>();
+
+        #endregion
+
+        #region properties
 
         public string Title
         {
@@ -28,23 +46,11 @@ namespace WpfMailSender.ViewModels
             set => Set(ref _title, value);
         }
 
-        private string _status = "Готов к работе";
-
         public string Status
         {
             get => _status;
             set => Set(ref _status, value);
         }
-
-
-        private ObservableDictionary<Type, ObservableCollection<IBaseModel>> _models = 
-            new ObservableDictionary<Type, ObservableCollection<IBaseModel>>();
-
-        private ObservableDictionary<Type, object> _selectedItem =
-            new ObservableDictionary<Type, object>();
-
-        private ObservableDictionary<Type, int> _selectedIndex =
-            new ObservableDictionary<Type, int>();
 
         public ObservableDictionary<Type, ObservableCollection<IBaseModel>> Models
         {
@@ -64,10 +70,16 @@ namespace WpfMailSender.ViewModels
             set => Set(ref _selectedIndex, value);
         }
 
+        #endregion
+
+        #region constructors
+
         public MainWindowViewModel()
         {
             RegistryTypeModel(typeof(RecipientModel));
             RegistryTypeModel(typeof(SenderModel));
+            RegistryTypeModel(typeof(ServerModel));
+            UpdateData();
         }
 
         //public MainWindowViewModel(IUnitOfWorkFactory unitOfWorkFactory = null)
@@ -75,6 +87,10 @@ namespace WpfMailSender.ViewModels
         //    _unitOfWorkFactory = unitOfWorkFactory;
         //}
 
+        #endregion
+
+
+        #region methods
 
         private void RegistryTypeModel(Type typeModel)
         {
@@ -82,61 +98,19 @@ namespace WpfMailSender.ViewModels
                 throw new ArgumentException($"Тип {nameof(typeModel)} не содержит реализацию интерфейса {nameof(IBaseModel)}");
 
             Models.Add(typeModel, new ObservableCollection<IBaseModel>());
-            
-            Task.Run(() =>
-            {
-                Thread.Sleep(10000);
-                Models[typeModel] = CreateTestData(typeModel);
-            });
-
             SelectedItem.Add(typeModel, null);
-            SelectedIndex.Add(typeModel, 0);
+            SelectedIndex.Add(typeModel, -1);
         }
 
-        private ObservableCollection<IBaseModel> CreateTestData(Type typeOfData)
+        private void UpdateData()
         {
-            var methodGetTestModels = GetType()
-                .GetMethod(nameof(GetTestDataGeneric), BindingFlags.Instance | BindingFlags.NonPublic);
-            return (ObservableCollection<IBaseModel>)methodGetTestModels?.MakeGenericMethod(typeOfData)
-                .Invoke(this, null);
+            Parallel.ForEach(Models.Keys, 
+                typeModel => Models[typeModel] = TestDataCreater.CreateTestData(typeModel));
         }
 
-        private ObservableCollection<IBaseModel> GetTestDataGeneric<T>() where T : class, IBaseModel, new()
-        {
-            T[] models = Enumerable.Range(1, 10).Select(m => Activator.CreateInstance<T>()).ToArray();
-            if (typeof(T).BaseType == typeof(ConnectionModel))
-            {
-                for (var i = 0; i < models.Length; i++)
-                {
-                    var connModel = models[i] as ConnectionModel;
-                    connModel.Id = i + 1;
-                    connModel.Name = $"{typeof(T).Name.Replace("Model", string.Empty)} {i + 1}";
-                    connModel.ConnectAdress = $"server_{i + 1}@mail.ru";
-                    connModel.Description = i % 3 == 0 ? $"Комментарий {i + 1}" : null;
-                }
-            }
-            else 
-            if (typeof(T).BaseType == typeof(NamedModel))
-            {
-                for (var i = 0; i < models.Length; i++)
-                {
-                    var namedModel = models[i] as NamedModel;
-                    namedModel.Id = i + 1;
-                    namedModel.Name = $"{typeof(T).Name.Replace("Model", string.Empty)} {i + 1}";
-                }
-            }
-            else
-            {
-                for (var i = 0; i < models.Length; i++)
-                {
-                    var namedModel = models[i] as BaseModel;
-                    namedModel.Id = i + 1;
-                }
-            }
+        #endregion
 
-            var collection = new ObservableCollection<IBaseModel>(models);
-            
-            return collection;
-        }
+
+        
     }
 }
