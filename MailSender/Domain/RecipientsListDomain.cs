@@ -9,6 +9,8 @@ namespace Domains
 {
     public class RecipientsListDomain : NamedDomain
     {
-        public ICollection<int> RecipientsId { get; set; }
+        public ICollection<RecipientDomain> RecipientsDomain { get; set; }
+
+        public ICollection<SchedulerTaskDomain> SchedulerTasksDomain { get; set; }
     }
 }

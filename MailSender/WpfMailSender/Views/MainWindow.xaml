@@ -15,7 +15,7 @@
         xmlns:behaviours="clr-namespace:WpfMailSender.Behaviours"
         mc:Ignorable="d"
         Title="{Binding Title}"  
-        Height="450" Width="800"
+        Height="700" Width="1800"
         DataContext="{Binding  MainWindowViewModel, Source={StaticResource Locator}}"
         >
     <DockPanel>
@@ -58,17 +58,22 @@
                     </ToolBarTray>
                     <Grid Grid.Row="1">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="5*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="3*"/>
                         </Grid.ColumnDefinitions>
                         <DataGrid utils:CollectionElementTypeConvertor.SetItemsSourceInOriginType=
-                                  "{utils:ParameterBinding {Binding Models[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:RecipientModel}}">
+                                  "{utils:ParameterBinding {Binding Models[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:RecipientModel}}"
+                                  SelectedItem="{utils:ParameterBinding {Binding SelectedItem[(0)]},{x:Type data:RecipientModel}}"
+                                  FlowDirection="RightToLeft" 
+                                  >
                             <i:Interaction.Behaviors>
                                 <behaviours:AutoGenerateColumnsBehaviour/>
                                 <behaviours:BindingStyleForAutoGenerateColumnsBehaviour/>
+                                <behaviours:GenerateDataGridForPropertiesManyToManyModelsBehaviour/>
                             </i:Interaction.Behaviors>
                         </DataGrid>
-                        <GridSplitter Grid.Column="1" HorizontalAlignment="Left" Width="3" Background="Transparent"/>
+                        <!--<GridSplitter Grid.Column="1" HorizontalAlignment="Left" Width="3" Background="Transparent"/>-->
                     </Grid>
                 </Grid>
             </TabItem>

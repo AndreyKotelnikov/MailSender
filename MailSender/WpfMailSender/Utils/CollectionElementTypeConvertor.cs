@@ -13,21 +13,6 @@ namespace WpfMailSender.Utils
 {
     public static class CollectionElementTypeConvertor
     {
-        public static void SetValueAsConvertToOriginTypeItems(Type elementType, IEnumerable<IBaseModel> collection, PropertyInfo propertyInfo, object instance)
-        {
-            var methodSetImplicitItemsSourceGeneric = typeof(CollectionElementTypeConvertor)
-                .GetMethod(nameof(SetValueAsConvertToOriginTypeItemsGeneric), BindingFlags.Static | BindingFlags.NonPublic);
-            methodSetImplicitItemsSourceGeneric?.MakeGenericMethod(elementType)
-                .Invoke(null, new object[] { collection, propertyInfo, instance });
-        }
-
-        private static void SetValueAsConvertToOriginTypeItemsGeneric<T>(IEnumerable<IBaseModel> collection, PropertyInfo propertyInfo, object instance)
-        {
-            var originTypeOfItemsCollection = new ObservableCollection<T>(collection.Cast<T>().ToArray());
-
-            propertyInfo.SetValue(instance, originTypeOfItemsCollection);
-        }
-
         public static IEnumerable<IBaseModel> GetSetItemsSourceInOriginType(DependencyObject obj)
         {
             return (IEnumerable<IBaseModel>)obj.GetValue(SetItemsSourceInOriginTypeProperty);
@@ -56,9 +41,24 @@ namespace WpfMailSender.Utils
                     return;
                 }
 
-                var propertyInfoOfItemsSource = itemsControl.GetType().GetProperty("ItemsSource");
-                SetValueAsConvertToOriginTypeItems(elementType, collection, propertyInfoOfItemsSource, itemsControl);
+                SetValueAsConvertToOriginTypeItems(elementType, collection, "ItemsSource", itemsControl);
             }
+        }
+
+        public static void SetValueAsConvertToOriginTypeItems(Type elementType, IEnumerable<IBaseModel> collection, string propertyName, object instance)
+        {
+            var propertyInfo = instance.GetType().GetProperty(propertyName);
+            var methodSetImplicitItemsSourceGeneric = typeof(CollectionElementTypeConvertor)
+                .GetMethod(nameof(SetValueAsConvertToOriginTypeItemsGeneric), BindingFlags.Static | BindingFlags.NonPublic);
+            methodSetImplicitItemsSourceGeneric?.MakeGenericMethod(elementType)
+                .Invoke(null, new [] { collection, propertyInfo, instance });
+        }
+
+        private static void SetValueAsConvertToOriginTypeItemsGeneric<T>(IEnumerable<IBaseModel> collection, PropertyInfo propertyInfo, object instance)
+        {
+            var originTypeOfItemsCollection = new ObservableCollection<T>(collection.Cast<T>().ToArray());
+
+            propertyInfo.SetValue(instance, originTypeOfItemsCollection);
         }
     }
 }

@@ -9,6 +9,8 @@ namespace Models
 {
     public class RecipientsListModel : NamedModel
     {
-        public ICollection<int> RecipientsId { get; set; }
+        public ICollection<RecipientModel> RecipientsModel { get; set; }
+
+        public ICollection<SchedulerTaskModel> SchedulerTasksModel { get; set; }
     }
 }

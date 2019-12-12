@@ -27,8 +27,8 @@ namespace WpfMailSender.Utils
                     {
                         recipientModel.RecipientsListModel = new List<RecipientsListModel>
                         {
-                            new RecipientsListModel(){Id = 1, Name = "List 1", RecipientsId = new List<int>(){i}},
-                            new RecipientsListModel(){Id = 2, Name = "List 2", RecipientsId = new List<int>(){i}}
+                            new RecipientsListModel(){Id = 1, Name = "List 1", RecipientsModel = new List<RecipientModel>{new RecipientModel{Id = i}, new RecipientModel{Id = i + 1}}},
+                            new RecipientsListModel(){Id = 2, Name = "List 2", RecipientsModel = new List<RecipientModel>{new RecipientModel{Id = i}, new RecipientModel{Id = i + 1}}}
                         };
                         recipientModel.Server = new ServerModel { Id = 1, Name = "Test Server" };
                     }

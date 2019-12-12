@@ -77,8 +77,11 @@ namespace WpfMailSender.ViewModels
         public MainWindowViewModel()
         {
             RegistryTypeModel(typeof(RecipientModel));
+            RegistryTypeModel(typeof(RecipientsListModel));
             RegistryTypeModel(typeof(SenderModel));
             RegistryTypeModel(typeof(ServerModel));
+            RegistryTypeModel(typeof(SchedulerTaskModel));
+            RegistryTypeModel(typeof(MailMessageModel));
             UpdateData();
         }
 
