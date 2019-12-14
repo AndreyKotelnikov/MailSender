@@ -82,8 +82,12 @@
     <Compile Include="Behaviours\BindingStyleForAutoGenerateColumnsBehaviour.cs" />
     <Compile Include="Behaviours\AutoGenerateColumnsBehaviour.cs" />
     <Compile Include="Behaviours\GenerateDataGridForPropertiesManyToManyModelsBehaviour.cs" />
+    <Compile Include="Components\ArrowDirectionEnum.cs" />
     <Compile Include="Components\ListController.xaml.cs">
       <DependentUpon>ListController.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Components\ButtonForAddAndRemoveSellectedItems.xaml.cs">
+      <DependentUpon>ButtonForAddAndRemoveSellectedItems.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\CollectionElementTypeConvertor.cs" />
     <Compile Include="Utils\SelectionFilterCreater.cs" />
@@ -95,6 +99,10 @@
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Page Include="Components\ListController.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Components\ButtonForAddAndRemoveSellectedItems.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

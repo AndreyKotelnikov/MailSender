@@ -1,0 +1,44 @@
+﻿<UserControl x:Class="WpfMailSender.Components.ButtonForAddAndRemoveSellectedItems"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WpfMailSender.Components"
+             xmlns:fa="http://schemas.fontawesome.io/icons/"
+             >
+    <UserControl.Resources>
+        <Style TargetType="{x:Type Button}" x:Key="BStyle">
+            <Setter Property="Foreground" Value="OrangeRed"></Setter>
+            <Setter Property="Background" Value="MediumSeaGreen"></Setter>
+            <Style.Triggers>
+                <DataTrigger  Binding="{Binding ArrowDirection, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ButtonForAddAndRemoveSellectedItems}}}" Value="{x:Static local:ArrowDirectionEnum.Up}">
+                    <Setter Property="Content">
+                        <Setter.Value>
+                            <StackPanel Orientation="Horizontal">
+                                <fa:ImageAwesome Icon="ArrowUp" Foreground="Brown"/>
+                                <TextBlock Padding="3">Add</TextBlock>
+                            </StackPanel>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+                <DataTrigger  Binding="{Binding ArrowDirection, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ButtonForAddAndRemoveSellectedItems}}}" Value="{x:Static local:ArrowDirectionEnum.Down}">
+                    <Setter Property="Content">
+                        <Setter.Value>
+                            <StackPanel Orientation="Horizontal">
+                                <fa:ImageAwesome Icon="ArrowDown" Foreground="Brown"/>
+                                <TextBlock Padding="3">Remove</TextBlock>
+                            </StackPanel>
+                        </Setter.Value>
+                    </Setter>
+                </DataTrigger>
+                <DataTrigger  Binding="{Binding ArrowDirection, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ButtonForAddAndRemoveSellectedItems}}}" Value="{x:Static local:ArrowDirectionEnum.None}">
+                    <Setter Property="Content" Value="Sellect items"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    <DockPanel DataContext="{Binding RelativeSource ={RelativeSource Self}}">
+        <Button Style="{StaticResource BStyle}"/>
+    </DockPanel>
+
+</UserControl>

@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Input;
+using WpfMailSender.Components;
 
 namespace WpfMailSender.Views
 {
@@ -11,6 +13,5 @@ namespace WpfMailSender.Views
         {
             InitializeComponent();
         }
-
     }
 }

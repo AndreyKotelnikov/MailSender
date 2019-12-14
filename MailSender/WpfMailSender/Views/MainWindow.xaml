@@ -38,6 +38,7 @@
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="auto"/>
+                        <RowDefinition Height="auto"/>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <ToolBarTray Grid.Row="0">
@@ -65,7 +66,8 @@
                         <DataGrid utils:CollectionElementTypeConvertor.SetItemsSourceInOriginType=
                                   "{utils:ParameterBinding {Binding Models[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:RecipientModel}}"
                                   SelectedItem="{utils:ParameterBinding {Binding SelectedItem[(0)]},{x:Type data:RecipientModel}}"
-                                  FlowDirection="RightToLeft" 
+                                  FlowDirection="RightToLeft"
+                                  Name="DataGrid"
                                   >
                             <i:Interaction.Behaviors>
                                 <behaviours:AutoGenerateColumnsBehaviour/>

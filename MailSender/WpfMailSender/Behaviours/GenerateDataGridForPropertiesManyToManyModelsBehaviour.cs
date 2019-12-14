@@ -32,15 +32,15 @@ namespace WpfMailSender.Behaviours
 
         private void OnAutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs eventArgs)
         {
-            if (sender is DataGrid dataGrid
+            if (sender is DataGrid mainDataGrid
                 && eventArgs.PropertyDescriptor is PropertyDescriptor descriptor)
             {
                 if (descriptor.PropertyType.IsPropertyEnumerableOfModels()
                     && !descriptor.IsPropertyDisplayNameNull())
                 {
-                    DataGrid newDataGridWithSelectFilter = CreatDataGridWithSelectFilter(dataGrid, descriptor);
-                    DataGrid newDataGridWithReverseSelectFilter = CreatDataGridWithSelectFilter(dataGrid, descriptor, true);
-                    RenderingUIElements(dataGrid, newDataGridWithSelectFilter, newDataGridWithReverseSelectFilter);
+                    DataGrid dataGridWithSelectFilter = CreatDataGridWithSelectFilter(mainDataGrid, descriptor);
+                    DataGrid dataGridWithReverseSelectFilter = CreatDataGridWithSelectFilter(mainDataGrid, descriptor, true);
+                    RenderingUIElements(mainDataGrid, dataGridWithSelectFilter, dataGridWithReverseSelectFilter);
                 }
             }
         }
@@ -66,13 +66,13 @@ namespace WpfMailSender.Behaviours
 
         private int FindLastGridColumn(FrameworkElement mainFrameworkElement)
         {
-            var parent = mainFrameworkElement.Parent as Panel;
-            var currentRow = Grid.GetRow(mainFrameworkElement);
+            var panel = mainFrameworkElement.Parent as Panel;
+            if (panel == null) throw new ArgumentNullException(nameof(panel));
 
-            return parent.Children.OfType<UIElement>()
-                .Where(e => (e is DataGrid || (e as Grid)?.Children.OfType<UIElement>().Where(d => d is DataGrid).Count() == 2) 
-                            && Grid.GetRow(e) == currentRow)
-                .Select(e => Grid.GetColumn(e))
+            return panel.Children.OfType<UIElement>()
+                .Where(e => ((e is DataGrid || ((e as Grid)?.Children.OfType<UIElement>().Count(d => d is DataGrid) == 2))
+                             && Grid.GetRow(e) == Grid.GetRow(mainFrameworkElement)))
+                .Select(Grid.GetColumn)
                 .Max();
         }
 
