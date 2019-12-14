@@ -13,6 +13,7 @@ using System.Windows.Data;
 using System.Windows.Interactivity;
 using System.Windows.Media.Media3D;
 using Models.Abstract;
+using WpfMailSender.Components;
 using WpfMailSender.Utils;
 using WpfMailSender.ViewModels;
 
@@ -40,19 +41,31 @@ namespace WpfMailSender.Behaviours
                 {
                     DataGrid dataGridWithSelectFilter = CreatDataGridWithSelectFilter(mainDataGrid, descriptor);
                     DataGrid dataGridWithReverseSelectFilter = CreatDataGridWithSelectFilter(mainDataGrid, descriptor, true);
-                    RenderingUIElements(mainDataGrid, dataGridWithSelectFilter, dataGridWithReverseSelectFilter);
+                    var sellectButton = CreatButtonForAddAndRemoveSellectedItems(dataGridWithSelectFilter, dataGridWithReverseSelectFilter);
+                    Grid gridWithSellectButton = PutElementIntoGrid(sellectButton, 0, 1);
+                    RenderingUIElements(mainDataGrid, dataGridWithSelectFilter, gridWithSellectButton, dataGridWithReverseSelectFilter);
                 }
             }
         }
 
+        private Grid PutElementIntoGrid(UIElement elementForPutInto, int row, int column)
+        {
+            var grid = CreateGridWithColumns(GridUnitType.Star, 5, 1, 5);
+            Grid.SetRow(elementForPutInto, row);
+            Grid.SetColumn(elementForPutInto, column);
+            grid.Children.Add(elementForPutInto);
+            return grid;
+        }
+
+        private ButtonForAddAndRemoveSellectedItems CreatButtonForAddAndRemoveSellectedItems(Selector sellectorForRemoveItems, Selector sellectorForAddItems)
+        {
+            var sellectButton = new ButtonForAddAndRemoveSellectedItems();
+            return sellectButton;
+        }
+
         private void RenderingUIElements(FrameworkElement mainFrameworkElement, params UIElement[] elementsForRendering)
         {
-            
-
-            Grid grid = CreateGridWithRows(GridUnitType.Star, 3, 1, 3);
-
-            Grid.SetRow(elementsForRendering[0], 0);
-            Grid.SetRow(elementsForRendering[1], 2);
+            Grid grid = CreateGridWithRows(GridUnitType.Star, 5, 1, 5);
 
             var lastGridColumn = FindLastGridColumn(mainFrameworkElement);
             Grid.SetColumn(grid, lastGridColumn + 1);
@@ -60,8 +73,12 @@ namespace WpfMailSender.Behaviours
 
             var parent = mainFrameworkElement.Parent as Panel;
             parent.Children.Add(grid);
-            grid.Children.Add(elementsForRendering[0]);
-            grid.Children.Add(elementsForRendering[1]);
+
+            for (int i = 0; i < elementsForRendering.Length; i++)
+            {
+                Grid.SetRow(elementsForRendering[i], i);
+                grid.Children.Add(elementsForRendering[i]);
+            }
         }
 
         private int FindLastGridColumn(FrameworkElement mainFrameworkElement)
@@ -76,15 +93,29 @@ namespace WpfMailSender.Behaviours
                 .Max();
         }
 
-        private Grid CreateGridWithRows(GridUnitType gridUnitType, params int[] heightRowRatio)
+        private Grid CreateGridWithRows(GridUnitType gridUnitType, params int[] heightRowsRatio)
         {
             var grid = new Grid();
-            foreach (var height in heightRowRatio)
+            foreach (var height in heightRowsRatio)
             {
                 var gridLenght = new GridLength(height, gridUnitType);
                 var rowDefinition = new RowDefinition();
                 rowDefinition.Height = gridLenght;
                 grid.RowDefinitions.Add(rowDefinition);
+            }
+
+            return grid;
+        }
+
+        private Grid CreateGridWithColumns(GridUnitType gridUnitType, params int[] widthColumnsRatio)
+        {
+            var grid = new Grid();
+            foreach (var width in widthColumnsRatio)
+            {
+                var gridLenght = new GridLength(width, gridUnitType);
+                var columnDefinition = new ColumnDefinition();
+                columnDefinition.Width = gridLenght;
+                grid.ColumnDefinitions.Add(columnDefinition);
             }
 
             return grid;
