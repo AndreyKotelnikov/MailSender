@@ -14,8 +14,10 @@ using System.Windows.Interactivity;
 using MaterialDesignThemes.Wpf;
 using Models;
 using Models.Abstract;
+using WpfMailSender.Abstracts;
 using WpfMailSender.Utils;
 using WpfMailSender.ViewModels;
+using DataGridComboBoxColumn = System.Windows.Controls.DataGridComboBoxColumn;
 
 namespace WpfMailSender.Behaviours
 {
@@ -70,7 +72,7 @@ namespace WpfMailSender.Behaviours
 
         private static void FillPropertiesOfComboBoxColumn(DataGridComboBoxColumn newComboBoxColumn, DataGrid dataGrid, PropertyDescriptor descriptor)
         {
-            var sourceItems = (dataGrid.DataContext as MainWindowViewModel)?.Models[descriptor.PropertyType]
+            var sourceItems = (dataGrid.DataContext as IViewModelCollectionsOfModelsAndSellectedItems)?.Models[descriptor.PropertyType]
                 .Prepend(CreateNullItem(descriptor.PropertyType));
 
             CollectionElementTypeConvertor.SetValueAsConvertToOriginTypeItems(descriptor.PropertyType, sourceItems, "ItemsSource", newComboBoxColumn);

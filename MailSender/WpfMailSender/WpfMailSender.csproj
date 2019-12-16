@@ -81,6 +81,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Abstracts\IViewModelCollectionsOfModelsAndSellectedItems.cs" />
     <Compile Include="Behaviours\BindingStyleForAutoGenerateColumnsBehaviour.cs" />
     <Compile Include="Behaviours\AutoGenerateColumnsBehaviour.cs" />
     <Compile Include="Behaviours\GenerateDataGridForPropertiesManyToManyModelsBehaviour.cs" />
@@ -166,9 +167,7 @@
       <Name>RepositoryAbstract</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Abstracts\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\MaterialDesignThemes.3.0.0\build\MaterialDesignThemes.targets" Condition="Exists('..\packages\MaterialDesignThemes.3.0.0\build\MaterialDesignThemes.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

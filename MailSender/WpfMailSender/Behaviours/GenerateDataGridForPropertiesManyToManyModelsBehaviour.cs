@@ -13,6 +13,7 @@ using System.Windows.Data;
 using System.Windows.Interactivity;
 using System.Windows.Media.Media3D;
 using Models.Abstract;
+using WpfMailSender.Abstracts;
 using WpfMailSender.Components;
 using WpfMailSender.Utils;
 using WpfMailSender.ViewModels;
@@ -125,7 +126,7 @@ namespace WpfMailSender.Behaviours
         {
             var newDataGrid = new DataGrid();
             var elementType = descriptor.PropertyType.GenericTypeArguments.Single();
-            var sourceItems = (dataGrid.DataContext as MainWindowViewModel)?.Models[elementType];
+            var sourceItems = (dataGrid.DataContext as IViewModelCollectionsOfModelsAndSellectedItems)?.Models[elementType];
             CollectionElementTypeConvertor.SetValueAsConvertToOriginTypeItems(elementType, sourceItems, "ItemsSource", newDataGrid);
 
             var filterHelper = new SelectionFilterCreater(newDataGrid.ItemsSource, descriptor.Name, descriptor.ComponentType, isReverseFilter);

@@ -12,12 +12,13 @@ using GalaSoft.MvvmLight;
 using Models;
 using Models.Abstract;
 using RepositoryAbstract;
+using WpfMailSender.Abstracts;
 using WpfMailSender.Utils;
 using Type = System.Type;
 
 namespace WpfMailSender.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : ViewModelBase, IViewModelCollectionsOfModelsAndSellectedItems
     {
         #region private
 
