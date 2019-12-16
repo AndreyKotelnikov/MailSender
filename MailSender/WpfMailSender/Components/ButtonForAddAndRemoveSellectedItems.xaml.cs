@@ -39,5 +39,29 @@ namespace WpfMailSender.Components
             get => (ArrowDirectionEnum) GetValue(ArrowDirectionProperty);
             set => SetValue(ArrowDirectionProperty, value);
         }
+
+        public static readonly DependencyProperty CommandProperty = DependencyProperty.Register(
+            "Command",
+            typeof(ICommand),
+            typeof(ButtonForAddAndRemoveSellectedItems),
+            new PropertyMetadata(default(ICommand)));
+
+        public ICommand Command
+        {
+            get { return (ICommand) GetValue(CommandProperty); }
+            set { SetValue(CommandProperty, value); }
+        }
+
+        public static readonly DependencyProperty CommandParameterProperty = DependencyProperty.Register(
+            "CommandParameter",
+            typeof(object),
+            typeof(ButtonForAddAndRemoveSellectedItems),
+            new PropertyMetadata(default(object)));
+
+        public object CommandParameter
+        {
+            get { return (object) GetValue(CommandParameterProperty); }
+            set { SetValue(CommandParameterProperty, value); }
+        }
     }
 }

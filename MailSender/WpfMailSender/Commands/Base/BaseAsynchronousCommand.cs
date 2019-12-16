@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Threading;
-using GalaSoft.MvvmLight.Threading;
 
-namespace WpfMailSender.Commands
+namespace WpfMailSender.Commands.Base
 {
     public abstract class BaseAsynchronousCommand : BaseCommand, INotifyPropertyChanged
     {

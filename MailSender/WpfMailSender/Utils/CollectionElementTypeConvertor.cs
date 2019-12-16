@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -59,6 +60,19 @@ namespace WpfMailSender.Utils
             var originTypeOfItemsCollection = new ObservableCollection<T>(collection.Cast<T>().ToArray());
 
             propertyInfo.SetValue(instance, originTypeOfItemsCollection);
+        }
+
+        public static IList CreateList(Type elementType)
+        {
+            var methodCreateListGeneric = typeof(CollectionElementTypeConvertor)
+                .GetMethod(nameof(CreateListGeneric), BindingFlags.Static | BindingFlags.NonPublic);
+            return (IList) methodCreateListGeneric?.MakeGenericMethod(elementType)
+                .Invoke(null, null);
+        }
+
+        private static IList CreateListGeneric<T>()
+        {
+            return new List<T>();
         }
     }
 }

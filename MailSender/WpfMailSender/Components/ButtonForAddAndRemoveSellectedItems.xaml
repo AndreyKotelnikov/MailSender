@@ -37,8 +37,10 @@
             </Style.Triggers>
         </Style>
     </UserControl.Resources>
-    <DockPanel DataContext="{Binding RelativeSource ={RelativeSource Self}}">
-        <Button Style="{StaticResource BStyle}"/>
+    <DockPanel DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ButtonForAddAndRemoveSellectedItems}}}">
+        <Button Style="{StaticResource BStyle}"
+                Command="{Binding Command}"
+                CommandParameter="{Binding CommandParameter}"/>
     </DockPanel>
 
 </UserControl>

@@ -14,6 +14,7 @@ using System.Windows.Interactivity;
 using System.Windows.Media.Media3D;
 using Models.Abstract;
 using WpfMailSender.Abstracts;
+using WpfMailSender.Commands;
 using WpfMailSender.Components;
 using WpfMailSender.Utils;
 using WpfMailSender.ViewModels;
@@ -42,7 +43,7 @@ namespace WpfMailSender.Behaviours
                 {
                     DataGrid dataGridWithSelectFilter = CreatDataGridWithSelectFilter(mainDataGrid, descriptor);
                     DataGrid dataGridWithReverseSelectFilter = CreatDataGridWithSelectFilter(mainDataGrid, descriptor, true);
-                    var sellectButton = CreatButtonForAddAndRemoveSellectedItems(dataGridWithSelectFilter, dataGridWithReverseSelectFilter);
+                    var sellectButton = CreatButtonForAddAndRemoveSellectedItems(mainDataGrid, descriptor, dataGridWithSelectFilter, dataGridWithReverseSelectFilter);
                     Grid gridWithSellectButton = PutElementIntoGrid(sellectButton, 0, 1);
                     RenderingUIElements(mainDataGrid, dataGridWithSelectFilter, gridWithSellectButton, dataGridWithReverseSelectFilter);
                 }
@@ -58,10 +59,60 @@ namespace WpfMailSender.Behaviours
             return grid;
         }
 
-        private ButtonForAddAndRemoveSellectedItems CreatButtonForAddAndRemoveSellectedItems(Selector sellectorForRemoveItems, Selector sellectorForAddItems)
+        private ButtonForAddAndRemoveSellectedItems CreatButtonForAddAndRemoveSellectedItems
+            (DataGrid mainDataGrid, PropertyDescriptor descriptor, DataGrid dataGridForRemoveItems, DataGrid dataGridForAddItems)
         {
-            var sellectButton = new ButtonForAddAndRemoveSellectedItems();
-            return sellectButton;
+            var button = new ButtonForAddAndRemoveSellectedItems();
+            dataGridForRemoveItems.SelectionChanged += (s, e) =>
+            {
+                if (e.AddedItems.Count != 0)
+                {
+                    button.ArrowDirection = ArrowDirectionEnum.Down;
+                }
+                else
+                {
+                    button.ArrowDirection = ArrowDirectionEnum.None;
+                }
+            };
+            dataGridForAddItems.SelectionChanged += (s, e) =>
+            {
+                if (e.AddedItems.Count != 0)
+                {
+                    button.ArrowDirection = ArrowDirectionEnum.Up;
+                }
+                else
+                {
+                    button.ArrowDirection = ArrowDirectionEnum.None;
+                }
+            };
+
+            mainDataGrid.SelectionChanged += (s, e) =>
+            {
+                dataGridForRemoveItems.SelectedItems.Clear();
+                dataGridForAddItems.SelectedItems.Clear();
+            };
+
+
+            var sellectedItemDictionary = (mainDataGrid.DataContext as IViewModelCollectionsOfModelsAndSellectedItems)
+                .SelectedItem;
+            var command = new AddAndRemoveSellectedItemsCommand(sellectedItemDictionary, descriptor.ComponentType, descriptor.Name);
+            command.Executed += (s, e) =>
+            {
+                dataGridForRemoveItems.SelectedItems.Clear();
+                dataGridForRemoveItems.Items.Refresh();
+                dataGridForAddItems.SelectedItems.Clear();
+                dataGridForAddItems.Items.Refresh();
+            };
+            
+            button.Command = command;
+            button.CommandParameter = (dataGridForRemoveItems.SelectedItems.Cast<IBaseModel>(), dataGridForAddItems.SelectedItems.Cast<IBaseModel>()); 
+
+            return button;
+        }
+
+        private void Command_Executed(object sender, Commands.Base.CommandEventArgs args)
+        {
+            throw new NotImplementedException();
         }
 
         private void RenderingUIElements(FrameworkElement mainFrameworkElement, params UIElement[] elementsForRendering)

@@ -85,14 +85,15 @@
     <Compile Include="Behaviours\BindingStyleForAutoGenerateColumnsBehaviour.cs" />
     <Compile Include="Behaviours\AutoGenerateColumnsBehaviour.cs" />
     <Compile Include="Behaviours\GenerateDataGridForPropertiesManyToManyModelsBehaviour.cs" />
-    <Compile Include="Commands\BaseAsynchronousCommand.cs" />
-    <Compile Include="Commands\BaseCommand.cs" />
-    <Compile Include="Commands\CancelCommand.cs" />
-    <Compile Include="Commands\CancelCommandEventArgs.cs" />
-    <Compile Include="Commands\CancelCommandEventHandler.cs" />
-    <Compile Include="Commands\CommandEventArgs.cs" />
-    <Compile Include="Commands\CommandEventHandler.cs" />
-    <Compile Include="Commands\DispatcherHelper.cs" />
+    <Compile Include="Commands\AddAndRemoveSellectedItemsCommand.cs" />
+    <Compile Include="Commands\Base\BaseAsynchronousCommand.cs" />
+    <Compile Include="Commands\Base\BaseCommand.cs" />
+    <Compile Include="Commands\Base\CancelCommand.cs" />
+    <Compile Include="Commands\Base\CancelCommandEventArgs.cs" />
+    <Compile Include="Commands\Base\CancelCommandEventHandler.cs" />
+    <Compile Include="Commands\Base\CommandEventArgs.cs" />
+    <Compile Include="Commands\Base\CommandEventHandler.cs" />
+    <Compile Include="Commands\Base\DispatcherHelper.cs" />
     <Compile Include="Components\ArrowDirectionEnum.cs" />
     <Compile Include="Components\ListController.xaml.cs">
       <DependentUpon>ListController.xaml</DependentUpon>
