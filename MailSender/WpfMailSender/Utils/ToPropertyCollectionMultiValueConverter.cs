@@ -26,22 +26,26 @@ namespace WpfMailSender.Utils
             {
                 var propertyInfo = values[0].GetType().GetProperties().Single(p =>
                     p.PropertyType.GetGenericArguments().SingleOrDefault() == elementType);
-
                 var propertyCollection = (propertyInfo?.GetValue(values[0]) as IList)?.Cast<IBaseModel>();
+
+                var isInverted = (bool)(parameter ?? false);
 
                 if (propertyCollection != null)
                 {
-                    var isInverted = (bool)(parameter ?? false);
-
                     var resultCollection =
                         modelCollection.Where(v => isInverted
                             ? propertyCollection.All(e => e.Id != v.Id)
                             : propertyCollection.Any(e => e.Id == v.Id));
                     return resultCollection;
                 }
+
+                if (isInverted)
+                {
+                    return modelCollection.Where(e => true); // I still do not understand why the data is displayed incorrectly without "Where"...
+                }
             }
 
-            return CollectionElementTypeConvertor.CreateList(elementType);
+            return CollectionElementTypeConverter.CreateEmptyList(elementType);
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
