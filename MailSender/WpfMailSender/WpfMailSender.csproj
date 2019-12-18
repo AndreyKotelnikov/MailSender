@@ -103,8 +103,6 @@
     </Compile>
     <Compile Include="Utils\CollectionElementTypeConverter.cs" />
     <Compile Include="Utils\ToPropertyCollectionMultiValueConverter.cs" />
-    <Compile Include="Utils\ToPropertyCollectionValueConverter.cs" />
-    <Compile Include="Utils\SelectionFilterCreater.cs" />
     <Compile Include="Utils\ObservableDictionary.cs" />
     <Compile Include="Utils\ParameterBinding.cs" />
     <Compile Include="Utils\TestDataCreater.cs" />
