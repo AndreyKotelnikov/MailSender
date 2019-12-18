@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Documents;
 using Models.Abstract;
 using WpfMailSender.Commands.Base;
+using WpfMailSender.Components;
 using WpfMailSender.Utils;
 
 namespace WpfMailSender.Commands
@@ -17,12 +18,18 @@ namespace WpfMailSender.Commands
         private readonly ObservableDictionary<Type, object> _sellectedCollection;
         private readonly Type _typeOfSellectedItem;
         private readonly PropertyInfo _propertyInfo;
+        private readonly ButtonForAddAndRemoveSellectedItems _button;
 
-
-        public AddAndRemoveSellectedItemsCommand(ObservableDictionary<Type, object> sellectedCollection, Type typeOfSellectedItem, string propertyName)
+        public AddAndRemoveSellectedItemsCommand(
+            ObservableDictionary<Type, object> sellectedCollection, 
+            Type typeOfSellectedItem, 
+            string propertyName, 
+            ButtonForAddAndRemoveSellectedItems button
+            )
         {
             _sellectedCollection = sellectedCollection;
             _typeOfSellectedItem = typeOfSellectedItem;
+            _button = button;
             _propertyInfo = typeOfSellectedItem.GetProperty(propertyName);
             ParameterizedAction = AddAndRemoveSellectedItems;
         }
@@ -31,18 +38,41 @@ namespace WpfMailSender.Commands
         public void AddAndRemoveSellectedItems(object valueTuple)
         {
             (IEnumerable<IBaseModel> itemsForRemove, IEnumerable<IBaseModel> itemsForAdd) = (ValueTuple<IEnumerable<IBaseModel> , IEnumerable<IBaseModel>>) valueTuple;
+            
             var sellectedItem = _sellectedCollection[_typeOfSellectedItem];
-
             var propertyValueOfSellectedItem = _propertyInfo.GetValue(sellectedItem) as IList;
-            foreach (var itemForRemove in itemsForRemove)
+            var arrowDirection = (ArrowDirectionEnum)_button.GetValue(ButtonForAddAndRemoveSellectedItems.ArrowDirectionProperty);
+
+            if (arrowDirection == ArrowDirectionEnum.Down)
             {
-                var innerItemForRemove = propertyValueOfSellectedItem.Cast<IBaseModel>().First(i => i.Id == itemForRemove.Id);
-                propertyValueOfSellectedItem.Remove(innerItemForRemove);
+                RemoveItems(itemsForRemove, propertyValueOfSellectedItem);
             }
 
+            if (arrowDirection == ArrowDirectionEnum.Up)
+            {
+                AddItems(itemsForAdd, propertyValueOfSellectedItem, sellectedItem);
+            }
+        }
+
+        private void RemoveItems(IEnumerable<IBaseModel> itemsForRemove, IList propertyValueOfSellectedItem)
+        {
+            foreach (var itemForRemove in itemsForRemove)
+            {
+                var innerItemForRemove = propertyValueOfSellectedItem.Cast<IBaseModel>()
+                    .First(i => i.Id == itemForRemove.Id);
+                propertyValueOfSellectedItem.Remove(innerItemForRemove);
+            }
+        }
+
+        private void AddItems(IEnumerable<IBaseModel> itemsForAdd, IList propertyValueOfSellectedItem, object sellectedItem)
+        {
             if (propertyValueOfSellectedItem == null)
             {
-                propertyValueOfSellectedItem = CollectionElementTypeConvertor.CreateList(_propertyInfo.PropertyType.GetGenericArguments().Single());
+                propertyValueOfSellectedItem = CollectionElementTypeConverter.CreateEmptyList(
+                    _propertyInfo.PropertyType
+                        .GetGenericArguments()
+                        .Single()
+                    );
                 _propertyInfo.SetValue(sellectedItem, propertyValueOfSellectedItem);
             }
             foreach (var itemForAdd in itemsForAdd)
