@@ -41,11 +41,11 @@ namespace WpfMailSender.Behaviours
                 if (descriptor.PropertyType.IsPropertyEnumerableOfModels()
                     && !descriptor.IsPropertyDisplayNameNull())
                 {
-                    DataGrid dataGridWithSelectFilter = CreatDataGridWithSelectFilter(mainDataGrid, descriptor);
-                    DataGrid dataGridWithReverseSelectFilter = CreatDataGridWithSelectFilter(mainDataGrid, descriptor, true);
-                    var sellectButton = CreatButtonForAddAndRemoveSellectedItems(mainDataGrid, descriptor, dataGridWithSelectFilter, dataGridWithReverseSelectFilter);
+                    DataGrid dataGridWithPropertyCollection = CreatDataGridWithPropertyCollection(mainDataGrid, descriptor);
+                    DataGrid dataGridWithInvertedPropertyCollection = CreatDataGridWithPropertyCollection(mainDataGrid, descriptor, true);
+                    var sellectButton = CreatButtonForAddAndRemoveSellectedItems(mainDataGrid, descriptor, dataGridWithPropertyCollection, dataGridWithInvertedPropertyCollection);
                     Grid gridWithSellectButton = PutElementIntoGrid(sellectButton, 0, 1);
-                    RenderingUIElements(mainDataGrid, dataGridWithSelectFilter, gridWithSellectButton, dataGridWithReverseSelectFilter);
+                    RenderingUIElements(mainDataGrid, dataGridWithPropertyCollection, gridWithSellectButton, dataGridWithInvertedPropertyCollection);
                 }
             }
         }
@@ -63,46 +63,14 @@ namespace WpfMailSender.Behaviours
             (DataGrid mainDataGrid, PropertyDescriptor descriptor, DataGrid dataGridForRemoveItems, DataGrid dataGridForAddItems)
         {
             var button = new ButtonForAddAndRemoveSellectedItems();
-            dataGridForRemoveItems.SelectionChanged += (s, e) =>
-            {
-                if (e.AddedItems.Count != 0)
-                {
-                    button.ArrowDirection = ArrowDirectionEnum.Down;
-                }
-                else
-                {
-                    button.ArrowDirection = ArrowDirectionEnum.None;
-                }
-            };
-            dataGridForAddItems.SelectionChanged += (s, e) =>
-            {
-                if (e.AddedItems.Count != 0)
-                {
-                    button.ArrowDirection = ArrowDirectionEnum.Up;
-                }
-                else
-                {
-                    button.ArrowDirection = ArrowDirectionEnum.None;
-                }
-            };
 
-            mainDataGrid.SelectionChanged += (s, e) =>
-            {
-                dataGridForRemoveItems.SelectedItems.Clear();
-                dataGridForAddItems.SelectedItems.Clear();
-            };
+            dataGridForRemoveItems.SelectionChanged += button.CollectionForRemoveItems_SelectionChanged;
+            dataGridForRemoveItems.GotFocus += button.CollectionForRemoveItems_GotFocus;
 
+            dataGridForAddItems.SelectionChanged += button.CollectionForAddItems_SelectionChanged;
+            dataGridForAddItems.GotFocus += button.CollectionForAddItems_GotFocus;
 
-            var sellectedItemDictionary = (mainDataGrid.DataContext as IViewModelCollectionsOfModelsAndSellectedItems)
-                .SelectedItem;
-            var command = new AddAndRemoveSellectedItemsCommand(sellectedItemDictionary, descriptor.ComponentType, descriptor.Name);
-            command.Executed += (s, e) =>
-            {
-                dataGridForRemoveItems.SelectedItems.Clear();
-                dataGridForRemoveItems.Items.Refresh();
-                dataGridForAddItems.SelectedItems.Clear();
-                dataGridForAddItems.Items.Refresh();
-            };
+            var command = CreateAddAndRemoveSellectedItemsCommand(mainDataGrid, descriptor, button);
             
             button.Command = command;
             button.CommandParameter = (dataGridForRemoveItems.SelectedItems.Cast<IBaseModel>(), dataGridForAddItems.SelectedItems.Cast<IBaseModel>()); 
@@ -110,9 +78,17 @@ namespace WpfMailSender.Behaviours
             return button;
         }
 
-        private void Command_Executed(object sender, Commands.Base.CommandEventArgs args)
+        private AddAndRemoveSellectedItemsCommand CreateAddAndRemoveSellectedItemsCommand(DataGrid mainDataGrid, PropertyDescriptor descriptor, ButtonForAddAndRemoveSellectedItems button)
         {
-            throw new NotImplementedException();
+            var sellectedItemDictionary = (mainDataGrid.DataContext as IViewModelCollectionsOfModelsAndSellectedItems)
+                .SelectedItem;
+            var command = new AddAndRemoveSellectedItemsCommand(sellectedItemDictionary, descriptor.ComponentType, descriptor.Name, button);
+            command.Executed += (s, e) =>
+            {
+                sellectedItemDictionary.RaisePropertyChangedEventForIndexerName();
+            };
+
+            return command;
         }
 
         private void RenderingUIElements(FrameworkElement mainFrameworkElement, params UIElement[] elementsForRendering)
@@ -173,19 +149,41 @@ namespace WpfMailSender.Behaviours
             return grid;
         }
 
-        private DataGrid CreatDataGridWithSelectFilter(DataGrid dataGrid, PropertyDescriptor descriptor, bool isReverseFilter = false)
+        private DataGrid CreatDataGridWithPropertyCollection(DataGrid dataGrid, PropertyDescriptor descriptor, bool isInverted = false)
         {
             var newDataGrid = new DataGrid();
-            var elementType = descriptor.PropertyType.GenericTypeArguments.Single();
-            var sourceItems = (dataGrid.DataContext as IViewModelCollectionsOfModelsAndSellectedItems)?.Models[elementType];
-            CollectionElementTypeConvertor.SetValueAsConvertToOriginTypeItems(elementType, sourceItems, "ItemsSource", newDataGrid);
 
-            var filterHelper = new SelectionFilterCreater(newDataGrid.ItemsSource, descriptor.Name, descriptor.ComponentType, isReverseFilter);
-            newDataGrid.ItemsSource = filterHelper.GetCollectionWithSelectionFilter(dataGrid);
+            var multiBinding = new MultiBinding
+            {
+                Converter = new ToPropertyCollectionMultiValueConverter(), 
+                ConverterParameter = isInverted
+            };
+
+            AddBindingsForMultiBinding(multiBinding, dataGrid, descriptor);
+
+            newDataGrid.SetBinding(ItemsControl.ItemsSourceProperty, multiBinding);
 
             FillPropertiesAndSubscriptions(newDataGrid, dataGrid);
 
             return newDataGrid;
+        }
+
+        private void AddBindingsForMultiBinding(MultiBinding multiBinding, DataGrid dataGrid, PropertyDescriptor descriptor)
+        {
+            var sellectedItemBinding = new Binding
+            {
+                Source = dataGrid.DataContext,
+                Path = new PropertyPath("SelectedItem[(0)]", descriptor.ComponentType)
+            };
+
+            var collectionOfPropertyBinding = new Binding
+            {
+                Source = dataGrid.DataContext,
+                Path = new PropertyPath("Models[(0)]", descriptor.PropertyType.GetGenericArguments().Single())
+            };
+
+            multiBinding.Bindings.Add(sellectedItemBinding);
+            multiBinding.Bindings.Add(collectionOfPropertyBinding);
         }
 
         private void FillPropertiesAndSubscriptions(DataGrid dataGrid, DataGrid mainDataGrid)
@@ -194,6 +192,7 @@ namespace WpfMailSender.Behaviours
             dataGrid.IsReadOnly = true;
             dataGrid.HorizontalAlignment = HorizontalAlignment.Left;
             dataGrid.CanUserAddRows = false;
+            dataGrid.CanUserDeleteRows = false;
 
             dataGrid.AutoGeneratingColumn += AutoGenerateColumnsBehaviour.OnAutoGeneratingColumn;
             dataGrid.AutoGeneratedColumns += BindingStyleForAutoGenerateColumnsBehaviour.OnAutoGeneratedColumns;
