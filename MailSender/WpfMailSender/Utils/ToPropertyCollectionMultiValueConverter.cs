@@ -41,7 +41,8 @@ namespace WpfMailSender.Utils
 
                 if (isInverted)
                 {
-                    return modelCollection.Where(e => true); // I still do not understand why the data is displayed incorrectly without "Where"...
+                    // I still do not understand why the data is displayed incorrectly without "Where"...
+                    return modelCollection.Where(e => true); 
                 }
             }
 

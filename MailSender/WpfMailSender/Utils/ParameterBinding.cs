@@ -34,6 +34,7 @@ namespace WpfMailSender.Utils
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
             Binding.Path = new PropertyPath(Binding.Path.Path, Parameters.Cast<object>().ToArray());
+            
             return Binding.ProvideValue(serviceProvider);
         }
     }

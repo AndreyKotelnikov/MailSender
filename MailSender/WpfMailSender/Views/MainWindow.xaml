@@ -63,9 +63,9 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="3*"/>
                         </Grid.ColumnDefinitions>
-                        <DataGrid utils:CollectionElementTypeConvertor.SetItemsSourceInOriginType=
+                        <DataGrid utils:CollectionElementTypeConverter.SetItemsSourceInOriginType=
                                   "{utils:ParameterBinding {Binding Models[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:RecipientModel}}"
-                                  SelectedItem="{utils:ParameterBinding {Binding SelectedItem[(0)]},{x:Type data:RecipientModel}}"
+                                  SelectedItem="{utils:ParameterBinding {Binding SelectedItem[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:RecipientModel}}"
                                   FlowDirection="RightToLeft"
                                   Name="DataGrid"
                                   >

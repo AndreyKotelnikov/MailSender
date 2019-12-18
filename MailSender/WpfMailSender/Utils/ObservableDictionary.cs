@@ -98,12 +98,9 @@ namespace WpfMailSender.Utils
             }
         }
 
-        public void RaisePropertyChangedForIndexerName()
+        public void RaisePropertyChangedEventForIndexerName()
         {
-            OnPropertyChanged("Count");
-            OnPropertyChanged("Item[]");
-            OnPropertyChanged("Keys");
-            OnPropertyChanged("Values");
+            OnPropertyChanged(Binding.IndexerName);
         }
 
         public Dictionary<TKey, TValue>.ValueCollection Values

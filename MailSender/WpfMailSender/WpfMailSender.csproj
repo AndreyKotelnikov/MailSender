@@ -101,7 +101,9 @@
     <Compile Include="Components\ButtonForAddAndRemoveSellectedItems.xaml.cs">
       <DependentUpon>ButtonForAddAndRemoveSellectedItems.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils\CollectionElementTypeConvertor.cs" />
+    <Compile Include="Utils\CollectionElementTypeConverter.cs" />
+    <Compile Include="Utils\ToPropertyCollectionMultiValueConverter.cs" />
+    <Compile Include="Utils\ToPropertyCollectionValueConverter.cs" />
     <Compile Include="Utils\SelectionFilterCreater.cs" />
     <Compile Include="Utils\ObservableDictionary.cs" />
     <Compile Include="Utils\ParameterBinding.cs" />

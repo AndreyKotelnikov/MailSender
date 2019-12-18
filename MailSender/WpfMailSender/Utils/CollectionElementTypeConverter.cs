@@ -12,7 +12,7 @@ using Models.Abstract;
 
 namespace WpfMailSender.Utils
 {
-    public static class CollectionElementTypeConvertor
+    public static class CollectionElementTypeConverter
     {
         public static IEnumerable<IBaseModel> GetSetItemsSourceInOriginType(DependencyObject obj)
         {
@@ -28,7 +28,7 @@ namespace WpfMailSender.Utils
         public static readonly DependencyProperty SetItemsSourceInOriginTypeProperty =
             DependencyProperty.RegisterAttached("SetItemsSourceInOriginType",
                 typeof(IEnumerable<IBaseModel>),
-                typeof(CollectionElementTypeConvertor),
+                typeof(CollectionElementTypeConverter),
                 new PropertyMetadata(null, SetItemsSourceInOriginTypeChanged));
 
         private static void SetItemsSourceInOriginTypeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -49,7 +49,7 @@ namespace WpfMailSender.Utils
         public static void SetValueAsConvertToOriginTypeItems(Type elementType, IEnumerable<IBaseModel> collection, string propertyName, object instance)
         {
             var propertyInfo = instance.GetType().GetProperty(propertyName);
-            var methodSetImplicitItemsSourceGeneric = typeof(CollectionElementTypeConvertor)
+            var methodSetImplicitItemsSourceGeneric = typeof(CollectionElementTypeConverter)
                 .GetMethod(nameof(SetValueAsConvertToOriginTypeItemsGeneric), BindingFlags.Static | BindingFlags.NonPublic);
             methodSetImplicitItemsSourceGeneric?.MakeGenericMethod(elementType)
                 .Invoke(null, new [] { collection, propertyInfo, instance });
@@ -62,15 +62,15 @@ namespace WpfMailSender.Utils
             propertyInfo.SetValue(instance, originTypeOfItemsCollection);
         }
 
-        public static IList CreateList(Type elementType)
+        public static IList CreateEmptyList(Type elementType)
         {
-            var methodCreateListGeneric = typeof(CollectionElementTypeConvertor)
-                .GetMethod(nameof(CreateListGeneric), BindingFlags.Static | BindingFlags.NonPublic);
+            var methodCreateListGeneric = typeof(CollectionElementTypeConverter)
+                .GetMethod(nameof(CreateEmptyListGeneric), BindingFlags.Static | BindingFlags.NonPublic);
             return (IList) methodCreateListGeneric?.MakeGenericMethod(elementType)
                 .Invoke(null, null);
         }
 
-        private static IList CreateListGeneric<T>()
+        private static IList CreateEmptyListGeneric<T>()
         {
             return new List<T>();
         }

@@ -75,7 +75,7 @@ namespace WpfMailSender.Behaviours
             var sourceItems = (dataGrid.DataContext as IViewModelCollectionsOfModelsAndSellectedItems)?.Models[descriptor.PropertyType]
                 .Prepend(CreateNullItem(descriptor.PropertyType));
 
-            CollectionElementTypeConvertor.SetValueAsConvertToOriginTypeItems(descriptor.PropertyType, sourceItems, "ItemsSource", newComboBoxColumn);
+            CollectionElementTypeConverter.SetValueAsConvertToOriginTypeItems(descriptor.PropertyType, sourceItems, "ItemsSource", newComboBoxColumn);
 
             newComboBoxColumn.DisplayMemberPath = descriptor.PropertyType
                                                       .GetProperties()
