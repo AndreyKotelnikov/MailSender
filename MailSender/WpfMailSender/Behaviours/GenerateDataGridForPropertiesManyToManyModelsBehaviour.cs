@@ -44,19 +44,10 @@ namespace WpfMailSender.Behaviours
                     DataGrid dataGridWithPropertyCollection = CreatDataGridWithPropertyCollection(mainDataGrid, descriptor);
                     DataGrid dataGridWithInvertedPropertyCollection = CreatDataGridWithPropertyCollection(mainDataGrid, descriptor, true);
                     var sellectButton = CreatButtonForAddAndRemoveSellectedItems(mainDataGrid, descriptor, dataGridWithPropertyCollection, dataGridWithInvertedPropertyCollection);
-                    Grid gridWithSellectButton = PutElementIntoGrid(sellectButton, 0, 1);
-                    RenderingUIElements(mainDataGrid, dataGridWithPropertyCollection, gridWithSellectButton, dataGridWithInvertedPropertyCollection);
+                    Grid gridWithSellectButton = RenderingHelper.PutElementIntoGrid(sellectButton, 0, 1);
+                    RenderingHelper.RenderingUIElements(mainDataGrid, dataGridWithPropertyCollection, gridWithSellectButton, dataGridWithInvertedPropertyCollection);
                 }
             }
-        }
-
-        private Grid PutElementIntoGrid(UIElement elementForPutInto, int row, int column)
-        {
-            var grid = CreateGridWithColumns(GridUnitType.Star, 5, 1, 5);
-            Grid.SetRow(elementForPutInto, row);
-            Grid.SetColumn(elementForPutInto, column);
-            grid.Children.Add(elementForPutInto);
-            return grid;
         }
 
         private ButtonForAddAndRemoveSellectedItems CreatButtonForAddAndRemoveSellectedItems
@@ -70,7 +61,7 @@ namespace WpfMailSender.Behaviours
             dataGridForAddItems.SelectionChanged += button.CollectionForAddItems_SelectionChanged;
             dataGridForAddItems.GotFocus += button.CollectionForAddItems_GotFocus;
 
-            var command = CreateAddAndRemoveSellectedItemsCommand(mainDataGrid, descriptor, button);
+            var command = CreateCommandForAddAndRemoveSellectedItems(mainDataGrid, descriptor, button);
             
             button.Command = command;
             button.CommandParameter = (dataGridForRemoveItems.SelectedItems.Cast<IBaseModel>(), dataGridForAddItems.SelectedItems.Cast<IBaseModel>()); 
@@ -78,7 +69,7 @@ namespace WpfMailSender.Behaviours
             return button;
         }
 
-        private AddAndRemoveSellectedItemsCommand CreateAddAndRemoveSellectedItemsCommand(DataGrid mainDataGrid, PropertyDescriptor descriptor, ButtonForAddAndRemoveSellectedItems button)
+        private AddAndRemoveSellectedItemsCommand CreateCommandForAddAndRemoveSellectedItems(DataGrid mainDataGrid, PropertyDescriptor descriptor, ButtonForAddAndRemoveSellectedItems button)
         {
             var sellectedItemDictionary = (mainDataGrid.DataContext as IViewModelCollectionsOfModelsAndSellectedItems)
                 .SelectedItem;
@@ -89,64 +80,6 @@ namespace WpfMailSender.Behaviours
             };
 
             return command;
-        }
-
-        private void RenderingUIElements(FrameworkElement mainFrameworkElement, params UIElement[] elementsForRendering)
-        {
-            Grid grid = CreateGridWithRows(GridUnitType.Star, 5, 1, 5);
-
-            var lastGridColumn = FindLastGridColumn(mainFrameworkElement);
-            Grid.SetColumn(grid, lastGridColumn + 1);
-            Grid.SetRow(grid, Grid.GetRow(mainFrameworkElement));
-
-            var parent = mainFrameworkElement.Parent as Panel;
-            parent.Children.Add(grid);
-
-            for (int i = 0; i < elementsForRendering.Length; i++)
-            {
-                Grid.SetRow(elementsForRendering[i], i);
-                grid.Children.Add(elementsForRendering[i]);
-            }
-        }
-
-        private int FindLastGridColumn(FrameworkElement mainFrameworkElement)
-        {
-            var panel = mainFrameworkElement.Parent as Panel;
-            if (panel == null) throw new ArgumentNullException(nameof(panel));
-
-            return panel.Children.OfType<UIElement>()
-                .Where(e => ((e is DataGrid || ((e as Grid)?.Children.OfType<UIElement>().Count(d => d is DataGrid) == 2))
-                             && Grid.GetRow(e) == Grid.GetRow(mainFrameworkElement)))
-                .Select(Grid.GetColumn)
-                .Max();
-        }
-
-        private Grid CreateGridWithRows(GridUnitType gridUnitType, params int[] heightRowsRatio)
-        {
-            var grid = new Grid();
-            foreach (var height in heightRowsRatio)
-            {
-                var gridLenght = new GridLength(height, gridUnitType);
-                var rowDefinition = new RowDefinition();
-                rowDefinition.Height = gridLenght;
-                grid.RowDefinitions.Add(rowDefinition);
-            }
-
-            return grid;
-        }
-
-        private Grid CreateGridWithColumns(GridUnitType gridUnitType, params int[] widthColumnsRatio)
-        {
-            var grid = new Grid();
-            foreach (var width in widthColumnsRatio)
-            {
-                var gridLenght = new GridLength(width, gridUnitType);
-                var columnDefinition = new ColumnDefinition();
-                columnDefinition.Width = gridLenght;
-                grid.ColumnDefinitions.Add(columnDefinition);
-            }
-
-            return grid;
         }
 
         private DataGrid CreatDataGridWithPropertyCollection(DataGrid dataGrid, PropertyDescriptor descriptor, bool isInverted = false)

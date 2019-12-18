@@ -102,6 +102,7 @@
       <DependentUpon>ButtonForAddAndRemoveSellectedItems.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\CollectionElementTypeConverter.cs" />
+    <Compile Include="Utils\RenderingHelper.cs" />
     <Compile Include="Utils\ToPropertyCollectionMultiValueConverter.cs" />
     <Compile Include="Utils\ObservableDictionary.cs" />
     <Compile Include="Utils\ParameterBinding.cs" />

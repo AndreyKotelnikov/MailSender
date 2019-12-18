@@ -32,11 +32,9 @@ namespace WpfMailSender.Utils
 
                 if (propertyCollection != null)
                 {
-                    var resultCollection =
-                        modelCollection.Where(v => isInverted
+                    return modelCollection.Where(v => isInverted
                             ? propertyCollection.All(e => e.Id != v.Id)
                             : propertyCollection.Any(e => e.Id == v.Id));
-                    return resultCollection;
                 }
 
                 if (isInverted)
