@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -23,7 +24,6 @@ namespace WpfMailSender.Components
         public ButtonForAddAndRemoveSellectedItems()
         {
             InitializeComponent();
-            var t = this;
         }
 
        
@@ -62,6 +62,39 @@ namespace WpfMailSender.Components
         {
             get { return (object) GetValue(CommandParameterProperty); }
             set { SetValue(CommandParameterProperty, value); }
+        }
+
+        public void CollectionForRemoveItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SetArrowDirection(e.AddedItems.Count, ArrowDirectionEnum.Down);
+        }
+
+        public void CollectionForAddItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            SetArrowDirection(e.AddedItems.Count, ArrowDirectionEnum.Up);
+        }
+
+        public void CollectionForRemoveItems_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is MultiSelector multiSelector)
+            {
+                SetArrowDirection(multiSelector.SelectedItems.Count, ArrowDirectionEnum.Down);
+            }
+        }
+
+        public void CollectionForAddItems_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is MultiSelector multiSelector)
+            {
+                SetArrowDirection(multiSelector.SelectedItems.Count, ArrowDirectionEnum.Up);
+            }
+        }
+
+        private void SetArrowDirection(int itemsCount, ArrowDirectionEnum arrowDirection)
+        {
+            ArrowDirection = itemsCount > 0 
+                ? arrowDirection 
+                : ArrowDirectionEnum.None;
         }
     }
 }
