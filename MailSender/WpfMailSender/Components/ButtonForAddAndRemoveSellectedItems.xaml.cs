@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Models.Abstract;
 
 namespace WpfMailSender.Components
 {
@@ -21,13 +22,6 @@ namespace WpfMailSender.Components
     /// </summary>
     public partial class ButtonForAddAndRemoveSellectedItems
     {
-        public ButtonForAddAndRemoveSellectedItems()
-        {
-            InitializeComponent();
-        }
-
-       
-
         public static readonly DependencyProperty ArrowDirectionProperty = DependencyProperty.Register(
             "ArrowDirection",
             typeof(ArrowDirectionEnum),
@@ -64,37 +58,29 @@ namespace WpfMailSender.Components
             set { SetValue(CommandParameterProperty, value); }
         }
 
-        public void CollectionForRemoveItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public ButtonForAddAndRemoveSellectedItems()
         {
-            SetArrowDirection(e.AddedItems.Count, ArrowDirectionEnum.Down);
+            InitializeComponent();
         }
 
-        public void CollectionForAddItems_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            SetArrowDirection(e.AddedItems.Count, ArrowDirectionEnum.Up);
-        }
+        public void CollectionForRemoveItems_SelectionChanged(object sender, SelectionChangedEventArgs e) => SetArrowDirection(sender, ArrowDirectionEnum.Down);
 
-        public void CollectionForRemoveItems_GotFocus(object sender, RoutedEventArgs e)
+        public void CollectionForAddItems_SelectionChanged(object sender, SelectionChangedEventArgs e) => SetArrowDirection(sender, ArrowDirectionEnum.Up);
+
+        public void CollectionForRemoveItems_GotFocus(object sender, RoutedEventArgs e) => SetArrowDirection(sender, ArrowDirectionEnum.Down);
+
+        public void CollectionForAddItems_GotFocus(object sender, RoutedEventArgs e) => SetArrowDirection(sender, ArrowDirectionEnum.Up);
+
+        private void SetArrowDirection(object sender, ArrowDirectionEnum arrowDirection)
         {
             if (sender is MultiSelector multiSelector)
             {
-                SetArrowDirection(multiSelector.SelectedItems.Count, ArrowDirectionEnum.Down);
-            }
-        }
+                var itemsCount = multiSelector.SelectedItems.Count;
 
-        public void CollectionForAddItems_GotFocus(object sender, RoutedEventArgs e)
-        {
-            if (sender is MultiSelector multiSelector)
-            {
-                SetArrowDirection(multiSelector.SelectedItems.Count, ArrowDirectionEnum.Up);
+                ArrowDirection = itemsCount > 0
+                    ? arrowDirection
+                    : ArrowDirectionEnum.None;
             }
-        }
-
-        private void SetArrowDirection(int itemsCount, ArrowDirectionEnum arrowDirection)
-        {
-            ArrowDirection = itemsCount > 0 
-                ? arrowDirection 
-                : ArrowDirectionEnum.None;
         }
     }
 }
