@@ -9,6 +9,5 @@ namespace Models.Abstract
     public abstract class BaseModel : IBaseModel
     {
         public int Id { get; set; }
-        public int Test { get; set; }
     }
 }
