@@ -46,14 +46,14 @@
                             <components:ListController LabelName="Отправители"
                                                        ItemsSource="{utils:ParameterBinding {Binding Models[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:SenderModel}}"
                                                        SelectedIndex="{utils:ParameterBinding {Binding SelectedIndex[(0)]},{x:Type data:SenderModel}}"
-                                                       SelectedItem="{utils:ParameterBinding {Binding SelectedItem[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:SenderModel}}"> 
+                                                       SelectedItem="{utils:ParameterBinding {Binding SelectedItem[(0)]},{x:Type data:SenderModel}}"> 
                             </components:ListController>
                         </ToolBar>
                         <ToolBar Band="1">
                             <components:ListController LabelName="Получатели"
                                                        ItemsSource="{utils:ParameterBinding {Binding Models[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:RecipientModel}}"
                                                        SelectedIndex="{utils:ParameterBinding {Binding SelectedIndex[(0)]},{x:Type data:RecipientModel}}"
-                                                       SelectedItem="{utils:ParameterBinding {Binding SelectedItem[(0)], UpdateSourceTrigger=PropertyChanged, Mode=TwoWay},{x:Type data:RecipientModel}}">
+                                                       SelectedItem="{utils:ParameterBinding {Binding SelectedItem[(0)]},{x:Type data:RecipientModel}}">
                             </components:ListController>
                         </ToolBar>
                     </ToolBarTray>
@@ -61,16 +61,14 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="3*"/>
                         </Grid.ColumnDefinitions>
                         <DataGrid utils:CollectionElementTypeConverter.SetItemsSourceInOriginType=
-                                  "{utils:ParameterBinding {Binding Models[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:RecipientModel}}"
-                                  SelectedItem="{utils:ParameterBinding {Binding SelectedItem[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:RecipientModel}}"
+                                  "{utils:ParameterBinding {Binding Models[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:RecipientsListModel}}"
+                                  SelectedItem="{utils:ParameterBinding {Binding SelectedItem[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:RecipientsListModel}}"
                                   FlowDirection="RightToLeft"
-                                  AlternatingRowBackground="AntiqueWhite"
                                   Margin="10"
-                                  BorderThickness="2"
-                                  >
+                                  BorderThickness="2">
                             <i:Interaction.Behaviors>
                                 <behaviours:AutoGenerateColumnsBehaviour/>
                                 <behaviours:BindingStyleForAutoGenerateColumnsBehaviour/>

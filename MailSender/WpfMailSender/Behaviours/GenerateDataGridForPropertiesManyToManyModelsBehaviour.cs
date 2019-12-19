@@ -41,23 +41,13 @@ namespace WpfMailSender.Behaviours
                 if (descriptor.PropertyType.IsPropertyEnumerableOfModels()
                     && !descriptor.IsPropertyDisplayNameNull())
                 {
-                    Label propertyNameLabel = CreateLabelWithPropertyName(descriptor);
                     DataGrid dataGridWithPropertyCollection = CreatDataGridWithPropertyCollection(mainDataGrid, descriptor);
                     DataGrid dataGridWithInvertedPropertyCollection = CreatDataGridWithPropertyCollection(mainDataGrid, descriptor, true);
                     var sellectButton = CreatButtonForAddAndRemoveSellectedItems(mainDataGrid, descriptor, dataGridWithPropertyCollection, dataGridWithInvertedPropertyCollection);
                     Grid gridWithSellectButton = RenderingHelper.PutElementIntoGrid(sellectButton, 0, 1);
-                    RenderingHelper.RenderingUIElements(mainDataGrid, propertyNameLabel, dataGridWithPropertyCollection, gridWithSellectButton, dataGridWithInvertedPropertyCollection);
+                    RenderingHelper.RenderingUIElements(mainDataGrid, dataGridWithPropertyCollection, gridWithSellectButton, dataGridWithInvertedPropertyCollection);
                 }
             }
-        }
-
-        private Label CreateLabelWithPropertyName(PropertyDescriptor descriptor)
-        {
-            var propertyNameLabel = new Label();
-            propertyNameLabel.Content = descriptor.DisplayName ?? descriptor.Name;
-            propertyNameLabel.HorizontalAlignment = HorizontalAlignment.Center;
-
-            return propertyNameLabel;
         }
 
         private ButtonForAddAndRemoveSellectedItems CreatButtonForAddAndRemoveSellectedItems

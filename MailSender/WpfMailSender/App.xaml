@@ -15,11 +15,6 @@
           <Style TargetType="{x:Type TextBox}" x:Key="DataGridTextColumn.EditingElementStyle" BasedOn="{StaticResource {x:Type TextBox}}">
               <Setter Property="Foreground" Value="DarkOrchid" />
           </Style>
-          <Style TargetType="{x:Type Label}" BasedOn="{StaticResource {x:Type Label}}">
-              <Setter Property="HorizontalAlignment" Value="Center" />
-              <Setter Property="VerticalAlignment" Value="Bottom"/>
-              <Setter Property="FontSize" Value="16"/>
-            </Style>
             <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:WpfMailSender.ViewModels" />
           <ResourceDictionary.MergedDictionaries>
               <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />

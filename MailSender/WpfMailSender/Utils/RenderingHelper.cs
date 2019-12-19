@@ -12,7 +12,8 @@ namespace WpfMailSender.Utils
     {
         public static void RenderingUIElements(FrameworkElement mainFrameworkElement, params UIElement[] elementsForRendering)
         {
-            Grid grid = CreateGridWithRows(GridUnitType.Star, 1, 5, 1, 5);
+            Grid grid = CreateGridWithRows(GridUnitType.Star, 5, 1, 5);
+
             var lastGridColumn = FindLastGridColumn(mainFrameworkElement);
             Grid.SetColumn(grid, lastGridColumn + 1);
             Grid.SetRow(grid, Grid.GetRow(mainFrameworkElement));
@@ -67,25 +68,9 @@ namespace WpfMailSender.Utils
             return grid;
         }
 
-        public static void AddColumnsToGrid(Grid grid, GridUnitType gridUnitType, params int[] widthColumnsRatio)
-        {
-            foreach (var width in widthColumnsRatio)
-            {
-                var gridLenght = gridUnitType == GridUnitType.Auto
-                                 ? GridLength.Auto
-                                 : new GridLength(width, gridUnitType);
-                var columnDefinition = new ColumnDefinition
-                {
-                    Width = gridLenght
-                };
-                grid.ColumnDefinitions.Add(columnDefinition);
-            }
-        }
-
         public static Grid PutElementIntoGrid(UIElement elementForPutInto, int row, int column)
         {
-            var grid = new Grid();
-            AddColumnsToGrid(grid, GridUnitType.Star, 3, 1, 3);
+            var grid = CreateGridWithColumns(GridUnitType.Star, 5, 1, 5);
             Grid.SetRow(elementForPutInto, row);
             Grid.SetColumn(elementForPutInto, column);
             grid.Children.Add(elementForPutInto);
