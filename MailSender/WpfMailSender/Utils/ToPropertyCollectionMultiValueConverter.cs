@@ -30,7 +30,8 @@ namespace WpfMailSender.Utils
 
                 var isInverted = (bool)(parameter ?? false);
 
-                if (propertyCollection != null)
+                if (propertyCollection != null 
+                    && propertyCollection.Any())
                 {
                     return modelCollection.Where(v => isInverted
                             ? propertyCollection.All(e => e.Id != v.Id)
@@ -44,7 +45,8 @@ namespace WpfMailSender.Utils
                 }
             }
 
-            return CollectionElementTypeConverter.CreateEmptyList(elementType);
+            var res = CollectionElementTypeConverter.CreateEmptyList(elementType);
+            return res;
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)

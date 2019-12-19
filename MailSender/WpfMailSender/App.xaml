@@ -9,10 +9,13 @@
              xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006">
   <Application.Resources>
       <ResourceDictionary>
-          <Style TargetType="{x:Type ComboBox}" x:Key="DataGridComboBoxColumn.EditingElementStyle">
+            <Style TargetType="{x:Type ComboBox}" x:Key="DataGridComboBoxColumn.EditingElementStyle" BasedOn="{StaticResource {x:Type ComboBox}}">
               <Setter Property="Foreground" Value="DarkOrchid" />
           </Style>
-          <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:WpfMailSender.ViewModels" />
+          <Style TargetType="{x:Type TextBox}" x:Key="DataGridTextColumn.EditingElementStyle" BasedOn="{StaticResource {x:Type TextBox}}">
+              <Setter Property="Foreground" Value="DarkOrchid" />
+          </Style>
+            <vm:ViewModelLocator x:Key="Locator" d:IsDataSource="True" xmlns:vm="clr-namespace:WpfMailSender.ViewModels" />
           <ResourceDictionary.MergedDictionaries>
               <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
               <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />

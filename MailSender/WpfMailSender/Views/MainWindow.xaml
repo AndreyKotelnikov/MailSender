@@ -64,11 +64,11 @@
                             <ColumnDefinition Width="3*"/>
                         </Grid.ColumnDefinitions>
                         <DataGrid utils:CollectionElementTypeConverter.SetItemsSourceInOriginType=
-                                  "{utils:ParameterBinding {Binding Models[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:RecipientModel}}"
-                                  SelectedItem="{utils:ParameterBinding {Binding SelectedItem[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:RecipientModel}}"
+                                  "{utils:ParameterBinding {Binding Models[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:RecipientsListModel}}"
+                                  SelectedItem="{utils:ParameterBinding {Binding SelectedItem[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:RecipientsListModel}}"
                                   FlowDirection="RightToLeft"
-                                  Name="DataGrid"
-                                  >
+                                  Margin="10"
+                                  BorderThickness="2">
                             <i:Interaction.Behaviors>
                                 <behaviours:AutoGenerateColumnsBehaviour/>
                                 <behaviours:BindingStyleForAutoGenerateColumnsBehaviour/>

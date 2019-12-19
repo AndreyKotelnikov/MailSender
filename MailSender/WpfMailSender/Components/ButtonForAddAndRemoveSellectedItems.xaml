@@ -7,15 +7,13 @@
              xmlns:fa="http://schemas.fontawesome.io/icons/"
              >
     <UserControl.Resources>
-        <Style TargetType="{x:Type Button}" x:Key="BStyle">
-            <Setter Property="Foreground" Value="OrangeRed"></Setter>
-            <Setter Property="Background" Value="MediumSeaGreen"></Setter>
+        <Style TargetType="{x:Type Button}" BasedOn="{StaticResource {x:Type Button}}">
             <Style.Triggers>
                 <DataTrigger  Binding="{Binding ArrowDirection, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ButtonForAddAndRemoveSellectedItems}}}" Value="{x:Static local:ArrowDirectionEnum.Up}">
                     <Setter Property="Content">
                         <Setter.Value>
                             <StackPanel Orientation="Horizontal">
-                                <fa:ImageAwesome Icon="ArrowUp" Foreground="Brown"/>
+                                <fa:ImageAwesome Icon="ArrowUp" Foreground="GreenYellow"/>
                                 <TextBlock Padding="3">Add</TextBlock>
                             </StackPanel>
                         </Setter.Value>
@@ -25,7 +23,7 @@
                     <Setter Property="Content">
                         <Setter.Value>
                             <StackPanel Orientation="Horizontal">
-                                <fa:ImageAwesome Icon="ArrowDown" Foreground="Brown"/>
+                                <fa:ImageAwesome Icon="ArrowDown" Foreground="Orange"/>
                                 <TextBlock Padding="3">Remove</TextBlock>
                             </StackPanel>
                         </Setter.Value>
@@ -38,9 +36,7 @@
         </Style>
     </UserControl.Resources>
     <DockPanel DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:ButtonForAddAndRemoveSellectedItems}}}">
-        <Button Style="{StaticResource BStyle}"
-                Command="{Binding Command}"
+        <Button Command="{Binding Command}"
                 CommandParameter="{Binding CommandParameter}"/>
     </DockPanel>
-
 </UserControl>
