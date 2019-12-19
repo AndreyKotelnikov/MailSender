@@ -10,6 +10,6 @@ namespace Models.Abstract
 
     public interface IBaseModel : IUniqueEntity
     {
-        int Test { get; set; }
+
     }
 }
