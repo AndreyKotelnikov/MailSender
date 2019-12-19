@@ -99,7 +99,10 @@ namespace WpfMailSender.ViewModels
         private void RegistryTypeModel(Type typeModel)
         {
             if (typeModel.GetInterfaces().All(i => i != typeof(IBaseModel))) 
-                throw new ArgumentException($"Тип {nameof(typeModel)} не содержит реализацию интерфейса {nameof(IBaseModel)}");
+                throw new ArgumentException($"Тип {typeModel} не содержит реализацию интерфейса {nameof(IBaseModel)}");
+
+            if(Models.ContainsKey(typeModel)) 
+                throw new ArgumentException($"Тип {typeModel} уже зарегистрирован");
 
             Models.Add(typeModel, new ObservableCollection<IBaseModel>());
             SelectedItem.Add(typeModel, null);
