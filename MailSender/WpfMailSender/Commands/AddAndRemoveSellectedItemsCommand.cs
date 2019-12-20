@@ -14,7 +14,7 @@ using WpfMailSender.Utils;
 
 namespace WpfMailSender.Commands
 {
-    public class AddAndRemoveSellectedItemsCommand : BaseCommandGeneric<ValueTuple<IEnumerable<IBaseModel>, IEnumerable<IBaseModel>>>
+    public class AddAndRemoveSellectedItemsCommand : BaseCommandGeneric<(IEnumerable<IBaseModel>, IEnumerable<IBaseModel>)>
     {
         private readonly ObservableDictionary<Type, object> _sellectedCollection;
         private readonly Type _typeOfSellectedItem;
@@ -33,12 +33,18 @@ namespace WpfMailSender.Commands
             _button = button;
             _propertyInfo = typeOfSellectedItem.GetProperty(propertyName);
             ParameterizedAction = AddAndRemoveSellectedItems;
+            CanExecuteFunc = CanExecute;
         }
 
-
-        public void AddAndRemoveSellectedItems(ValueTuple<IEnumerable<IBaseModel>, IEnumerable<IBaseModel>> valueTuple)
+        private bool CanExecute((IEnumerable<IBaseModel>, IEnumerable<IBaseModel>) collectionsWithSelectedItems)
         {
-            (IEnumerable<IBaseModel> itemsForRemove, IEnumerable<IBaseModel> itemsForAdd) = valueTuple;
+            (IEnumerable<IBaseModel> itemsForRemove, IEnumerable<IBaseModel> itemsForAdd) = collectionsWithSelectedItems;
+            return itemsForAdd.Any() || itemsForRemove.Any();
+        }
+
+        private void AddAndRemoveSellectedItems((IEnumerable<IBaseModel>, IEnumerable<IBaseModel>) collectionsWithSelectedItems)
+        {
+            (IEnumerable<IBaseModel> itemsForRemove, IEnumerable<IBaseModel> itemsForAdd) = collectionsWithSelectedItems;
             
             var sellectedItem = _sellectedCollection[_typeOfSellectedItem];
             var propertyValueOfSellectedItem = _propertyInfo.GetValue(sellectedItem) as IList;

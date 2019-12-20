@@ -6,16 +6,17 @@ namespace WpfMailSender.Commands.Generic
     public abstract class BaseCommandGeneric<TParameter> : ICommand
     {
         protected Action<TParameter> ParameterizedAction;
-        private bool _canExecute;
+        protected Func<TParameter, bool> CanExecuteFunc;
+        protected bool CanExecuteManualSet = true;
 
-        protected BaseCommandGeneric() : this(null, true)
+        protected BaseCommandGeneric() : this(null, null)
         {
         }
 
-        protected BaseCommandGeneric(Action<TParameter> parameterizedAction, bool canExecute = true)
+        protected BaseCommandGeneric(Action<TParameter> parameterizedAction, Func<TParameter, bool> canExecuteFunc)
         {
             ParameterizedAction = parameterizedAction;
-            _canExecute = canExecute;
+            CanExecuteFunc = canExecuteFunc;
         }
 
         public virtual void DoExecute(TParameter param)
@@ -59,32 +60,48 @@ namespace WpfMailSender.Commands.Generic
             executing?.Invoke(this, args);
         }
 
-        public bool CanExecute
-        {
-            get => _canExecute;
-            set
-            {
-                if (_canExecute == value)
-                    return;
-                _canExecute = value;
-                EventHandler canExecuteChanged = CanExecuteChanged;
-                canExecuteChanged?.Invoke(this, EventArgs.Empty);
-            }
-        }
+        //public bool CanExecuteManual
+        //{
+        //    get => _canExecuteManual;
+        //    set
+        //    {
+        //        if (_canExecuteManual == value)
+        //            return;
+        //        _canExecuteManual = value;
+        //        var canExecuteChanged = CanExecuteChanged;
+        //        canExecuteChanged?.Invoke(this, EventArgs.Empty);
+        //    }
+        //}
 
         bool ICommand.CanExecute(object parameter)
         {
-            return _canExecute;
+            if (parameter == null)
+            {
+                return false;
+            }
+               
+            if (!(parameter is TParameter))
+                throw new InvalidOperationException($"A parameter of type { parameter.GetType() } was passed to a Command expecting a parameter of type { typeof(TParameter).Name }. " +
+                                                    "Check the binding of the 'CommandParameter'.");
+            
+            return CanExecuteManualSet 
+                   && (CanExecuteFunc?.Invoke((TParameter)parameter) 
+                       ?? true);
         }
 
         void ICommand.Execute(object parameter)
         {
             if (!(parameter is TParameter))
-                throw new InvalidOperationException("A parameter of type " + (parameter != null ? parameter.GetType() : typeof(object)).Name + " was passed to a Command expecting a parameter of type " + typeof(TParameter).Name + ". Check the binding of the 'CommandParameter'.");
+                throw new InvalidOperationException($"A parameter of type { parameter.GetType() } was passed to a Command expecting a parameter of type { typeof(TParameter).Name }. " +
+                                                    "Check the binding of the 'CommandParameter'.");
             DoExecute((TParameter)parameter);
         }
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged
+        {
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
+        }
 
         public event CancelCommandEventHandlerGeneric<TParameter> Executing;
 

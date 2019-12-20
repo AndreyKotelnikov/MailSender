@@ -8,7 +8,7 @@ namespace WpfMailSender.Commands.Generic
 {
     public class CancelCommandGeneric<TParameter> : BaseCommandGeneric<TParameter>
     {
-        public CancelCommandGeneric(Action<TParameter> parameterizedAction, bool canExecute = true) : base(parameterizedAction, canExecute)
+        public CancelCommandGeneric(Action<TParameter> parameterizedAction, Func<TParameter, bool> canExecuteFunc) : base(parameterizedAction, null)
         {
         }
     }

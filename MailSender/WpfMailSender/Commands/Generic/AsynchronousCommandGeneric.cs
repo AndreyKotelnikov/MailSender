@@ -18,15 +18,15 @@ namespace WpfMailSender.Commands.Generic
         private bool _disableDuringExecuting;
 
 
-        public AsynchronousCommandGeneric(Action<TParameter> parameterizedAction, bool canExecute = true)
-          : base(parameterizedAction, canExecute)
+        public AsynchronousCommandGeneric(Action<TParameter> parameterizedAction, Func<TParameter, bool> canExecuteFunc)
+          : base(parameterizedAction, canExecuteFunc)
         {
             Initialise();
         }
 
         private void Initialise()
         {
-            CancelCommand = new CancelCommandGeneric<TParameter>(((papameter) => IsCancellationRequested = true), true);
+            CancelCommand = new CancelCommandGeneric<TParameter>(((parameter) => IsCancellationRequested = true), null);
         }
 
         public override void DoExecute(TParameter param)
@@ -48,9 +48,9 @@ namespace WpfMailSender.Commands.Generic
             IsExecuting = true;
             if (DisableDuringExecution)
             {
-                CanExecute = false;
+                CanExecuteManualSet = false;
             }
-                
+
             CallingDispatcher = DispatcherHelper.CurrentDispatcher;
             ThreadPool.QueueUserWorkItem(state =>
             {
@@ -70,8 +70,9 @@ namespace WpfMailSender.Commands.Generic
                         });
                     IsCancellationRequested = false;
                     if (!DisableDuringExecution)
-                        return;
-                    CanExecute = true;
+                    {
+                        CanExecuteManualSet = true;
+                    }
                 });
             });
         }
