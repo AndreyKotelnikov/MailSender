@@ -93,7 +93,14 @@
     <Compile Include="Commands\Base\CancelCommandEventHandler.cs" />
     <Compile Include="Commands\Base\CommandEventArgs.cs" />
     <Compile Include="Commands\Base\CommandEventHandler.cs" />
+    <Compile Include="Commands\Generic\AsynchronousCommandGeneric.cs" />
+    <Compile Include="Commands\Generic\BaseCommandGeneric.cs" />
     <Compile Include="Commands\Base\DispatcherHelper.cs" />
+    <Compile Include="Commands\Generic\CancelCommandEventArgsGeneric.cs" />
+    <Compile Include="Commands\Generic\CancelCommandEventHandlerGeneric.cs" />
+    <Compile Include="Commands\Generic\CancelCommandGeneric.cs" />
+    <Compile Include="Commands\Generic\CommandEventArgsGeneric.cs" />
+    <Compile Include="Commands\Generic\CommandEventHandlerGeneric.cs" />
     <Compile Include="Components\ArrowDirectionEnum.cs" />
     <Compile Include="Components\ListController.xaml.cs">
       <DependentUpon>ListController.xaml</DependentUpon>

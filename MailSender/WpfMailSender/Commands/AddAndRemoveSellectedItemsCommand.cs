@@ -8,12 +8,13 @@ using System.Threading.Tasks;
 using System.Windows.Documents;
 using Models.Abstract;
 using WpfMailSender.Commands.Base;
+using WpfMailSender.Commands.Generic;
 using WpfMailSender.Components;
 using WpfMailSender.Utils;
 
 namespace WpfMailSender.Commands
 {
-    public class AddAndRemoveSellectedItemsCommand : BaseCommand
+    public class AddAndRemoveSellectedItemsCommand : BaseCommandGeneric<ValueTuple<IEnumerable<IBaseModel>, IEnumerable<IBaseModel>>>
     {
         private readonly ObservableDictionary<Type, object> _sellectedCollection;
         private readonly Type _typeOfSellectedItem;
@@ -35,9 +36,9 @@ namespace WpfMailSender.Commands
         }
 
 
-        public void AddAndRemoveSellectedItems(object valueTuple)
+        public void AddAndRemoveSellectedItems(ValueTuple<IEnumerable<IBaseModel>, IEnumerable<IBaseModel>> valueTuple)
         {
-            (IEnumerable<IBaseModel> itemsForRemove, IEnumerable<IBaseModel> itemsForAdd) = (ValueTuple<IEnumerable<IBaseModel> , IEnumerable<IBaseModel>>) valueTuple;
+            (IEnumerable<IBaseModel> itemsForRemove, IEnumerable<IBaseModel> itemsForAdd) = valueTuple;
             
             var sellectedItem = _sellectedCollection[_typeOfSellectedItem];
             var propertyValueOfSellectedItem = _propertyInfo.GetValue(sellectedItem) as IList;
