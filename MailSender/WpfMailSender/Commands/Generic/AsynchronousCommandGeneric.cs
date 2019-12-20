@@ -18,6 +18,10 @@ namespace WpfMailSender.Commands.Generic
         private bool _disableDuringExecuting;
 
 
+        public AsynchronousCommandGeneric() : this(null, null)
+        {
+        }
+
         public AsynchronousCommandGeneric(Action<TParameter> parameterizedAction, Func<TParameter, bool> canExecuteFunc)
           : base(parameterizedAction, canExecuteFunc)
         {

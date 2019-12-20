@@ -19,7 +19,7 @@ namespace WpfMailSender.Commands.Generic
             CanExecuteFunc = canExecuteFunc;
         }
 
-        public virtual void DoExecute(TParameter param)
+        protected virtual void DoExecute(TParameter param)
         {
             CancelCommandEventArgsGeneric<TParameter> commandEventArgs =
                 new CancelCommandEventArgsGeneric<TParameter>
@@ -59,19 +59,6 @@ namespace WpfMailSender.Commands.Generic
             CancelCommandEventHandlerGeneric<TParameter> executing = Executing;
             executing?.Invoke(this, args);
         }
-
-        //public bool CanExecuteManual
-        //{
-        //    get => _canExecuteManual;
-        //    set
-        //    {
-        //        if (_canExecuteManual == value)
-        //            return;
-        //        _canExecuteManual = value;
-        //        var canExecuteChanged = CanExecuteChanged;
-        //        canExecuteChanged?.Invoke(this, EventArgs.Empty);
-        //    }
-        //}
 
         bool ICommand.CanExecute(object parameter)
         {
