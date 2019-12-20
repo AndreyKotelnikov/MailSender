@@ -33,7 +33,7 @@ namespace WpfMailSender.Commands.Generic
             CancelCommand = new CancelCommandGeneric<TParameter>(((parameter) => IsCancellationRequested = true), null);
         }
 
-        public override void DoExecute(TParameter param)
+        protected override void DoExecute(TParameter param)
         {
             if (IsExecuting)
                 return;

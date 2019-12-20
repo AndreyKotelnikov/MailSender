@@ -111,8 +111,10 @@ namespace WpfMailSender.ViewModels
 
         private void UpdateData()
         {
-            Parallel.ForEach(Models.Keys, 
-                typeModel => Models[typeModel] = TestDataCreater.CreateTestData(typeModel));
+            foreach (var typeModel in Models.Keys)
+            {
+                Models[typeModel] = TestDataCreater.CreateTestData(typeModel);
+            }
         }
 
         #endregion
