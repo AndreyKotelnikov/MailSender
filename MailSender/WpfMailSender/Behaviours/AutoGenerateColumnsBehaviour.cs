@@ -97,6 +97,10 @@ namespace WpfMailSender.Behaviours
         {
             var nullItem = (IBaseModel)Activator.CreateInstance(itemType);
             nullItem.Id = -1;
+            if (nullItem is NamedModel nullItemWithName)
+            {
+                nullItemWithName.Name = "(Пусто)";
+            }
             return nullItem;
         }
     }
