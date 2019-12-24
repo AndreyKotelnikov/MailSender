@@ -125,7 +125,6 @@
     <Compile Include="Utils\ValueConverterById.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModelFactory.cs" />
-    <Compile Include="ViewModels\ViewModelLocator.cs" />
     <Compile Include="Views\MainWindowAdapter.cs" />
     <Page Include="Components\ListController.xaml">
       <SubType>Designer</SubType>
