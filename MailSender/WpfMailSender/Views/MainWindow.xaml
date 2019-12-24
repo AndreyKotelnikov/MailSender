@@ -13,10 +13,12 @@
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:behaviours="clr-namespace:WpfMailSender.Behaviours"
+        xmlns:viewModels="clr-namespace:WpfMailSender.ViewModels"
         mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance viewModels:MainWindowViewModel, IsDesignTimeCreatable=True}"
         Title="{Binding Title}"  
-        Height="700" Width="1800"
-        DataContext="{Binding  MainWindowViewModel, Source={StaticResource Locator}}"
+        Height="796" 
+        Width="1800"
         >
     <DockPanel>
         <Menu DockPanel.Dock="Top">
