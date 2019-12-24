@@ -14,6 +14,7 @@ using Models.Abstract;
 using RepositoryAbstract;
 using WpfMailSender.Abstracts;
 using WpfMailSender.Utils;
+using WpfMailSender.Views;
 using Type = System.Type;
 
 namespace WpfMailSender.ViewModels
@@ -23,6 +24,8 @@ namespace WpfMailSender.ViewModels
         #region private
 
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+
+        private readonly IWindow _window; 
 
         private string _title = "Рассыльщик почты";
 
@@ -75,8 +78,15 @@ namespace WpfMailSender.ViewModels
 
         #region constructors
 
-        public MainWindowViewModel()
+        /// <summary>
+        /// Only for design Mode
+        /// </summary>
+        public MainWindowViewModel() : this(null) { }
+
+        public MainWindowViewModel(IWindow window)
         {
+            _window = window;
+
             RegistryTypeModel(typeof(RecipientModel));
             RegistryTypeModel(typeof(RecipientsListModel));
             RegistryTypeModel(typeof(SenderModel));
@@ -86,6 +96,7 @@ namespace WpfMailSender.ViewModels
             UpdateData();
         }
 
+        //TODO Сделать связку со слоем бизнесс-логики в VM
         //public MainWindowViewModel(IUnitOfWorkFactory unitOfWorkFactory = null)
         //{
         //    _unitOfWorkFactory = unitOfWorkFactory;
@@ -118,8 +129,5 @@ namespace WpfMailSender.ViewModels
         }
 
         #endregion
-
-
-        
     }
 }
