@@ -5,6 +5,10 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Autofac;
+using WpfMailSender.Abstracts;
+using WpfMailSender.CompositionRoot;
+
 
 namespace WpfMailSender
 {
@@ -13,5 +17,11 @@ namespace WpfMailSender
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            var container = ContainerConfig.Configure();
+            container.Resolve<IWindow>().Show();
+        }
     }
 }

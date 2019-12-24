@@ -37,6 +37,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac, Version=4.9.4.0, Culture=neutral, PublicKeyToken=17863af14b0044da, processorArchitecture=MSIL">
+      <HintPath>..\packages\Autofac.4.9.4\lib\net45\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="CommonServiceLocator, Version=2.0.5.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
       <HintPath>..\packages\CommonServiceLocator.2.0.5\lib\net47\CommonServiceLocator.dll</HintPath>
     </Reference>
@@ -81,9 +84,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Abstracts\IMainWindowViewModelFactory.cs" />
     <Compile Include="Abstracts\IViewModelCollectionsOfModelsAndSellectedItems.cs" />
+    <Compile Include="Abstracts\IWindow.cs" />
     <Compile Include="Behaviours\BindingStyleForAutoGenerateColumnsBehaviour.cs" />
     <Compile Include="Behaviours\AutoGenerateColumnsBehaviour.cs" />
+    <Compile Include="Behaviours\EditSellWithDataTimeTypeBehaviour.cs" />
     <Compile Include="Behaviours\GenerateDataGridForPropertiesManyToManyModelsBehaviour.cs" />
     <Compile Include="Commands\AddAndRemoveSellectedItemsCommand.cs" />
     <Compile Include="Commands\Base\BaseAsynchronousCommand.cs" />
@@ -108,6 +114,7 @@
     <Compile Include="Components\ButtonForAddAndRemoveSellectedItems.xaml.cs">
       <DependentUpon>ButtonForAddAndRemoveSellectedItems.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CompositionRoot\ContainerConfig.cs" />
     <Compile Include="Utils\CollectionElementTypeConverter.cs" />
     <Compile Include="Utils\RenderingHelper.cs" />
     <Compile Include="Utils\ToPropertyCollectionMultiValueConverter.cs" />
@@ -117,7 +124,9 @@
     <Compile Include="Utils\PropertyTypeExtentions.cs" />
     <Compile Include="Utils\ValueConverterById.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="ViewModels\MainWindowViewModelFactory.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs" />
+    <Compile Include="Views\MainWindowAdapter.cs" />
     <Page Include="Components\ListController.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -167,6 +176,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Autofac.Lib\Autofac.Lib.csproj">
+      <Project>{1542F997-B693-448B-B5B2-08A3E994ACF1}</Project>
+      <Name>Autofac.Lib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Models.csproj">
       <Project>{43D73C57-FDCC-4298-8A89-F35673DCF4F8}</Project>
       <Name>Models</Name>
