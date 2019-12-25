@@ -85,7 +85,8 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Abstracts\IDataContextFactory.cs" />
-    <Compile Include="Abstracts\IViewModelCollectionsOfModelsAndSellectedItems.cs" />
+    <Compile Include="Abstracts\IViewModelCollectionsOfModels.cs" />
+    <Compile Include="Abstracts\IViewModelSellectedItems.cs" />
     <Compile Include="Abstracts\IWindow.cs" />
     <Compile Include="Behaviours\BindingStyleForAutoGenerateColumnsBehaviour.cs" />
     <Compile Include="Behaviours\AutoGenerateColumnsBehaviour.cs" />

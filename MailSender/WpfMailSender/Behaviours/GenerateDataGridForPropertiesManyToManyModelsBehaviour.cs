@@ -81,7 +81,7 @@ namespace WpfMailSender.Behaviours
 
         private AddAndRemoveSellectedItemsCommand CreateCommandForAddAndRemoveSellectedItems(DataGrid mainDataGrid, PropertyDescriptor descriptor, ButtonForAddAndRemoveSellectedItems button)
         {
-            var sellectedItemDictionary = (mainDataGrid.DataContext as IViewModelCollectionsOfModelsAndSellectedItems)
+            var sellectedItemDictionary = (mainDataGrid.DataContext as IViewModelSellectedItems)
                 .SelectedItem;
             var command = new AddAndRemoveSellectedItemsCommand(sellectedItemDictionary, descriptor.ComponentType, descriptor.Name, button);
             command.Executed += (s, e) =>

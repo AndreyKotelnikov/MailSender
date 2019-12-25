@@ -72,7 +72,7 @@ namespace WpfMailSender.Behaviours
 
         private static void FillPropertiesOfComboBoxColumn(DataGridComboBoxColumn newComboBoxColumn, DataGrid dataGrid, PropertyDescriptor descriptor)
         {
-            var sourceItems = (dataGrid.DataContext as IViewModelCollectionsOfModelsAndSellectedItems)?.Models[descriptor.PropertyType]
+            var sourceItems = (dataGrid.DataContext as IViewModelCollectionsOfModels)?.Models[descriptor.PropertyType]
                 .Prepend(CreateNullItem(descriptor.PropertyType));
 
             CollectionElementTypeConverter.SetValueAsConvertToOriginTypeItems(descriptor.PropertyType, sourceItems, "ItemsSource", newComboBoxColumn);

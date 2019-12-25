@@ -19,7 +19,8 @@ using Type = System.Type;
 
 namespace WpfMailSender.ViewModels
 {
-    public class MainWindowViewModel : ViewModelBase, IViewModelCollectionsOfModelsAndSellectedItems
+    
+    public class MainWindowViewModel : ViewModelBase, IViewModelSellectedItems, IViewModelCollectionsOfModels
     {
         #region private
 

@@ -9,9 +9,8 @@ using WpfMailSender.Utils;
 
 namespace WpfMailSender.Abstracts
 {
-    public interface IViewModelCollectionsOfModelsAndSellectedItems
+    public interface IViewModelCollectionsOfModels
     {
         ObservableDictionary<Type, ObservableCollection<IBaseModel>> Models { get; set; }
-        ObservableDictionary<Type, object> SelectedItem { get; set; }
     }
 }
