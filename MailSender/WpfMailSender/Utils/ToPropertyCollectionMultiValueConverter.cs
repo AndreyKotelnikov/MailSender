@@ -28,7 +28,8 @@ namespace WpfMailSender.Utils
                     p.PropertyType.GetGenericArguments().SingleOrDefault() == elementType);
                 var propertyCollection = (propertyInfo?.GetValue(values[0]) as IList)?.Cast<IBaseModel>();
 
-                var isInverted = (bool)(parameter ?? false);
+                var isInverted = (bool)(parameter 
+                                        ?? false);
 
                 if (propertyCollection != null 
                     && propertyCollection.Any())
@@ -40,13 +41,12 @@ namespace WpfMailSender.Utils
 
                 if (isInverted)
                 {
-                    // I still do not understand why the data is displayed incorrectly without "Where"...
+                    //TODO  I still do not understand why the data is displayed incorrectly without "Where"...
                     return modelCollection.Where(e => true); 
                 }
             }
 
-            var res = CollectionElementTypeConverter.CreateEmptyList(elementType);
-            return res;
+            return CollectionElementTypeConverter.CreateEmptyList(elementType);
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
