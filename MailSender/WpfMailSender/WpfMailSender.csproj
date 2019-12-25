@@ -84,7 +84,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Abstracts\IMainWindowViewModelFactory.cs" />
+    <Compile Include="Abstracts\IDataContextFactory.cs" />
     <Compile Include="Abstracts\IViewModelCollectionsOfModelsAndSellectedItems.cs" />
     <Compile Include="Abstracts\IWindow.cs" />
     <Compile Include="Behaviours\BindingStyleForAutoGenerateColumnsBehaviour.cs" />
@@ -124,8 +124,8 @@
     <Compile Include="Utils\PropertyTypeExtentions.cs" />
     <Compile Include="Utils\ValueConverterById.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
-    <Compile Include="ViewModels\MainWindowViewModelFactory.cs" />
-    <Compile Include="Views\MainWindowAdapter.cs" />
+    <Compile Include="ViewModels\MainWindowDataContextFactory.cs" />
+    <Compile Include="Views\WindowAdapter.cs" />
     <Page Include="Components\ListController.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

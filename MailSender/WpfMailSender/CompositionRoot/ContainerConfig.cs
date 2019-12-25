@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using Autofac;
 using RepositoryAbstract;
 using WpfMailSender.Abstracts;
@@ -17,9 +18,9 @@ namespace WpfMailSender.CompositionRoot
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterType<MainWindowViewModelFactory>().As<IMainWindowViewModelFactory>();
-            builder.RegisterType<MainWindow>().AsSelf();
-            builder.RegisterType<MainWindowAdapter>().As<IWindow>();
+            builder.RegisterType<MainWindowDataContextFactory>().As<IDataContextFactory>();
+            builder.RegisterType<MainWindow>().As<Window>();
+            builder.RegisterType<WindowAdapter>().As<IWindow>();
 
             return builder.Build();
         }

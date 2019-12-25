@@ -8,18 +8,18 @@ using WpfMailSender.Abstracts;
 
 namespace WpfMailSender.ViewModels
 {
-    public class MainWindowViewModelFactory : IMainWindowViewModelFactory
+    public class MainWindowDataContextFactory : IDataContextFactory
     {
         private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 
         //TODO Сделать связку со слоем бизнесс-логики в VMFactory
-        //public MainWindowViewModelFactory(IUnitOfWorkFactory unitOfWorkFactory)
+        //public MainWindowDataContextFactory(IUnitOfWorkFactory unitOfWorkFactory)
         //{
         //    _unitOfWorkFactory = unitOfWorkFactory;
         //}
 
 
-        public MainWindowViewModel Create(IWindow window)
+        public object Create(IWindow window)
         {
             return new MainWindowViewModel(window);
         }

@@ -8,18 +8,16 @@ using WpfMailSender.Abstracts;
 
 namespace WpfMailSender.Views
 {
-    public class MainWindowAdapter : IWindow
+    public class WindowAdapter : IWindow
     {
-        private readonly MainWindow _mainWindow;
-        private readonly IMainWindowViewModelFactory _vmFactory;
+        private readonly Window _window;
 
-        public MainWindowAdapter(MainWindow mainWindow, IMainWindowViewModelFactory vmFactory)
+        public WindowAdapter(Window window, IDataContextFactory dataContextFactory)
         {
-            _mainWindow = mainWindow;
-            _vmFactory = vmFactory;
-
-            var vm = _vmFactory.Create(this);
-            _mainWindow.DataContext = vm;
+            _window = window 
+                          ?? throw new ArgumentNullException(nameof(window));
+            _window.DataContext = dataContextFactory
+                ?.Create(this);
         }
 
         void IWindow.Close()
@@ -27,12 +25,12 @@ namespace WpfMailSender.Views
             throw new NotImplementedException();
         }
 
-        IWindow IWindow.CreateChild(object viewModel)
+        IWindow IWindow.CreateChild<T>(T viewModel)
         {
             throw new NotImplementedException();
         }
 
-        void IWindow.Show() => _mainWindow.Show();
+        void IWindow.Show() => _window.Show();
         
 
         bool? IWindow.ShowDialog()

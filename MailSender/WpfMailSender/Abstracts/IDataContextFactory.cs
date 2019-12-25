@@ -3,14 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WpfMailSender.ViewModels;
 
 namespace WpfMailSender.Abstracts
 {
-    public interface IWindow
+    public interface IDataContextFactory
     {
-        void Close();
-        IWindow CreateChild<T>(T dataContext);
-        void Show();
-        bool? ShowDialog();
+        object Create(IWindow window);
     }
 }
