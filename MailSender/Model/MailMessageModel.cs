@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,10 +10,13 @@ namespace Models
 {
     public class MailMessageModel : BaseModel
     {
+        public string Body { get; set; }
+        
         public string Subject { get; set; }
 
-        public string Body { get; set; }
+        [DisplayName(null)]
+        public ICollection<SchedulerTaskModel> SchedulerTaskModel { get; set; }
 
-        public virtual ICollection<SchedulerTaskModel> SchedulerTaskModel { get; set; }
+        public ICollection<RecipientsListModel> RecipientsLists { get; set; }
     }
 }

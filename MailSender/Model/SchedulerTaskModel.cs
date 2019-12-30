@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Net.Mail;
 using Models.Abstract;
 
@@ -14,6 +15,7 @@ namespace Models
 
         public virtual ServerModel ServerModel { get; set; }
         
+        [DisplayName("Плановое время")]
         public DateTime PlanedTime { get; set; }
     }
 }
