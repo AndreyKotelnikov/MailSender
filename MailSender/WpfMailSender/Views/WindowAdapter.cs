@@ -20,18 +20,14 @@ namespace WpfMailSender.Views
                 ?.Create(this);
         }
 
+        public Window GetWindow() => _window;
+
         void IWindow.Close()
         {
             throw new NotImplementedException();
         }
 
-        IWindow IWindow.CreateChild<T>(T viewModel)
-        {
-            throw new NotImplementedException();
-        }
-
         void IWindow.Show() => _window.Show();
-        
 
         bool? IWindow.ShowDialog()
         {
