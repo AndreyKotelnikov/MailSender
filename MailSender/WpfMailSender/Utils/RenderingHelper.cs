@@ -91,5 +91,17 @@ namespace WpfMailSender.Utils
             grid.Children.Add(elementForPutInto);
             return grid;
         }
+
+        public static FrameworkElement GetLastParent(FrameworkElement element)
+        {
+            if (element == null) throw new ArgumentNullException(nameof(element));
+
+            if (element.Parent == null)
+            {
+                return element;
+            }
+
+            return GetLastParent(element.Parent as FrameworkElement);
+        }
     }
 }
