@@ -35,6 +35,32 @@ namespace WpfMailSender.Utils
                 }
             }
             else
+            if (typeOfData == typeof(SchedulerTaskModel))
+            {
+                for (var i = 0; i < models.Count; i++)
+                {
+                    var schedulerTaskModel = models[i] as SchedulerTaskModel;
+                    schedulerTaskModel.Id = i + 1;
+                    schedulerTaskModel.Name = $"{typeOfData.Name.Replace("Model", string.Empty)} {i + 1}";
+                    if (i == 5)
+                    {
+                        schedulerTaskModel.PlanedTime = DateTime.Now;
+                    }
+                }
+            }
+            if (typeOfData == typeof(MailMessageModel))
+            {
+                for (var i = 0; i < models.Count; i++)
+                {
+                    var schedulerTaskModel = models[i] as MailMessageModel;
+                    schedulerTaskModel.Id = i + 1;
+                    schedulerTaskModel.Subject = $"{typeOfData.Name.Replace("Model", string.Empty)} {i + 1}";
+                    if (i == 5)
+                    {
+                        schedulerTaskModel.Body = $"Body {i + 1}";
+                    }
+                }
+            }
             if (typeOfData.BaseType == typeof(ConnectionModel))
             {
                 for (var i = 0; i < models.Count; i++)
