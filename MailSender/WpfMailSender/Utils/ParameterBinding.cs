@@ -31,6 +31,13 @@ namespace WpfMailSender.Utils
             Parameters = new[] { p0 };
         }
 
+        public ParameterBinding(Binding b, object p0, object p1)
+        {
+            Binding = b;
+            var propertyInfo = (p0 as Type)?.GetProperty(p1.ToString());
+            Parameters = new[] { p0, propertyInfo };
+        }
+
         public override object ProvideValue(IServiceProvider serviceProvider)
         {
             Binding.Path = new PropertyPath(Binding.Path.Path, Parameters.Cast<object>().ToArray());
