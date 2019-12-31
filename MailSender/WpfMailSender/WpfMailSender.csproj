@@ -92,6 +92,7 @@
     <Compile Include="Behaviours\AutoGenerateColumnsBehaviour.cs" />
     <Compile Include="Behaviours\EditSellWithDataTimeTypeBehaviour.cs" />
     <Compile Include="Behaviours\GenerateDataGridForPropertiesManyToManyModelsBehaviour.cs" />
+    <Compile Include="Behaviours\RaiseEventPropertyChangedBehaviour.cs" />
     <Compile Include="Commands\AddAndRemoveSellectedItemsCommand.cs" />
     <Compile Include="Commands\Base\BaseAsynchronousCommand.cs" />
     <Compile Include="Commands\Base\BaseCommand.cs" />
@@ -123,6 +124,7 @@
     <Compile Include="Utils\ParameterBinding.cs" />
     <Compile Include="Utils\TestDataCreater.cs" />
     <Compile Include="Utils\PropertyTypeExtentions.cs" />
+    <Compile Include="Utils\DataGridItemsRefreshValueConverter.cs" />
     <Compile Include="Utils\ValueConverterById.cs" />
     <Compile Include="ViewModels\EditDateTimeViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />

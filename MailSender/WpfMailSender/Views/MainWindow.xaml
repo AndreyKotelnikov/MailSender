@@ -104,11 +104,14 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
-                    <DataGrid utils:CollectionElementTypeConverter.SetItemsSourceInOriginType=
-                              "{utils:ParameterBinding {Binding Models[(0)], UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True},{x:Type data:MailMessageModel}}"
-                              SelectedItem="{utils:ParameterBinding {Binding SelectedItem[(0)], UpdateSourceTrigger=PropertyChanged,  NotifyOnSourceUpdated=True},{x:Type data:MailMessageModel}}"
+                    <DataGrid x:Name="MailDataGrid"
+                        utils:CollectionElementTypeConverter.SetItemsSourceInOriginType=
+                              "{utils:ParameterBinding {Binding Models[(0)], UpdateSourceTrigger=PropertyChanged, Converter={utils:DataGridItemsRefreshValueConverter}, ConverterParameter='MailDataGrid'}
+                                ,{x:Type data:MailMessageModel}}"
+                              SelectedItem="{utils:ParameterBinding {Binding SelectedItem[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:MailMessageModel}}"
                               Style="{StaticResource DataGridStyle}"
-                              AlternatingRowBackground="AntiqueWhite">
+                              AlternatingRowBackground="AntiqueWhite"
+                               >
                         <i:Interaction.Behaviors>
                             <behaviours:AutoGenerateColumnsBehaviour/>
                             <behaviours:BindingStyleForAutoGenerateColumnsBehaviour/>
@@ -117,13 +120,16 @@
                     </DataGrid>
                     <DockPanel Grid.Column="2">
                         <GroupBox DockPanel.Dock="Top" Header="Тема">
-                            <TextBox Text="{utils:ParameterBinding {Binding SelectedItem[(0)].(1), UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, Mode=TwoWay},{x:Type data:MailMessageModel}, 'Subject'}"/>
+                            <TextBox Text="{utils:ParameterBinding {Binding SelectedItem[(0)].(1), UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, Mode=TwoWay},{x:Type data:MailMessageModel}, 'Subject'}">
+                                <i:Interaction.Behaviors>
+                                    <behaviours:RaiseEventPropertyChangedBehaviour/>
+                                </i:Interaction.Behaviors>
+                            </TextBox>
                         </GroupBox>
                         <GroupBox DockPanel.Dock="Top" Header="Тело">
                             <TextBox Text="{utils:ParameterBinding {Binding SelectedItem[(0)].(1), UpdateSourceTrigger=PropertyChanged, Mode=TwoWay},{x:Type data:MailMessageModel}, 'Body'}" AcceptsReturn="True"/>
                         </GroupBox>
                     </DockPanel>
-
                 </Grid>
             </TabItem>
             <TabItem Header="Статистика" IsEnabled="False"/>
