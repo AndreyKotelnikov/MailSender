@@ -5,7 +5,8 @@
              xmlns:local="clr-namespace:WpfMailSender"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              d1p1:Ignorable="d" 
-             xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006">
+             xmlns:d1p1="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             >
     <Application.Resources>
       <ResourceDictionary>
             <Style TargetType="{x:Type ComboBox}" x:Key="DataGridComboBoxColumn.EditingElementStyle" BasedOn="{StaticResource {x:Type ComboBox}}">
@@ -19,7 +20,14 @@
               <Setter Property="VerticalAlignment" Value="Bottom"/>
               <Setter Property="FontSize" Value="16"/>
             </Style>
-          <ResourceDictionary.MergedDictionaries>
+            <Style x:Key="DataGridStyle" TargetType="{x:Type DataGrid}" BasedOn="{StaticResource {x:Type DataGrid}}">
+                <Setter Property="FlowDirection" Value="RightToLeft" />
+                <Setter Property="AlternatingRowBackground" Value="AntiqueWhite"/>
+                <Setter Property="Margin" Value="10"/>
+                <Setter Property="BorderThickness" Value="2"/>
+                <Setter Property="HorizontalAlignment" Value="Left"/>
+          </Style>
+            <ResourceDictionary.MergedDictionaries>
               <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
               <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
               <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.DeepPurple.xaml" />
