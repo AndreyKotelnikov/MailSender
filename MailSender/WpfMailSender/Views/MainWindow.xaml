@@ -68,97 +68,61 @@
                         <DataGrid utils:CollectionElementTypeConverter.SetItemsSourceInOriginType=
                                   "{utils:ParameterBinding {Binding Models[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:RecipientModel}}"
                                   SelectedItem="{utils:ParameterBinding {Binding SelectedItem[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:RecipientModel}}"
-                                  FlowDirection="RightToLeft"
-                                  AlternatingRowBackground="AntiqueWhite"
-                                  Margin="10"
-                                  BorderThickness="2"
-                                  >
+                                  Style="{StaticResource DataGridStyle}"
+                                  AlternatingRowBackground="AntiqueWhite">
                             <i:Interaction.Behaviors>
                                 <behaviours:AutoGenerateColumnsBehaviour/>
                                 <behaviours:BindingStyleForAutoGenerateColumnsBehaviour/>
                                 <behaviours:GenerateDataGridForPropertiesManyToManyModelsBehaviour/>
                             </i:Interaction.Behaviors>
                         </DataGrid>
-                        <!--<GridSplitter Grid.Column="1" HorizontalAlignment="Left" Width="3" Background="Transparent"/>-->
                     </Grid>
                 </Grid>
             </TabItem>
             <TabItem Header="Планировщик">
                 <DockPanel>
-                    <StackPanel>
-                        <StackPanel.Resources>
-                            <Style x:Key="ControlStyle" TargetType="Control" >
-                                <Setter Property="Margin" Value="3"/>
-                                <Setter Property="Padding" Value="2"/>
-                            </Style>
-                            <Style x:Key="ButtonStyle" TargetType="Button" BasedOn="{StaticResource ControlStyle}">
-                                <Setter Property="Background" Value="#FFA8FF00"/>
-                            </Style>
-                        </StackPanel.Resources>
-                        <TextBlock>Дата:</TextBlock>
-                        <Calendar Style="{StaticResource ControlStyle}"/>
-                        <DockPanel>
-                            <TextBlock VerticalAlignment="Center">Время:</TextBlock>
-                            <materialDesign:TimePicker Style="{StaticResource ControlStyle}"/>
-                        </DockPanel>
-                        <Button Style="{StaticResource ButtonStyle}">
-                            <StackPanel Orientation="Horizontal">
-                                <fa:ImageAwesome Icon="ClockOutline" Foreground="DarkBlue" Effect="{x:Null}"/>
-                                <TextBlock>Запланировать</TextBlock>
-                            </StackPanel>
-                        </Button>
-                        <Button Style="{StaticResource ButtonStyle}">
-                            <StackPanel Orientation="Horizontal">
-                                <fa:ImageAwesome Icon="Send" Foreground="DarkBlue"/>
-                                <TextBlock>Отправить</TextBlock>
-                            </StackPanel>
-                        </Button>
-                        <Button Content="Button"/>
-                    </StackPanel>
-
-                    <GroupBox Header="Запланированные задания">
-                        <ListBox>
-                            <ListBoxItem>Задание 1</ListBoxItem>
-                            <ListBoxItem>Задание 2</ListBoxItem>
-                            <ListBoxItem>Задание 3</ListBoxItem>
-                            <ListBoxItem>Задание 4</ListBoxItem>
-                        </ListBox>
-                    </GroupBox>
+                    <Grid>
+                        <DataGrid utils:CollectionElementTypeConverter.SetItemsSourceInOriginType=
+                                  "{utils:ParameterBinding {Binding Models[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:SchedulerTaskModel}}"
+                                  SelectedItem="{utils:ParameterBinding {Binding SelectedItem[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:SchedulerTaskModel}}"
+                                  Style="{StaticResource DataGridStyle}"
+                                  AlternatingRowBackground="AntiqueWhite">
+                            <i:Interaction.Behaviors>
+                                <behaviours:AutoGenerateColumnsBehaviour/>
+                                <behaviours:BindingStyleForAutoGenerateColumnsBehaviour/>
+                                <behaviours:GenerateDataGridForPropertiesManyToManyModelsBehaviour/>
+                                <behaviours:EditSellWithDataTimeTypeBehaviour/>
+                            </i:Interaction.Behaviors>
+                        </DataGrid>
+                    </Grid>
                 </DockPanel>
             </TabItem>
             <TabItem Header="Почта">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="30*"/>
-                        <ColumnDefinition Width="115*"/>
-                        <ColumnDefinition Width="21*"/>
-                        <ColumnDefinition Width="43*"/>
-                        <ColumnDefinition Width="132*"/>
-                        <ColumnDefinition Width="845*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
-                    <!--<GroupBox Grid.Column="0" Header="Письма" Grid.ColumnSpan="5">
-                        <DockPanel>
-                            <UniformGrid DockPanel.Dock="Bottom" Rows="1">
-                                <Button>New</Button>
-                                <Button>Delete</Button>
-                            </UniformGrid>
-                            <ListBox x:Name="MessagesList" ItemsSource="{Binding MailMessages}" SelectedIndex="0">
-                                <ListBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <TextBlock Text="{Binding Subject}" ToolTip="{Binding Body}"/>
-                                    </DataTemplate>
-                                </ListBox.ItemTemplate>
-                            </ListBox>
-                        </DockPanel>
-                    </GroupBox>
-                    <DockPanel Grid.Column="5">
+                    <DataGrid utils:CollectionElementTypeConverter.SetItemsSourceInOriginType=
+                              "{utils:ParameterBinding {Binding Models[(0)], UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True},{x:Type data:MailMessageModel}}"
+                              SelectedItem="{utils:ParameterBinding {Binding SelectedItem[(0)], UpdateSourceTrigger=PropertyChanged,  NotifyOnSourceUpdated=True},{x:Type data:MailMessageModel}}"
+                              Style="{StaticResource DataGridStyle}"
+                              AlternatingRowBackground="AntiqueWhite">
+                        <i:Interaction.Behaviors>
+                            <behaviours:AutoGenerateColumnsBehaviour/>
+                            <behaviours:BindingStyleForAutoGenerateColumnsBehaviour/>
+                            <behaviours:GenerateDataGridForPropertiesManyToManyModelsBehaviour/>
+                        </i:Interaction.Behaviors>
+                    </DataGrid>
+                    <DockPanel Grid.Column="2">
                         <GroupBox DockPanel.Dock="Top" Header="Тема">
-                            <TextBox Text="{Binding  SelectedItem.Subject,  ElementName=MessagesList}"></TextBox>
+                            <TextBox Text="{utils:ParameterBinding {Binding SelectedItem[(0)].(1), UpdateSourceTrigger=PropertyChanged, NotifyOnSourceUpdated=True, Mode=TwoWay},{x:Type data:MailMessageModel}, 'Subject'}"/>
                         </GroupBox>
                         <GroupBox DockPanel.Dock="Top" Header="Тело">
-                            <TextBox Text="{Binding  SelectedItem.Body,  ElementName=MessagesList}" AcceptsReturn="True" VerticalContentAlignment="Top"></TextBox>
+                            <TextBox Text="{utils:ParameterBinding {Binding SelectedItem[(0)].(1), UpdateSourceTrigger=PropertyChanged, Mode=TwoWay},{x:Type data:MailMessageModel}, 'Body'}" AcceptsReturn="True"/>
                         </GroupBox>
-                    </DockPanel>-->
+                    </DockPanel>
 
                 </Grid>
             </TabItem>
