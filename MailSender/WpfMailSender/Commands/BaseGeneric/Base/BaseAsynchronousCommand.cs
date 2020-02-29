@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Threading;
 using System.Windows.Threading;
 
-namespace WpfMailSender.Commands.Base
+namespace WpfMailSender.Commands.BaseGeneric.Base
 {
     public abstract class BaseAsynchronousCommand : BaseCommand, INotifyPropertyChanged
     {

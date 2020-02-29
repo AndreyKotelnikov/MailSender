@@ -10,6 +10,7 @@
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:utils="clr-namespace:WpfMailSender.Utils"
+        xmlns:commands="clr-namespace:WpfMailSender.Commands"
         xmlns:sys="clr-namespace:System;assembly=mscorlib"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:behaviours="clr-namespace:WpfMailSender.Behaviours"
@@ -48,14 +49,16 @@
                             <components:ListController LabelName="Отправители"
                                                        ItemsSource="{utils:ParameterBinding {Binding Models[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:SenderModel}}"
                                                        SelectedIndex="{utils:ParameterBinding {Binding SelectedIndex[(0)]},{x:Type data:SenderModel}}"
-                                                       SelectedItem="{utils:ParameterBinding {Binding SelectedItem[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:SenderModel}}"> 
+                                                       SelectedItem="{utils:ParameterBinding {Binding SelectedItem[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:SenderModel}}"
+                                                       EditCommand="{Binding EditItemCommand}"> 
                             </components:ListController>
                         </ToolBar>
                         <ToolBar Band="1">
                             <components:ListController LabelName="Получатели"
                                                        ItemsSource="{utils:ParameterBinding {Binding Models[(0)], UpdateSourceTrigger=PropertyChanged},{x:Type data:RecipientModel}}"
                                                        SelectedIndex="{utils:ParameterBinding {Binding SelectedIndex[(0)]},{x:Type data:RecipientModel}}"
-                                                       SelectedItem="{utils:ParameterBinding {Binding SelectedItem[(0)], UpdateSourceTrigger=PropertyChanged, Mode=TwoWay},{x:Type data:RecipientModel}}">
+                                                       SelectedItem="{utils:ParameterBinding {Binding SelectedItem[(0)], UpdateSourceTrigger=PropertyChanged, Mode=TwoWay},{x:Type data:RecipientModel}}"
+                                                       EditCommand="{Binding EditItemCommand}">
                             </components:ListController>
                         </ToolBar>
                     </ToolBarTray>

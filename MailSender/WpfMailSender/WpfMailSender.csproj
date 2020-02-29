@@ -94,21 +94,22 @@
     <Compile Include="Behaviours\GenerateDataGridForPropertiesManyToManyModelsBehaviour.cs" />
     <Compile Include="Behaviours\RaiseEventPropertyChangedBehaviour.cs" />
     <Compile Include="Commands\AddAndRemoveSellectedItemsCommand.cs" />
-    <Compile Include="Commands\Base\BaseAsynchronousCommand.cs" />
-    <Compile Include="Commands\Base\BaseCommand.cs" />
-    <Compile Include="Commands\Base\CancelCommand.cs" />
-    <Compile Include="Commands\Base\CancelCommandEventArgs.cs" />
-    <Compile Include="Commands\Base\CancelCommandEventHandler.cs" />
-    <Compile Include="Commands\Base\CommandEventArgs.cs" />
-    <Compile Include="Commands\Base\CommandEventHandler.cs" />
-    <Compile Include="Commands\Generic\AsynchronousCommandGeneric.cs" />
-    <Compile Include="Commands\Generic\BaseCommandGeneric.cs" />
-    <Compile Include="Commands\Base\DispatcherHelper.cs" />
-    <Compile Include="Commands\Generic\CancelCommandEventArgsGeneric.cs" />
-    <Compile Include="Commands\Generic\CancelCommandEventHandlerGeneric.cs" />
-    <Compile Include="Commands\Generic\CancelCommandGeneric.cs" />
-    <Compile Include="Commands\Generic\CommandEventArgsGeneric.cs" />
-    <Compile Include="Commands\Generic\CommandEventHandlerGeneric.cs" />
+    <Compile Include="Commands\EditItemCommand.cs" />
+    <Compile Include="Commands\BaseGeneric\Base\BaseAsynchronousCommand.cs" />
+    <Compile Include="Commands\BaseGeneric\Base\BaseCommand.cs" />
+    <Compile Include="Commands\BaseGeneric\Base\CancelCommand.cs" />
+    <Compile Include="Commands\BaseGeneric\Base\CancelCommandEventArgs.cs" />
+    <Compile Include="Commands\BaseGeneric\Base\CancelCommandEventHandler.cs" />
+    <Compile Include="Commands\BaseGeneric\Base\CommandEventArgs.cs" />
+    <Compile Include="Commands\BaseGeneric\Base\CommandEventHandler.cs" />
+    <Compile Include="Commands\BaseGeneric\AsynchronousCommandGeneric.cs" />
+    <Compile Include="Commands\BaseGeneric\BaseCommandGeneric.cs" />
+    <Compile Include="Commands\BaseGeneric\Base\DispatcherHelper.cs" />
+    <Compile Include="Commands\BaseGeneric\CancelCommandEventArgsGeneric.cs" />
+    <Compile Include="Commands\BaseGeneric\CancelCommandEventHandlerGeneric.cs" />
+    <Compile Include="Commands\BaseGeneric\CancelCommandGeneric.cs" />
+    <Compile Include="Commands\BaseGeneric\CommandEventArgsGeneric.cs" />
+    <Compile Include="Commands\BaseGeneric\CommandEventHandlerGeneric.cs" />
     <Compile Include="Components\ArrowDirectionEnum.cs" />
     <Compile Include="Components\ListController.xaml.cs">
       <DependentUpon>ListController.xaml</DependentUpon>
@@ -126,11 +127,15 @@
     <Compile Include="Utils\PropertyTypeExtentions.cs" />
     <Compile Include="Utils\DataGridItemsRefreshValueConverter.cs" />
     <Compile Include="Utils\ValueConverterById.cs" />
+    <Compile Include="ViewModels\EditItemsViewModel.cs" />
     <Compile Include="ViewModels\EditDateTimeViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\MainWindowDataContextFactory.cs" />
     <Compile Include="Views\EditDateTimeWindow.xaml.cs">
       <DependentUpon>EditDateTimeWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\EditItemsWindow.xaml.cs">
+      <DependentUpon>EditItemsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WindowAdapter.cs" />
     <Page Include="Components\ListController.xaml">
@@ -144,6 +149,10 @@
     <Page Include="Views\EditDateTimeWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EditItemsWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

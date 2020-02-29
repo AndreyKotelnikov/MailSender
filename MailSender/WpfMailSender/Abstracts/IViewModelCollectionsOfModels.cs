@@ -11,6 +11,6 @@ namespace WpfMailSender.Abstracts
 {
     public interface IViewModelCollectionsOfModels
     {
-        ObservableDictionary<Type, ObservableCollection<IBaseModel>> Models { get; set; }
+        ObservableDictionary<Type, ObservableCollection<IBaseModel>> Models { get; }
     }
 }

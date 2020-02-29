@@ -8,11 +8,13 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using Models;
 using Models.Abstract;
 using RepositoryAbstract;
 using WpfMailSender.Abstracts;
+using WpfMailSender.Commands;
 using WpfMailSender.Utils;
 using WpfMailSender.Views;
 using Type = System.Type;
@@ -74,6 +76,8 @@ namespace WpfMailSender.ViewModels
             get => _selectedIndex;
             set => Set(ref _selectedIndex, value);
         }
+
+        public ICommand EditItemCommand => new EditItemCommand(SelectedItem, Models);
 
         #endregion
 

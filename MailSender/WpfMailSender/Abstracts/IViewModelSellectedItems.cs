@@ -11,6 +11,6 @@ namespace WpfMailSender.Abstracts
 {
     public interface IViewModelSellectedItems
     {
-       ObservableDictionary<Type, object> SelectedItem { get; set; }
+       ObservableDictionary<Type, object> SelectedItem { get; }
     }
 }

@@ -1,0 +1,36 @@
+﻿<Window x:Class="WpfMailSender.Views.EditItemsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:utils="clr-namespace:WpfMailSender.Utils"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:behaviours="clr-namespace:WpfMailSender.Behaviours"
+        xmlns:viewModels="clr-namespace:WpfMailSender.ViewModels"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance viewModels:EditItemsViewModel, IsDesignTimeCreatable=True}"
+        Title="{Binding Title}"  
+        >
+    <DockPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <DataGrid utils:CollectionElementTypeConverter.SetItemsSourceInOriginType=
+                      "{Binding ItemsForEdit, UpdateSourceTrigger=PropertyChanged}"
+                      SelectedItem="{Binding SelectedItemObject, UpdateSourceTrigger=PropertyChanged}"
+                      Style="{StaticResource DataGridStyle}"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      AlternatingRowBackground="AntiqueWhite">
+                <i:Interaction.Behaviors>
+                    <behaviours:AutoGenerateColumnsBehaviour/>
+                    <behaviours:BindingStyleForAutoGenerateColumnsBehaviour/>
+                    <behaviours:GenerateDataGridForPropertiesManyToManyModelsBehaviour/>
+                </i:Interaction.Behaviors>
+            </DataGrid>
+        </Grid>
+    </DockPanel>
+</Window>

@@ -19,5 +19,10 @@ namespace Models
         public ICollection<SchedulerTaskModel> SchedulerTaskModel { get; set; }
 
         public ICollection<RecipientsListModel> RecipientsLists { get; set; }
+
+        public override string ToString()
+        {
+            return Subject;
+        }
     }
 }

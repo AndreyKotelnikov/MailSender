@@ -1,4 +1,4 @@
-﻿namespace WpfMailSender.Commands.Base
+﻿namespace WpfMailSender.Commands.BaseGeneric.Base
 {
     public class CancelCommandEventArgs : CommandEventArgs
     {

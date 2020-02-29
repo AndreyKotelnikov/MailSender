@@ -7,8 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Documents;
 using Models.Abstract;
-using WpfMailSender.Commands.Base;
-using WpfMailSender.Commands.Generic;
+using WpfMailSender.Commands.BaseGeneric;
 using WpfMailSender.Components;
 using WpfMailSender.Utils;
 

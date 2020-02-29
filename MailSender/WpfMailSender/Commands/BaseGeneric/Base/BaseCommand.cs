@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace WpfMailSender.Commands.Base
+namespace WpfMailSender.Commands.BaseGeneric.Base
 {
     public abstract class BaseCommand : ICommand
     {
